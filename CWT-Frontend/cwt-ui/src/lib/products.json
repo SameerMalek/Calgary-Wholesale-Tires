@@ -1,0 +1,12 @@
+[
+  { "name": "Alloy Wheels", "image": "/assets/tire1.png" },
+  { "name": "Steel Wheels", "image": "/assets/tire2.png" },
+  { "name": "Iron Wheels", "image": "/assets/tire3.png" },
+  { "name": "Accessories", "image": "/assets/tire1.png" },
+  { "name": "Alloy Wheels", "image": "/assets/tire1.png" },
+  { "name": "Steel Wheels", "image": "/assets/tire2.png" },
+  { "name": "Iron Wheels", "image": "/assets/tire3.png" },
+  { "name": "Accessories", "image": "/assets/tire1.png" },
+  { "name": "Steel Wheels", "image": "/assets/tire2.png" },
+  { "name": "Iron Wheels", "image": "/assets/tire3.png" }
+]
