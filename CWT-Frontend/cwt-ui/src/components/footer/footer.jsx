@@ -1,14 +1,18 @@
-import React from 'react';
-import './footer.scss';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import React from "react";
+import "./footer.scss";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const Footer = () => {
   return (
     <div className="footer">
       <div className="footer-container">
         <div className="footer-logo">
-          <img src="Logo1.png" alt="Logo" />
-          <p>A large selection of quality products at a loyal price. Consult your manager if you need help with your selection. Using this site, you agree to the privacy policy and the terms of the public offer.</p>
+          <img src="/assets/Logo1.png" alt="Logo" />
+          <p>
+            A large selection of quality products at a loyal price. Consult your
+            manager if you need help with your selection. Using this site, you
+            agree to the privacy policy and the terms of the public offer.
+          </p>
         </div>
         <div className="footer-contacts">
           <h3>CONTACTS</h3>
@@ -20,19 +24,35 @@ const Footer = () => {
         <div className="footer-services">
           <h3>SERVICES</h3>
           <ul>
-            <li>About Company</li>
-            <li>Payment</li>
-            <li>Delivery</li>
-            <li>Terms & Conditions</li>
-            <li>Privacy</li>
+            <li>
+              <a href="/about">About Company</a>
+            </li>
+            <li>
+              <a href="/">Payment</a>
+            </li>
+            <li>
+              <a href="/">Delivery</a>
+            </li>
+            <li>
+              <a href="/">Terms & Conditions</a>
+            </li>
+            <li>
+              <a href="/">Privacy</a>
+            </li>
           </ul>
         </div>
         <div className="footer-socials">
           <h3>SOCIALS</h3>
           <div className="social-icons">
-            <i className="fab fa-instagram"></i>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer">
+              <i className="fab fa-instagram"></i>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer">
             <i className="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noreferrer">
             <i className="fab fa-twitter"></i>
+            </a>  
           </div>
         </div>
       </div>
@@ -47,6 +67,6 @@ const Footer = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Footer;
