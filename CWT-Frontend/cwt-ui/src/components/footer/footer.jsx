@@ -7,7 +7,7 @@ const Footer = () => {
     <div className="footer">
       <div className="footer-container">
         <div className="footer-logo">
-          <img src="/assets/Logo1.png" alt="Logo" />
+          <img src="/assets/logo.png" alt="Logo" />
           <p>
             A large selection of quality products at a loyal price. Consult your
             manager if you need help with your selection. Using this site, you

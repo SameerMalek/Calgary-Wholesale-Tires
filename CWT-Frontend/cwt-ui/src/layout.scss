@@ -8,15 +8,15 @@
     padding-right: 20px;
 
     @include lg{
-        background-color: chartreuse;
+        background-color: white;
     }
 
     @include md{
-        background-color: darkorange;
+        background-color: white;
     }
 
     @include sm{
-        background-color: red;
+        background-color: white;
     }
 }
 

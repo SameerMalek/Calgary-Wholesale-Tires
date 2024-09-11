@@ -1,5 +1,10 @@
+@import "../../responsive.scss";
+
 .filter-bar {
   display: flex;
+  flex-wrap: wrap; // Ensures elements stack when space is limited
+  justify-content: center;
+  margin: auto;
   align-items: center;
   background-color: #f3f4f6;
   padding: 1rem;
@@ -7,11 +12,33 @@
   width: 100%;
   gap: 20px;
 
+  // Adjust padding and gaps based on screen sizes
+  @include lg {
+    padding: 1rem;
+  }
+  
+  @include md {
+    gap: 13px;
+    padding: 1rem;
+  }
+
+  @include sm {
+    gap: 5px;
+    padding: 0.75rem; // Reduce padding slightly on smaller screens
+  }
+
   .filter-title {
     font-weight: bold;
     margin-right: 1rem;
-    margin-left: 44px;
     font-size: 16px;
+
+    @include md {
+      font-size: 14px; // Reduce font size on medium screens
+    }
+
+    @include sm {
+      display: none; // Hide title on small screens for space optimization
+    }
   }
 
   .filter-select {
@@ -22,6 +49,19 @@
     margin-right: 1rem;
     color: #374151;
     cursor: pointer;
+    flex-grow: 1; // Allow select box to take up extra space if available
+
+    @include lg {
+      padding: 6px 35px; // Adjust padding on larger screens
+    }
+
+    @include md {
+      padding: 4px 20px; // Smaller padding for medium screens
+    }
+
+    @include sm {
+      padding: 4px 10px; // Minimize padding for smaller screens
+    }
 
     &:focus {
       outline: none;
@@ -31,32 +71,58 @@
       color: #9ca3af;
     }
   }
-    .filter-button {
-      background-color: #000;
-      color: #fff;
-      border: none;
-      border-radius: 9999px;
-      padding: 0.5rem 3rem;
-      margin-right: 1rem;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
 
-      &:hover {
-        background-color: #333;
-      }
+  .filter-button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    padding: 0.5rem 3rem;
+    margin-right: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    
+    @include lg {
+      padding: 0.5rem 2rem; // Adjust padding for large screens
     }
 
-    .reset-button {
-      background: none;
-      border: none;
-      color: #000;
-      cursor: pointer;
-      font-weight: bold;
-      padding: 0.5rem 1rem;
+    @include md {
+      padding: 5px 15px; // Reduce padding on medium screens
+    }
 
-      &:hover {
-        text-decoration: underline;
-      }
+    @include sm {
+      padding: 5px 10px; // Further reduce padding for small screens
+    }
+
+    &:hover {
+      background-color: #333;
+    }
+  }
+
+  .reset-button {
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+
+    @include lg {
+      padding: 0.5rem 0.75rem; // Adjust padding for larger screens
+    }
+
+    @include md {
+      padding: 0.5rem 0.5rem; // Smaller padding on medium screens
+    }
+
+    @include sm {
+      padding: 0.25rem 0.5rem; // Minimized padding on smaller screens
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

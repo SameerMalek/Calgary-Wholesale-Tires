@@ -1,14 +1,31 @@
+@import "../../responsive.scss";
+
 nav {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  margin: auto;
+
+  // Global styles for all links
   a {
     transition: all 0.4s ease;
 
     &:hover {
       scale: 1.05;
     }
+
+    // Hiding links on small and medium screens
+    @include sm {
+      display: none;
+    }
+
+    @include md {
+      display: none;
+    }
   }
+
+  // Top section of the navbar
   .top {
     background: #e5e9ea;
     width: 100%;
@@ -16,22 +33,34 @@ nav {
     justify-content: end;
     height: 30px;
     align-items: center;
+
+    @include sm {
+      display: none;
+    }
+
+    @include md {
+      display: none;
+    }
+
     a {
       padding: 5px;
       margin: 10px;
     }
-
-  
   }
 
+  // Center section containing logo, search, etc.
   .center {
     display: flex;
-    width: 100%;
-    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 50px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    width: 100%;
+    padding: 1rem;
+
+    @include md {
+      padding: 0.5rem;
+    }
+
+    // Logo section
     .logo {
       font-weight: bold;
       display: flex;
@@ -41,19 +70,45 @@ nav {
       margin-left: 15px;
 
       img {
-        width: 28px;
+        width: 162px;
+        height: 35px;
+
+        @include sm {
+          width: 120px;
+          height: 25px; // Adjust size for smaller screens
+        }
       }
     }
+
+    // Divider hidden on small and medium screens
     .divider {
       font-weight: bold;
       margin-left: 0.5rem;
-      width: -81px;
       color: #e5e9ea;
+
+      @include sm {
+        display: none;
+      }
+
+      @include md {
+        display: none;
+      }
     }
+
     .label {
-      width: 100%;
-      margin-right: -114px;
+      @include sm {
+        display: none;
+      }
+
+      @include md {
+        display: none;
+      }
+      @include lg {
+        display: none;
+      }
     }
+
+    // Search bar
     .search {
       display: flex;
       padding: 0.5rem;
@@ -61,6 +116,15 @@ nav {
       border-radius: 9999px;
       background-color: #e5e7eb;
       height: 50px;
+
+      @include sm {
+        display: none; // Hide on small screens
+      }
+
+      @include md {
+        //  display: none;
+      }
+
       .input {
         padding-left: 1rem;
         padding-right: 1rem;
@@ -69,13 +133,22 @@ nav {
         background: transparent;
         border: none;
         outline: none;
+
+        @include lg {
+          width: 400px;
+        }
+
+        @include md {
+          width: 380px;
+        }
       }
+
       .searchIcon {
         color: #6b7280;
         width: 25px;
         height: 22px;
 
-        &:hover{
+        &:hover {
           transition: all 0.4s ease;
           color: black;
           cursor: pointer;
@@ -83,29 +156,86 @@ nav {
         }
       }
     }
+
+    // Right section with sign-in and cart
     .right {
-      width: 100%;
-      justify-content: end;
       display: flex;
-      flex-direction: row;
+      align-items: center;
       gap: 30px;
       padding-right: 20px;
-      .signIn {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 16px;
-        img {
-          width: 25px;
-        }
+
+      @include sm {
+        display: none; // Hide on small screens
       }
+
+      @include md {
+        display: none; // Hide on medium screens
+      }
+
+      // Menu icon for small screens (hamburger menu)
+
+      .signIn,
       .cart {
         display: flex;
         align-items: center;
         gap: 10px;
         font-size: 16px;
+
         img {
           width: 25px;
+        }
+      }
+    }
+
+    .menuIcon {
+      display: none;
+      z-index: 999;
+
+      img {
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+      }
+
+      @include sm {
+        display: inline;
+      }
+
+      @include md {
+        display: inline;
+      }
+    }
+
+    .menu {
+      position: absolute;
+      top: 0;
+      right: -50%;
+      background-color: black;
+      color: white;
+      height: 100vh;
+      width: 50%;
+      transition: all 1s ease;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      gap: 40px;
+      
+      &.active {
+        right: 0;
+      }
+
+      @include sm {
+        a {
+          display: initial;
+        }
+      }
+
+      @include md {
+        a {
+          display: initial;
         }
       }
     }

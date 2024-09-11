@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Navbar.scss";
 import Filter from "../filter/filter";
 import Categories from "../categories/categories";
 import { IoIosSearch } from "react-icons/io";
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false);
   return (
     <nav>
       {/* Top Part */}
@@ -23,7 +24,6 @@ const Navbar = () => {
       <div className="center">
         <a className="logo" href="/">
           <img src="/assets/logo.png" alt="logo" />
-          <span>C.W.T</span>
         </a>
         <Categories />
         <span className="divider">|</span>
@@ -48,6 +48,22 @@ const Navbar = () => {
             <img src="/assets/cart.png" alt="cart" />
             <span>Cart</span>
           </a>
+        </div>
+        <div className="menuIcon">
+          <img
+            src="/assets/menuIcon.png"
+            alt="menu"
+            onClick={() => setOpen((prev) => !prev)}
+          />
+        </div>
+        <div className={open ? "menu active" : "menu"}>
+          <a href="/">Home</a>
+          <a href="/">About</a>
+          <a href="/">Contact</a>
+          <a href="/">Products</a>
+          <a href="/">Sign In</a>
+          <a href="/">Cart</a>
+          <a href="/">My Acount</a>
         </div>
       </div>
 

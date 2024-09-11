@@ -1,88 +1,87 @@
 .footer {
-    background-color: #1c1c1c;
-    color: #ffffff;
-    width: 100%;
-  
-    .footer-container {
-      background-color: #f4f4f4; /* Set white background for the content area */
-      color: #000; /* Set text color to black for readability */
-      padding: 20px 50px;
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 38px;
-  
-      .footer-logo {
-        flex: 1;
-  
-        img {
-          width: 50px;
-          height: auto;
-        }
-  
-        p {
-          margin-top: 10px;
-          font-size: 14px;
-        }
+  background-color: #1c1c1c;
+  color: #ffffff;
+  width: 100%;
+
+  .footer-container {
+    background-color: #f4f4f4;
+    color: #000; 
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 38px;
+
+    .footer-logo {
+      flex: 1;
+
+      img {
+        width: 50px;
+        height: auto;
       }
-  
-      .footer-contacts,
-      .footer-services,
-      .footer-socials {
-        flex: 1;
-  
-        h3 {
-          font-size: 16px;
-          margin-bottom: 10px;
-        }
-  
-        p, ul {
-          font-size: 14px;
-        }
-  
-        ul {
-          list-style: none;
-          padding: 0;
-  
-          li {
-            margin-bottom: 5px;
-          }
-        }
-  
-        .social-icons {
-          display: flex;
-          gap: 10px;
-  
-          i {
-            font-size: 20px;
-          }
-        }
-      }
-    }
-  
-    .footer-bottom {
-      display: flex;
-      gap: 400px;
-      align-items: center;
-      padding: 10px 50px;
-      border-top: 1px solid #444;
-  
+
       p {
-        margin: 0;
+        margin-top: 10px;
         font-size: 14px;
       }
-  
-      .payment-methods {
+    }
+
+    .footer-contacts,
+    .footer-services,
+    .footer-socials {
+      flex: 1;
+
+      h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      p, ul {
+        font-size: 14px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          margin-bottom: 5px;
+        }
+      }
+
+      .social-icons {
         display: flex;
-        gap: 20px;
-        justify-content: center;
-        align-items: center;
-  
+        gap: 10px;
+
         i {
-          font-size: 24px;
+          font-size: 20px;
         }
       }
     }
   }
-  
+
+  .footer-bottom {
+    display: flex;
+    gap: 400px;
+    align-items: center;
+    padding: 10px 50px;
+    border-top: 1px solid #444;
+
+    p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .payment-methods {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+
+      i {
+        font-size: 24px;
+      }
+    }
+  }
+}
