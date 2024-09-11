@@ -1,0 +1,89 @@
+@import "../../responsive.scss";
+
+.list {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 94px;  // Adjust this value based on your navbar height
+  left: 310px;  // Adjust this value based on your navbar layout
+  width: 160px;  // Increased width for better content fit
+  padding: 10px;  // Reduced padding for a more compact look
+  border-radius: 8px;
+  background-color: #fff;  // White background for a clean look
+  border: 1px solid gray;  // Lighter border color for a softer appearance
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  // Subtle shadow for depth
+  z-index: 20;
+  transition: opacity 1s ease, transform 1s ease;  // Smooth transitions
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10px;  // Adjusted to align better with the dropdown
+    right: 107px;  // Centered the triangle better
+    width: 20px;
+    height: 20px;
+    border-left: 1px solid gray;
+    border-top: 1px solid gray;
+    border-right: 1px solid transparent;
+    background-color: #fff;
+    transform: rotate(45deg);
+    z-index: 10;
+
+    @include sm {
+      right: 85px;  // Adjust for small screens if needed
+    }
+
+    @include md {
+      right: 60px;  // Further adjustments for medium screens
+    }
+
+    @include lg {
+      right: 40px;  // Further adjustments for large screens
+    }
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;  // Increased gap for better readability
+    list-style-type: none;  // Remove bullet points
+    padding: 0;  // Remove default padding
+    margin: 0;  // Remove default margin
+    font-weight: bold;
+  }
+
+  .options li {
+    padding: 10px;
+    border-radius: 4px;  // Rounded corners for menu items
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    color: #333;  // Darker text for contrast
+
+    &:hover {
+      background-color: #f5f5f5;  // Subtle background color on hover
+      color: #eb3d3d;  // Primary color for hover text
+    }
+  }
+  
+  // Media queries for responsiveness
+  @include sm {
+    top: 60px;  // Adjust top positioning for small screens
+    left: 20px;  // Adjust left positioning for small screens
+    width: 140px;  // Adjust width for small screens
+    padding: 8px;  // Adjust padding for small screens
+  }
+
+  @include md {
+    top: 80px;  // Adjust top positioning for medium screens
+    left: 30px;  // Adjust left positioning for medium screens
+    width: 150px;  // Adjust width for medium screens
+    padding: 9px;  // Adjust padding for medium screens
+  }
+
+  @include lg {
+    top: 92px;  // Adjust top positioning for large screens
+    left: 190px;  // Adjust left positioning for large screens
+    width: 160px;  // Adjust width for large screens
+    padding: 10px;  // Adjust padding for large screens
+  }
+}

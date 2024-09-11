@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import "./Navbar.scss";
 import Filter from "../filter/filter";
-import Categories from "../categories/categories";
 import { IoIosSearch } from "react-icons/io";
+import { RxHamburgerMenu } from "react-icons/rx";
+import Dropdown from "./../dropdown/dropdown";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+  const handleMenu = () => {
+    setOpenMenu((prev) => !prev);
+  };
   return (
     <nav>
       {/* Top Part */}
@@ -25,7 +30,14 @@ const Navbar = () => {
         <a className="logo" href="/">
           <img src="/assets/logo.png" alt="logo" />
         </a>
-        <Categories />
+        
+        {/* DropDown Menu */}
+        <div className="menuBtn">
+          <div className="categories">
+            <RxHamburgerMenu className="img" onClick={handleMenu} />
+          </div>
+          {openMenu && <Dropdown />}
+        </div>
         <span className="divider">|</span>
         <label htmlFor="name" className="label">
           Search Products:
