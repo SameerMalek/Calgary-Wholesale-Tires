@@ -1,10 +1,14 @@
 .main {
     .image {
+
+        display: flex;
+        justify-content: center;
+
         img {
-            height: 300px;
-            width: 35%;
+            height: 290px;
+            width: 40%;
             max-width: 800px;
-            margin: 20px 0;
+            margin: 20px 50px;
             border-radius: 10px;
             object-fit: cover;
         }

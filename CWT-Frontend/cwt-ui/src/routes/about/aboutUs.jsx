@@ -6,7 +6,8 @@ export default function AboutUs() {
     <div className="main">
       <section className="heading">
         <div className="image">
-          <img src="/assets/aboutus.jpg" alt="About Us" />
+          <img src="/assets/aboutus2.jpeg" alt="Calgary Wholesale Tyre" />
+          <img src="/assets/aboutus4.jpg" alt="Calgary Wholesale Tyre" />
         </div>
         <div className="sub-heading">
           <h2>YOUR WHOLESALE TIRE STORE IN CALGARY</h2>
