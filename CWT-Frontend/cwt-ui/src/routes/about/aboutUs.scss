@@ -1,7 +1,44 @@
-.main{
+.main {
+    .image {
+        img {
+            height: 300px;
+            width: 35%;
+            max-width: 800px;
+            margin: 20px 0;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+    }
 
     .heading {
-        font-size: xx-large;
+        font-size: 1.1rem;
         margin-top: 20px;
+    }
+    
+    .sub-heading {
+        font-size: 1.25rem;
+        margin-top: 10px;
+    }
+
+    .info {
+        margin-top: 15px;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    @media (max-width: 768px) {
+        .image img {
+            width: 100%;
+            height: auto;
+        }
+
+        .sub-heading {
+            font-size: 1.1rem;
+        }
+
+        .info {
+            font-size: 0.9rem;
+        }
     }
 }
