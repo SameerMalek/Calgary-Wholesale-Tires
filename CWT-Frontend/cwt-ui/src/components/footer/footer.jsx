@@ -57,7 +57,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© CTW®. All rights reserved.</p>
+        <p>© CWT®. All rights reserved.</p>
         <div className="payment-methods">
           <i className="fab fa-cc-paypal"></i>
           <i className="fab fa-cc-visa"></i>
