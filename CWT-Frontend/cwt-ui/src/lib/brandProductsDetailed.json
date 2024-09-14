@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1",
+    "name": "Alloy Wheel 17X7.5 5-127",
+    "description": "High-quality alloy wheel with durable finish and superior performance.",
+    "diameter": "17 inches",
+    "offset": "40 mm",
+    "width": "7.5 inches",
+    "boltPattern": "5-127 (S-5)",
+    "centerBore": "71.5 mm",
+    "color": "Black",
+    "image": "/assets/tire1.png"
+  },
+  {
+    "id": "2",
+    "name": "Steel Wheel 17X7.5 5-127",
+    "description": "Durable steel wheel with excellent reliability for off-road adventures.",
+    "diameter": "17 inches",
+    "offset": "40 mm",
+    "width": "7 inches",
+    "boltPattern": "5-127 (S-5)",
+    "centerBore": "70.5 mm",
+    "color": "Black",
+    "image": "/assets/tire2.png"
+  },
+  {
+    "id": "3",
+    "name": "Chrome Wheel 18X8.5 5-114.3",
+    "description": "Shiny chrome wheel for a sleek and modern look.",
+    "diameter": "18 inches",
+    "offset": "35 mm",
+    "width": "8.5 inches",
+    "boltPattern": "5-114.3",
+    "centerBore": "72.6 mm",
+    "color": "Chrome",
+    "image": "/assets/tire3.png"
+  },
+  {
+    "id": "4",
+    "name": "Performance Wheel 19X9 5-112",
+    "description": "Performance-oriented wheel designed for enhanced driving dynamics.",
+    "diameter": "19 inches",
+    "offset": "45 mm",
+    "width": "9 inches",
+    "boltPattern": "5-112",
+    "centerBore": "66.5 mm",
+    "color": "Silver",
+    "image": "/assets/tire3.png"
+  }
+]
+
+  
