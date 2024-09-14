@@ -8,6 +8,7 @@
     padding-right: 20px; 
     display: flex;
     flex-direction: column;
+    padding-top: 95px;
     @include lg{
         // background-color: rgb(247, 210, 196);
         max-width: 1280px;
@@ -19,6 +20,7 @@
     @include sm{
         // background-color: rgb(174, 244, 202);
         max-width:640px ;
+        padding-top: 45px;
     } 
     .content{
         // height: calc(100vh - 100px);

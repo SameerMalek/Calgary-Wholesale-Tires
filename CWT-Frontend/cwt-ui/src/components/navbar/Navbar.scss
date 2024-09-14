@@ -6,6 +6,11 @@ nav {
   align-items: center;
   width: 100%;
   margin: auto;
+  position: fixed; // Keeps the navbar fixed at the top
+  top: 0;          // Positions it at the top of the page
+  left: 0;         // Ensures it starts from the left edge
+  z-index: 1000;   // Keeps it above other content
+  background-color: white; // Ensure it has a background so content doesn’t overlap
 
   // Global styles for all links
   a {
@@ -54,7 +59,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 1rem;
+    padding: 10px;
 
     @include md {
       padding: 0.5rem;

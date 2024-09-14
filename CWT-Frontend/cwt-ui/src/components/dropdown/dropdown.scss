@@ -4,8 +4,8 @@
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 94px;  // Adjust this value based on your navbar height
-  left: 310px;  // Adjust this value based on your navbar layout
+  top: 93px;  // Adjust this value based on your navbar height
+  left: 248px;  // Adjust this value based on your navbar layout
   width: 160px;  // Increased width for better content fit
   padding: 10px;  // Reduced padding for a more compact look
   border-radius: 8px;
@@ -18,7 +18,7 @@
   &::before {
     content: '';
     position: absolute;
-    top: -10px;  // Adjusted to align better with the dropdown
+    top: -11px;  // Adjusted to align better with the dropdown
     right: 107px;  // Centered the triangle better
     width: 20px;
     height: 20px;

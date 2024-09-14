@@ -1,15 +1,16 @@
-*{
-    box-sizing: border-box;
-    margin: 0px;
-    padding: 0px;
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
 }
 
-a{
-    text-decoration: none;
-    color: inherit;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-body{
-    font-family: "Lato", sans-serif;
-    overflow-x: hidden;
+body {
+  font-family: "Lato", sans-serif;
+  overflow-x: hidden;
+  padding-top: 80px;
 }
