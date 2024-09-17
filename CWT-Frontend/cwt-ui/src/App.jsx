@@ -4,8 +4,10 @@ import ContactUs from "./routes/contact/contactUs";
 import Home from "./routes/homepage/homepage";
 import { Layout } from "./routes/Layout/layout";
 import Login from "./routes/login/login";
-import ProductPage from './routes/ProductPage/ProductPage'; 
+
 import DetailedProductPage from './routes/ProductPage/DetailedProductPage'; // Import the new component
+import ProductPage from './routes/ProductPage/ProductPage'; // Ensure this is correctly imported
+import AdminHome  from "./AdminPanel/pages/home/AdminHome";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 function App() {
@@ -40,9 +42,13 @@ function App() {
         }
       ],
     },
+    {
+      path: "/admin",
+      element: <AdminHome/>, // New layout for the admin section
+    },
   ]);
 
-  return <RouterProvider router={router}/>;
+  return <RouterProvider router={router}/>;  
 }
 
 export default App;
