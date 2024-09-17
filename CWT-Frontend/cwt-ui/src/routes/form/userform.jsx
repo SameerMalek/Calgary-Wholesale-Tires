@@ -11,35 +11,57 @@ export default function UserForm() {
         <div className="form-section">
           <h3>Business Details*</h3>
           <div className="form-group">
-            <label>Company Name*</label>
-            <input type="text" placeholder="Enter company name" />
+            <label htmlFor="company-name">Company Name*</label>
+            <input id="company-name" type="text" placeholder="Enter company name" required />
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>Address*</label>
-              <input type="text" placeholder="Enter address" />
+              <label htmlFor="address">Address*</label>
+              <input id="address" type="text" placeholder="Enter address" required />
             </div>
             <div className="form-group">
-              <label>City*</label>
-              <input type="text" placeholder="Enter city" />
+              <label htmlFor="city">City*</label>
+              <input id="city" type="text" placeholder="Enter city" required />
             </div>
             <div className="form-group">
-              <label>Province*</label>
-              <input type="text" placeholder="Enter province" />
+              <label htmlFor="province">Province*</label>
+              <select id="province" required>
+                <option value="">Select province</option>
+                <option value="AB">Alberta</option>
+                <option value="BC">British Columbia</option>
+                <option value="MB">Manitoba</option>
+                <option value="NB">New Brunswick</option>
+                <option value="NL">Newfoundland and Labrador</option>
+                <option value="NS">Nova Scotia</option>
+                <option value="ON">Ontario</option>
+                <option value="PE">Prince Edward Island</option>
+                <option value="QC">Quebec</option>
+                <option value="SK">Saskatchewan</option>
+                <option value="NT">Northwest Territories</option>
+                <option value="NU">Nunavut</option>
+                <option value="YT">Yukon</option>
+              </select>
             </div>
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>Postal Code*</label>
-              <input type="text" placeholder="Enter postal code" />
+              <label htmlFor="postal-code">Postal Code*</label>
+              <input id="postal-code" type="text" placeholder="Enter postal code" required />
             </div>
             <div className="form-group">
-              <label>Phone no.*</label>
-              <input type="text" placeholder="Enter phone number" />
+              <label htmlFor="phone-number">Phone no.*</label>
+              <input
+                id="phone-number"
+                type="tel"
+                placeholder="Enter phone number"
+                pattern="[0-9]{10}"
+                title="Enter a 10-digit phone number"
+                required
+              />
             </div>
             <div className="form-group">
-              <label>Email Id*</label>
-              <input type="email" placeholder="Enter email id" />
+              <label htmlFor="email">Email Id*</label>
+              <input id="email" type="email" placeholder="Enter email id" required />
             </div>
           </div>
         </div>
@@ -51,7 +73,7 @@ export default function UserForm() {
             <label>Are you the company's owner?</label>
             <div className="radio-group">
               <label>
-                <input type="radio" name="owner" value="yes" />
+                <input type="radio" name="owner" value="yes" required />
                 Yes
               </label>
               <label>
@@ -62,25 +84,25 @@ export default function UserForm() {
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>Firstname*</label>
-              <input type="text" placeholder="Enter first name" />
+              <label htmlFor="firstname">Firstname*</label>
+              <input id="firstname" type="text" placeholder="Enter first name" required />
             </div>
             <div className="form-group">
-              <label>Lastname*</label>
-              <input type="text" placeholder="Enter last name" />
+              <label htmlFor="lastname">Lastname*</label>
+              <input id="lastname" type="text" placeholder="Enter last name" required />
             </div>
           </div>
           <div className="form-group">
-            <label>In operation since:</label>
-            <input type="text" placeholder="Enter year of operation" />
+            <label htmlFor="operation-year">In operation since:</label>
+            <input id="operation-year" type="text" placeholder="Enter year of operation" />
           </div>
           <div className="form-group">
-            <label>Annual purchased planned:</label>
-            <input type="text" placeholder="Enter annual purchase plan" />
+            <label htmlFor="annual-purchase">Annual purchased planned:</label>
+            <input id="annual-purchase" type="text" placeholder="Enter annual purchase plan" />
           </div>
           <div className="form-group">
-            <label>Comments:</label>
-            <textarea rows="5" placeholder="Enter any comments"></textarea>
+            <label htmlFor="comments">Comments:</label>
+            <textarea id="comments" rows="5" placeholder="Enter any comments"></textarea>
           </div>
         </div>
 
