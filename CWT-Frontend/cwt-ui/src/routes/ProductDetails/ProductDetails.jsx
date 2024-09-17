@@ -4,15 +4,15 @@ import productData from '../../lib/brandProductsDetailed.json';
 import './ProductDetails.scss';
 
 const ProductDetails = () => {
-  const { id } = useParams();
-  const product = productData.find(p => p.id === id);
+  const { productId } = useParams();
+  const product = productData.find(item => item.id === productId);
 
   if (!product) {
     return <div>Product not found</div>;
   }
 
   return (
-    <div className="product-details-page">
+    <div className="product-details">
       <div className="container">
         <div className="product-item">
           <img src={product.image} alt={product.name} className="product-image" />
@@ -26,9 +26,6 @@ const ProductDetails = () => {
             <p><strong>Bolt Pattern:</strong> {product.boltPattern}</p>
             <p><strong>Center Bore:</strong> {product.centerBore}</p>
             <p><strong>Color:</strong> {product.color}</p>
-            <p><strong>Price:</strong> ${product.price}</p>
-            <p><strong>Rating:</strong> {product.rating} stars</p>
-            <button>Add to Cart</button>
           </div>
         </div>
       </div>
@@ -37,3 +34,5 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
+
+
