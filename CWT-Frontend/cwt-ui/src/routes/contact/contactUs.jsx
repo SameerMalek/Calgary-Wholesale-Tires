@@ -14,10 +14,41 @@ export default function ContactUs() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const validatePhone = (phone) => {
+    const re = /^\+?[1-9]\d{1,14}$/;
+    return re.test(phone);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can handle form submission logic here
+    
+    if (!validateEmail(formData.email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+    
+    if (!validatePhone(formData.phone)) {
+      alert("Please enter a valid phone number.");
+      return;
+    }
+    
+    // Here you would typically send the form data to your backend
     console.log(formData);
+    
+    alert("Form submitted successfully!");
+    
+    // Reset the form
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      message: ''
+    });
   };
 
   return (
@@ -31,6 +62,7 @@ export default function ContactUs() {
             value={formData.name} 
             onChange={handleChange} 
             placeholder="Name" 
+            required
           />
           <input 
             type="email" 
@@ -38,6 +70,7 @@ export default function ContactUs() {
             value={formData.email} 
             onChange={handleChange} 
             placeholder="Email" 
+            required
           />
           <input 
             type="tel" 
@@ -45,6 +78,7 @@ export default function ContactUs() {
             value={formData.phone} 
             onChange={handleChange} 
             placeholder="Phone" 
+            required
           />
         </div>
         <div className="form-group">
@@ -53,10 +87,11 @@ export default function ContactUs() {
             value={formData.message} 
             onChange={handleChange} 
             placeholder="Message" 
+            required
           ></textarea>
         </div>
         <div className="form-actions">
-          <button type="button" className="back-btn">Back</button>
+          <a href="/" className="back-btn">Back</a>
           <button type="submit" className="submit-btn">Send Email</button>
         </div>
       </form>
