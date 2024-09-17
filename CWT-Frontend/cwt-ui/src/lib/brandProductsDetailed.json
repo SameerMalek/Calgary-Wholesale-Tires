@@ -9,6 +9,8 @@
     "boltPattern": "5-127 (S-5)",
     "centerBore": "71.5 mm",
     "color": "Black",
+    "price": "70.00",
+    "rating": 4,
     "image": "/assets/tire1.png"
   },
   {
@@ -21,6 +23,8 @@
     "boltPattern": "5-127 (S-5)",
     "centerBore": "70.5 mm",
     "color": "Black",
+    "price": "65.00",
+    "rating": 3,
     "image": "/assets/tire2.png"
   },
   {
@@ -33,6 +37,8 @@
     "boltPattern": "5-114.3",
     "centerBore": "72.6 mm",
     "color": "Chrome",
+    "price": "85.00",
+    "rating": 5,
     "image": "/assets/tire3.png"
   },
   {
@@ -45,8 +51,8 @@
     "boltPattern": "5-112",
     "centerBore": "66.5 mm",
     "color": "Silver",
+    "price": "95.00",
+    "rating": 4,
     "image": "/assets/tire3.png"
   }
 ]
-
-  

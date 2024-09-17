@@ -4,6 +4,8 @@ import ContactUs from "./routes/contact/contactUs";
 import Home from "./routes/homepage/homepage";
 import { Layout } from "./routes/Layout/layout";
 import Login from "./routes/login/login";
+
+import DetailedProductPage from './routes/ProductPage/DetailedProductPage'; // Import the new component
 import ProductPage from './routes/ProductPage/ProductPage'; // Ensure this is correctly imported
 import AdminHome from "./AdminPanel/pages/home/AdminHome";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -31,9 +33,13 @@ function App() {
           element: <ContactUs/>,
         },
         {
-          path: "/products", // Add the path to the products page
+          path: "/products", 
           element: <ProductPage />,
         },
+        {
+          path: "/products/:id",  // New Route
+          element: <DetailedProductPage />, // Route for Detailed Product Page
+        }
       ],
     },
     {
@@ -42,9 +48,11 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router}/>
-  
+  return <RouterProvider router={router}/>;  
 }
 
 export default App;
+
+
+
 
