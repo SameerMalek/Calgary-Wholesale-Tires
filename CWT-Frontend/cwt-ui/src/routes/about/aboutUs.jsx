@@ -24,7 +24,7 @@ export default function AboutUs() {
           <p>
             Our mission is to provide the highest quality tires at an affordable price to the people of Calgary. We are committed to delivering exceptional customer service and ensuring that our clients leave our shop satisfied. We strive to be the best in the industry and to build long-lasting relationships with our customers.
           </p>
-        </div>
+        </div>  
       </section>
     </div>
   );

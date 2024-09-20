@@ -7,8 +7,9 @@ import Login from "./routes/login/login";
 
 import DetailedProductPage from './routes/ProductPage/DetailedProductPage'; // Import the new component
 import ProductPage from './routes/ProductPage/ProductPage'; // Ensure this is correctly imported
-import AdminHome  from "./AdminPanel/pages/home/AdminHome";
+import AdminHome from "./AdminPanel/pages/home/AdminHome";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import UserForm from "./routes/form/userform";
 
 function App() {
   const router = createBrowserRouter([
@@ -31,6 +32,10 @@ function App() {
         {
           path: "/contact",
           element: <ContactUs/>,
+        },
+        {
+          path: "/form",
+          element: <UserForm/>,
         },
         {
           path: "/products", 
