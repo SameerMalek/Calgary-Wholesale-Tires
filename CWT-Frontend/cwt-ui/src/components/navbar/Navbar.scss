@@ -7,9 +7,9 @@ nav {
   width: 100%;
   margin: auto;
   position: fixed; // Keeps the navbar fixed at the top
-  top: 0;          // Positions it at the top of the page
-  left: 0;         // Ensures it starts from the left edge
-  z-index: 1000;   // Keeps it above other content
+  top: 0; // Positions it at the top of the page
+  left: 0; // Ensures it starts from the left edge
+  z-index: 1000; // Keeps it above other content
   background-color: white; // Ensure it has a background so content doesn’t overlap
 
   // Global styles for all links
@@ -66,28 +66,28 @@ nav {
     }
 
     .menuBtn {
-      .categories{
-          font-size: 16px;
-          display: flex;
-          align-items: center;
-          gap: 5px;
-          cursor: pointer;
-      
-          @include sm{
-            display: none;
-          }
-      
-          @include md{
-            display: none;
-          }
-          
-          .img{
-              width: 30px;
-              height: 22px;
-              margin-left: 5px;
-            }
+      .categories {
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+
+        @include sm {
+          display: none;
+        }
+
+        @include md {
+          display: none;
+        }
+
+        .img {
+          width: 30px;
+          height: 22px;
+          margin-left: 5px;
+        }
       }
-      }
+    }
 
     // Logo section
     .logo {
@@ -162,6 +162,7 @@ nav {
         background: transparent;
         border: none;
         outline: none;
+        padding-bottom: 9px;
 
         @include lg {
           width: 400px;
@@ -175,7 +176,14 @@ nav {
       .searchIcon {
         color: #6b7280;
         width: 25px;
-        height: 22px;
+        height: 34px;
+        border: none;
+        background: none;
+
+        .svg{
+          width: 21px;
+          height: 18px;
+        }
 
         &:hover {
           transition: all 0.4s ease;

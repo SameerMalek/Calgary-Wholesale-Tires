@@ -1,0 +1,11 @@
+Git commands:
+1) git init
+2) git add .
+3) git commit -m "Initial Commit"
+4) git branch -M main
+5) git remote add origin repo_link.git
+6) git push -u origin main
+
+1) git add .
+2) git commit -m "message"
+3) git push -u origin main

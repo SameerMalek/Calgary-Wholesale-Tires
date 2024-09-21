@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./filter.scss";
 
 const Filter = () => {
+  const[filterQuery, setFilterQuery] = useState({
+    year: "",
+    model:"",
+    make:"",
+    diamter:"",
+  });
+  
   return (
     <div className="filter-bar">
       <span className="filter-title">SEARCH BY VEHICLES</span>

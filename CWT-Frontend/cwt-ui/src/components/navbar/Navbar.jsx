@@ -11,6 +11,9 @@ const Navbar = () => {
   const handleMenu = () => {
     setOpenMenu((prev) => !prev);
   };
+  const [searchQuery, setSearchQuery]= useState({
+    search: "",
+  })
   return (
     <nav>
       {/* Top Part */}
@@ -30,8 +33,8 @@ const Navbar = () => {
         <a className="logo" href="/">
           <img src="/assets/logo.png" alt="logo" />
         </a>
-        
-        {/* DropDown Menu */}
+
+        {/* Menu */}
         <div className="menuBtn">
           <div className="categories">
             <RxHamburgerMenu className="img" onClick={handleMenu} />
@@ -42,14 +45,19 @@ const Navbar = () => {
         <label htmlFor="name" className="label">
           Search Products:
         </label>
+        {/* Search Bar */}
         <div className="search">
-          <input
-            type="text"
-            name="search"
-            placeholder="Search by part #"
-            className="input"
-          />
-          <IoIosSearch className="searchIcon" />
+          <form action="">
+            <input
+              type="text"
+              name="search"
+              placeholder="Search by part #"
+              className="input"
+            />
+            <button className="searchIcon">
+              <IoIosSearch  className="svg"/>
+            </button>
+          </form>
         </div>
         <div className="right">
           <a className="signIn" href="/login">
