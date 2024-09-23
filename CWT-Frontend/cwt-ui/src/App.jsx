@@ -4,12 +4,13 @@ import ContactUs from "./routes/contact/contactUs";
 import Home from "./routes/homepage/homepage";
 import { Layout } from "./routes/Layout/layout";
 import Login from "./routes/login/login";
-
-import DetailedProductPage from './routes/ProductPage/DetailedProductPage'; // Import the new component
-import ProductPage from './routes/ProductPage/ProductPage'; // Ensure this is correctly imported
+import DetailedProductPage from './routes/ProductPage/DetailedProductPage';
+import ProductPage from './routes/ProductPage/ProductPage';
 import AdminHome from "./AdminPanel/pages/home/AdminHome";
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import UserForm from "./routes/form/userform";
+import CartPage from './routes/CartPage/CartPage';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import CartProvider from './context/CartContext';
 
 function App() {
   const router = createBrowserRouter([
@@ -20,7 +21,7 @@ function App() {
         {
           path: "/",
           element: <Home />,
-        },   
+        },
         {
           path: "/login",
           element: <Login/>,
@@ -42,22 +43,26 @@ function App() {
           element: <ProductPage />,
         },
         {
-          path: "/products/:id",  // New Route
-          element: <DetailedProductPage />, // Route for Detailed Product Page
+          path: "/products/:id", 
+          element: <DetailedProductPage />,
+        },
+        {
+          path: "/cart",  
+          element: <CartPage />,
         }
       ],
     },
     {
       path: "/admin",
-      element: <AdminHome/>, // New layout for the admin section
+      element: <AdminHome/>,
     },
   ]);
 
-  return <RouterProvider router={router}/>;  
+  return (
+    <CartProvider>
+      <RouterProvider router={router}/>
+    </CartProvider>
+  );
 }
 
 export default App;
-
-
-
-

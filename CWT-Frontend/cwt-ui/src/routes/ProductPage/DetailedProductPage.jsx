@@ -1,22 +1,20 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import productData from '../../lib/brandProductsDetailed.json';
 import './DetailedProductPage.scss';
+import { CartContext } from '../../context/CartContext';
 
 const DetailedProductPage = () => {
   const { id } = useParams();
+  const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate(); // Initialize navigate
   const product = productData.find((item) => item.id === id);
-  const [rating, setRating] = useState(0); // State to hold the current rating
+  const [rating, setRating] = useState(0); 
 
   const handleAddToCart = () => {
+    addToCart({ ...product, quantity: 1 });
     console.log(`${product.name} added to cart`);
-    // Implement your add-to-cart logic here
-  };
-
-  const handleRatingClick = (newRating) => {
-    setRating(rating === newRating ? 0 : newRating); // Toggle between empty and filled stars
-    console.log(`You clicked on ${newRating} stars`);
-    // Implement your rating logic here, e.g., sending to backend
+    navigate('/cart'); // Redirect to cart page after adding item to cart
   };
 
   if (!product) {
@@ -40,19 +38,6 @@ const DetailedProductPage = () => {
             <p><strong>Color:</strong> {product.color}</p>
             <p className="product-price"><strong>Price:</strong> ${product.price}</p>
 
-            <div className="product-rating">
-              {Array.from({ length: 5 }, (_, i) => (
-                <span
-                  key={i}
-                  className={`star ${i < rating ? 'filled' : ''}`}
-                  onClick={() => handleRatingClick(i + 1)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  &#9733; {/* Filled star */}
-                </span>
-              ))}
-            </div>
-
             <button
               className="add-to-cart-button"
               onClick={handleAddToCart}
@@ -68,6 +53,5 @@ const DetailedProductPage = () => {
 };
 
 export default DetailedProductPage;
-
 
 

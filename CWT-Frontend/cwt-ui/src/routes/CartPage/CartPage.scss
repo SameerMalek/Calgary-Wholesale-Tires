@@ -1,0 +1,195 @@
+@import "../../responsive.scss";
+
+.cart-page {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  .cart-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    @include md {
+      flex-direction: row;
+    }
+
+    @include sm {
+      flex-direction: column;
+    }
+  }
+
+  .cart-item {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 15px;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 1 1 calc(50% - 20px); 
+
+    @include md {
+      flex: 1 1 calc(50% - 20px); 
+    }
+
+    @include sm {
+      flex: 1 1 100%; 
+    }
+
+    .cart-item-image {
+      width: 150px;
+      height: auto;
+      margin-right: 20px;
+    }
+
+    .cart-item-details {
+      flex: 1;
+
+      h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      .quantity {
+        color: #000;
+        margin: 5px 0;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .price {
+        color: red;
+        margin: 5px 0;
+        font-size: 20px;
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+
+        .quantity-buttons-container {
+          display: flex;
+          background-color: #ccc;
+          border-radius: 10px;  /* Increased border-radius for more rounded corners */
+          overflow: hidden;
+
+          .quantity-button {
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &:hover {
+              background-color: #999;
+            }
+
+            &:first-child {
+              border-right: 1px solid #999;
+            }
+          }
+        }
+      }
+
+      .remove-button {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 5px 15px;
+        border-radius: 10px;  /* Increased border-radius for more rounded corners */
+        cursor: pointer;
+        font-size: 14px;
+
+        &:hover {
+          background-color: #555;
+        }
+      }
+    }
+  }
+
+  .cart-summary {
+    margin-top: 30px;
+
+    .cart-total {
+      font-size: 24px;
+      color: #333;
+      text-align: left;
+      font-weight: bold;
+
+      .total-amount {
+        font-size: 28px;
+        color: red;
+        font-weight: bold;
+      }
+    }
+
+    .terms {
+      margin-top: 10px;
+      font-size: 16px;
+      text-align: left;
+
+      input[type="checkbox"] {
+        margin-right: 10px;
+      }
+
+      label {
+        color: #555;
+        font-weight: bold;
+      }
+    }
+
+    .cart-options {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+
+      button {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 15px 60px; /* Ensure both buttons have the same padding */
+        border-radius: 10px;  /* Increased border-radius for more rounded corners */
+        cursor: pointer;
+        font-size: 18px;
+        min-width: 150px; /* Set a minimum width for the buttons */
+
+        &:hover {
+          background-color: #555;
+        }
+      }
+
+      .back-button {
+        background-color: #000;
+        color: #fff;
+
+        &:hover {
+          background-color: #222;
+        }
+      }
+
+      .checkout-button {
+        background-color: #ff4d4d;
+
+        &:hover {
+          background-color: #ff1a1a;
+        }
+      }
+    }
+  }
+}
+
