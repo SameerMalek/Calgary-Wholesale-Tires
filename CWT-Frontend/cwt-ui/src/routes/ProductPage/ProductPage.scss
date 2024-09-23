@@ -1,15 +1,133 @@
 @import "../../responsive.scss";
 .product-page {
   .container {
-    max-width: 1200px;
+    max-width: 1347px;
     margin: 0 auto;
     padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 3fr; // Left for filters, right for products
+    gap: 20px;
+
+    @include sm {
+      grid-template-columns: 1fr; // Stack filters and products on small screens
+    }
   }
 
+  /* Filter Section */
+  .filter-section {
+    height: 752px;
+    overflow-y: auto;
+    position: relative;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    .filter-group {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      &:last-of-type {
+        border-bottom: none;
+      }
+    }
+
+    .disclosure-button {
+      display: flex;
+      border: none;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px; // Adjust padding for a better touch area
+      background-color: #5555550f;
+      color: #333; // Text color
+      font-weight: 600; // Bold text
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        background-color: rgba(29, 78, 216, 0.1); // Subtle background on hover
+        color: #1d4ed8; // Change text color on hover
+      }
+
+      .toggle-icon {
+        margin-left: 1rem; // Space between title and icon
+        transition: transform 0.3s ease;
+
+        .icon {
+          width: 1rem; // Adjust size as needed
+          height: 1rem;
+          color: #333; // Color of the icons
+          transition: color 0.3s ease, transform 0.3s ease; // Added transform for scaling effect
+        }
+      }
+    }
+
+    .filter-panel {
+      margin-top: 5px;
+      background-color: #f0f0f0; /* Example: Light gray background */
+      padding: 20px;
+      border-radius: 10px;
+      // position: absolute; // Position it absolutely
+      // z-index: 10; // Ensure it's above other content
+      // width: 100%; // Ensure it stretches across the filter section
+      // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Optional: add shadow for depth
+      padding-right: 20px;
+      padding-bottom: 10px;
+      max-height: 170px;
+      overflow-y: auto;
+      display: grid;
+      grid-auto-rows: auto;
+      grid-gap: 10px
+    }
+
+    .space-y-4 {
+      .flex {
+        transition: background-color 0.2s; // Add hover effect to options
+        border-bottom: 1px solid #80808038;
+        margin-bottom: 5px;
+
+        &:hover {
+          background-color: #f0f0f0; // Highlight on hover
+        }
+      }
+    }
+
+    .checkbox {
+      height: 16px;
+      width: 16px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      margin-right: 10px;
+      cursor: pointer; // Change cursor for checkboxes
+
+      &:checked {
+        background-color: #1d4ed8; // Highlight when checked
+      }
+    }
+
+    .label {
+      font-size: 14px;
+      color: #555;
+      cursor: pointer; // Change cursor for labels
+
+      &:hover {
+        color: #1d4ed8; // Change label color on hover
+      }
+    }
+  }
+
+  /* Product Grid */
   .product-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two columns to show four products in total */
+    grid-template-columns: repeat(2, 1fr); // Two columns for products
     gap: 20px;
+
+    @include sm {
+      grid-template-columns: 1fr; // Stack products on small screens
+    }
   }
 
   .product-item {
@@ -18,75 +136,44 @@
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    padding: 15px;
 
     .product-image {
-      width: 200px;
+      width: 100px;
       height: auto;
+      border-radius: 8px;
       margin-right: 20px;
-      margin-left: 160px;
-      margin-bottom: 8px;
     }
 
     .product-info {
-      h3.product-name {
-        font-size: 20px;
-        margin-bottom: 10px;
+      h3 {
+        font-size: 18px;
+        font-weight: 600;
         color: #333;
-      }
-
-      p.product-description-title {
-        color: red ;
-        font-weight: bold;
+        margin-bottom: 10px;
       }
 
       p {
-        margin: 5px 0;
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 5px;
+
+        strong {
+          font-weight: bold;
+          color: #444;
+        }
+      }
+
+      .product-description-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: red;
+      }
+
+      .product-description {
         font-size: 14px;
         color: #555;
-      }
-    }
-  }
-
-  /* Media Queries for Responsiveness */
-  /* Tablet View */
-  @include md{
-    .product-grid {
-      grid-template-columns: 1fr; /* Stack items on smaller screens */
-    }
-
-    .product-item {
-      flex-direction: column;
-      text-align: center;
-
-      .product-image {
-        margin: 0 auto 15px;
-      }
-    }
-  }
-
-  /* Mobile View */
-  @include sm {
-    .product-grid {
-      gap: 15px;
-    }
-
-    .product-item {
-      padding: 15px;
-
-      .product-image {
-        width: 100%;
-        max-width: 150px;
-      }
-
-      .product-info {
-        h3.product-name {
-          font-size: 18px;
-        }
-
-        p {
-          font-size: 12px;
-        }
+        margin-bottom: 10px;
       }
     }
   }
