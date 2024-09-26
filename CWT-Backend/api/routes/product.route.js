@@ -1,9 +1,9 @@
-import { express } from 'express';
+// import { express } from 'express';
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get("/products",(req,res)=>{
-    console.log("All Products")
-})
+// router.get("/products",(req,res)=>{
+//     console.log("All Products")
+// })
 
-export default router;
+// export default router;

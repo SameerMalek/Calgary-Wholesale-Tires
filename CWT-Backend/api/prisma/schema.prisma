@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Category Model:
+
+model Category {
+  /// Primary key for the category
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// Name of the category (e.g., Winter Tires)
+  name       String
+  /// Description of the category
+  description String?
+  /// Slug for SEO-friendly URL
+  slug       String   @unique
+  /// Boolean flag to check if category is active
+  isActive   Boolean  @default(true)
+  /// Date when category was created
+  createdAt  DateTime @default(now())
+  /// Date when category was last updated
+  updatedAt  DateTime @updatedAt
+
+  // Relation to SubCategory
+  subCategories SubCategory[]
+  products      Product[]
+}
+
+// Sub-Category Model:
+
+model SubCategory {
+  /// Primary key for the subcategory
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  /// Foreign key to the related category
+  categoryId   String    @db.ObjectId
+  /// Name of the subcategory (e.g., 195/65 Tires)
+  name         String
+  /// Description of the subcategory
+  description  String?
+  /// Slug for SEO-friendly URL
+  slug         String    @unique
+  /// Boolean flag to check if subcategory is active
+  isActive     Boolean   @default(true)
+  /// Date when subcategory was created
+  createdAt    DateTime  @default(now())
+  /// Date when subcategory was last updated
+  updatedAt    DateTime  @updatedAt
+
+  // Relation to Category
+  category     Category  @relation(fields: [categoryId], references: [id])
+  products     Product[]
+}
+
+// Product Model:
+
+model Product {
+  /// Primary key for the product
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  /// Foreign key to the related category
+  categoryId   String    @db.ObjectId
+  /// Foreign key to the related subcategory
+  subCategoryId String   @db.ObjectId
+  /// Name of the product (e.g., 185/65R15 88H Austone SP-901)
+  name         String
+  /// Description of the product
+  description  String?
+  /// SEO-friendly slug for URL
+  handle       String    @unique
+  /// Stock Keeping Unit (SKU)
+  sku          String    @unique
+  /// Product price
+  price        Float
+  /// Price comparison (if available)
+  compareAtPrice Float?
+  /// Quantity of products in stock
+  stockQuantity Int      @default(0)
+  /// Minimum stock threshold before warning
+  minStockThreshold Int  @default(1)
+  /// Brand of the product
+  brand        String?
+  /// Weight of the product
+  weight       Float     @default(0)
+  /// Dimensions of the product (optional)
+  dimensions   String?
+  /// URL to the main image of the product
+  featuredImage String?
+  /// Boolean to indicate if the product is active
+  isActive     Boolean   @default(true)
+  /// Date when product was created
+  createdAt    DateTime  @default(now())
+  /// Date when product was last updated
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  category     Category  @relation(fields: [categoryId], references: [id])
+  subCategory  SubCategory @relation(fields: [subCategoryId], references: [id])
+  variants     Variant[]
+  images       ProductImage[]
+  tags         ProductTag[]
+
+  ProductFilter ProductFilter[]
+
+  BundleProduct BundleProduct[]
+}
+
+// Variants model:
+
+model Variant {
+  /// Primary key for the variant
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// Foreign key to the related product
+  productId   String   @db.ObjectId
+  /// Title of the variant (e.g., Default Title)
+  title       String
+  /// Price of the variant
+  price       Float
+  /// SKU of the variant (if different from the product)
+  sku         String?
+  /// Quantity available for this variant
+  quantity    Int      @default(0)
+
+  // Relation to Product
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+// Product Image Model:
+
+model ProductImage {
+  /// Primary key for the image
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// Foreign key to the related product
+  productId   String   @db.ObjectId
+  /// Image source URL
+  src         String
+  /// Optional caption or alt text for the image
+  altText     String?
+
+  // Relation to Product
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+// Bundles Model:
+
+model Bundle {
+  /// Primary key for the bundle
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// Name of the bundle (e.g., Winter Tire Bundle)
+  bundleName  String
+  /// Description of the bundle
+  description String?
+  /// Price of the bundle
+  price       Float
+  /// Slug for SEO-friendly URL
+  slug        String    @unique
+  /// Date when the bundle was created
+  createdAt   DateTime  @default(now())
+  /// Date when the bundle was last updated
+  updatedAt   DateTime  @updatedAt
+
+  // Relation to BundleProduct
+  bundleProducts BundleProduct[]
+}
+
+// Bundle Product Model:
+
+model BundleProduct {
+  /// Primary key for the bundle product relation
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// Foreign key to the related bundle
+  bundleId    String   @db.ObjectId
+  /// Foreign key to the related product
+  productId   String   @db.ObjectId
+  /// Quantity of the product in the bundle
+  quantity    Int      @default(1)
+
+  // Relations
+  bundle      Bundle   @relation(fields: [bundleId], references: [id])
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+// Search-Filter Model:
+
+model SearchFilter {
+  /// Primary key for the search filter
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// Name of the filter (e.g., Size, Brand)
+  filterName  String
+  /// Date when the filter was created
+  createdAt   DateTime @default(now())
+  /// Date when the filter was last updated
+  updatedAt   DateTime @updatedAt
+
+  ProductFilter ProductFilter[]
+}
+
+// Product-Filter Model:
+
+model ProductFilter {
+  /// Primary key for the product filter relation
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// Foreign key to the related product
+  productId   String   @db.ObjectId
+  /// Foreign key to the related search filter
+  filterId    String   @db.ObjectId
+  /// Value of the filter (e.g., 185/65R15 for Size filter)
+  value       String
+
+  // Relations
+  product     Product  @relation(fields: [productId], references: [id])
+  filter      SearchFilter @relation(fields: [filterId], references: [id])
+}
+
+// ProductTags Model:
+
+model ProductTag {
+  /// Primary key for the product tag relation
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// Foreign key to the related product
+  productId   String   @db.ObjectId
+  /// Tag name (e.g., "Winter", "Tires")
+  tagName     String
+
+  // Relation to Product
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+
+

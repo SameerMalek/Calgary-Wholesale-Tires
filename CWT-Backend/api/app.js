@@ -1,5 +1,5 @@
 import express from "express";
-import productRoute from "./routes/product.route";
+
 
 const app = express();
 const PORT=8800;
@@ -14,7 +14,6 @@ app.use("/route/to/path", (req,res)=>{
     })
 */
 
-app.use("api/", productRoute);
 
 app.listen(PORT, ()=> {
     console.log(`Server is successfully started at PORT: ${PORT}`);
