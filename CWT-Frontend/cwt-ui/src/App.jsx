@@ -11,6 +11,7 @@ import UserForm from "./routes/form/userform";
 import CartPage from './routes/CartPage/CartPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import CartProvider from './context/CartContext';
+import User from './AdminPanel/components/users/User';  
 
 function App() {
   const router = createBrowserRouter([
@@ -49,7 +50,11 @@ function App() {
         {
           path: "/cart",  
           element: <CartPage />,
-        }
+        },
+        {
+          path: "/users",  
+          element: <User />,
+        },
       ],
     },
     {
