@@ -38,7 +38,7 @@ model Category {
   /// Primary key for the category
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   /// Name of the category (e.g., Winter Tires)
-  name        String
+  name        String   @unique
   /// Description of the category
   description String?
   /// Slug for SEO-friendly URL
@@ -63,7 +63,7 @@ model SubCategory {
   /// Foreign key to the related category
   categoryId  String   @db.ObjectId
   /// Name of the subcategory (e.g., 195/65 Tires)
-  name        String
+  name        String   @unique
   /// Description of the subcategory
   description String?
   /// Slug for SEO-friendly URL
