@@ -80,7 +80,7 @@
         .quantity-buttons-container {
           display: flex;
           background-color: #ccc;
-          border-radius: 10px;  /* Increased border-radius for more rounded corners */
+          border-radius: 10px;  
           overflow: hidden;
 
           .quantity-button {
@@ -110,7 +110,7 @@
         color: #fff;
         border: none;
         padding: 5px 15px;
-        border-radius: 10px;  /* Increased border-radius for more rounded corners */
+        border-radius: 10px;  
         cursor: pointer;
         font-size: 14px;
 
@@ -162,11 +162,11 @@
         background-color: #333;
         color: #fff;
         border: none;
-        padding: 15px 60px; /* Ensure both buttons have the same padding */
-        border-radius: 10px;  /* Increased border-radius for more rounded corners */
+        padding: 15px 60px; 
+        border-radius: 10px;  
         cursor: pointer;
         font-size: 18px;
-        min-width: 150px; /* Set a minimum width for the buttons */
+        min-width: 150px; 
 
         &:hover {
           background-color: #555;
