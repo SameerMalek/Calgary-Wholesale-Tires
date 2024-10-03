@@ -92,7 +92,7 @@ model SubCategory {
 }
 
 // Product Model:
-
+ 
 model Product {
   /// Primary key for the product
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
