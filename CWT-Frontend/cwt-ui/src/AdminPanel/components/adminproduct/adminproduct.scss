@@ -1,96 +1,215 @@
+// .addProduct {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     min-height: 100vh; // Ensure it takes up the full viewport height
+//     margin: 0 auto;
+//     padding: 40px;
+//     background: #f8f9fa;
+//     font-family: Arial, sans-serif;
+  
+//     .addProductContainer {
+//       width: 100%;
+//       max-width: 900px;
+//       padding: 40px;
+//       background: #ffffff;
+//       border-radius: 12px;
+//       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  
+//       h1 {
+//         text-align: center;
+//         margin-bottom: 30px;
+//         font-size: 28px;
+//         color: #343a40;
+//         font-weight: bold;
+//       }
+  
+//       form {
+//         .formGroup {
+//           margin-bottom: 20px;
+  
+//           label {
+//             font-weight: 600;
+//             margin-bottom: 8px;
+//             font-size: 16px;
+//             color: #495057;
+//             display: block;
+//           }
+  
+//           input[type="text"],
+//           input[type="number"],
+//           textarea {
+//             width: 100%;
+//             padding: 12px;
+//             font-size: 16px;
+//             border: 1px solid #ced4da;
+//             border-radius: 8px;
+//             transition: border-color 0.3s ease;
+//             background-color: #f8f9fa;
+  
+//             &:focus {
+//               outline: none;
+//               border-color: #80bdff;
+//               box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+//             }
+//           }
+  
+//           textarea {
+//             resize: vertical;
+//             min-height: 100px;
+//           }
+//         }
+  
+//         .formGroupRow {
+//           display: flex;
+//           flex-wrap: wrap;
+//           gap: 20px;
+  
+//           .formGroup {
+//             flex: 1 1 calc(50% - 20px); // Ensures equal width with consistent gap
+//           }
+//         }
+  
+//         button[type="submit"] {
+//           width: 100%;
+//           padding: 15px;
+//           background-color: #007bff;
+//           color: #fff;
+//           font-size: 18px;
+//           font-weight: bold;
+//           border: none;
+//           border-radius: 8px;
+//           cursor: pointer;
+//           transition: background-color 0.3s ease;
+  
+//           &:hover {
+//             background-color: #0056b3;
+//           }
+  
+//           &:active {
+//             transform: scale(0.98);
+//           }
+//         }
+//       }
+//     }
+//   }
+  
 .addProduct {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; // Ensure it takes up the full viewport height
-    margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; // Ensure it takes up the full viewport height
+  margin: 0 auto;
+  padding: 40px;
+  background: #f8f9fa;
+  font-family: Arial, sans-serif;
+
+  .addProductContainer {
+    width: 100%;
+    max-width: 900px;
     padding: 40px;
-    background: #f8f9fa;
-    font-family: Arial, sans-serif;
-  
-    .addProductContainer {
-      width: 100%;
-      max-width: 900px;
-      padding: 40px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  
-      h1 {
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 28px;
-        color: #343a40;
-        font-weight: bold;
-      }
-  
-      form {
-        .formGroup {
-          margin-bottom: 20px;
-  
-          label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 16px;
-            color: #495057;
-            display: block;
-          }
-  
-          input[type="text"],
-          input[type="number"],
-          textarea {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            transition: border-color 0.3s ease;
-            background-color: #f8f9fa;
-  
-            &:focus {
-              outline: none;
-              border-color: #80bdff;
-              box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-            }
-          }
-  
-          textarea {
-            resize: vertical;
-            min-height: 100px;
-          }
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      color: #343a40;
+      font-weight: bold;
+    }
+
+    form {
+      .formGroup {
+        margin-bottom: 20px;
+
+        label {
+          font-weight: 600;
+          margin-bottom: 8px;
+          font-size: 16px;
+          color: #495057;
+          display: block;
         }
-  
-        .formGroupRow {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 20px;
-  
-          .formGroup {
-            flex: 1 1 calc(50% - 20px); // Ensures equal width with consistent gap
-          }
-        }
-  
-        button[type="submit"] {
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select.selectInput {
           width: 100%;
-          padding: 15px;
-          background-color: #007bff;
-          color: #fff;
-          font-size: 18px;
-          font-weight: bold;
-          border: none;
+          padding: 12px;
+          font-size: 16px;
+          border: 1px solid #ced4da;
           border-radius: 8px;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-  
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
+          background-color: #f8f9fa;
+
           &:hover {
-            background-color: #0056b3;
+            border-color: #6c757d;
           }
-  
-          &:active {
-            transform: scale(0.98);
+
+          &:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
           }
+        }
+
+        textarea {
+          resize: vertical;
+          min-height: 100px;
+        }
+      }
+
+      .formGroupRow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+
+        .formGroup {
+          flex: 1 1 calc(50% - 20px); // Ensures equal width with consistent gap
+        }
+      }
+
+      .formGroup input[type="checkbox"] {
+        margin-right: 10px;
+        transform: scale(1.2);
+      }
+
+      button[type="submit"] {
+        width: 100%;
+        padding: 15px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+
+        &.loading {
+          background-color: #6c757d;
+          cursor: not-allowed;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .formGroupRow {
+          flex-direction: column;
+        }
+        .formGroup {
+          flex: 1 1 100%;
         }
       }
     }
   }
-  
+}
