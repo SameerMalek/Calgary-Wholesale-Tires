@@ -31,7 +31,7 @@ export default function Login() {
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input type="password" id="password" placeholder="Password" />
-            </div>
+             </div>
             <button type="submit" className="btn-sign-in">Sign In</button>
             <a href="#" className="forgot-password" onClick={openForgotPasswordModal}>Forgot Password?</a>
           </form>

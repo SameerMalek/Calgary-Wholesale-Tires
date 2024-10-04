@@ -1,6 +1,10 @@
+//require('dotenv').config();
+
 import express from "express";
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
+//console.log('Environment Variables:',process.env);
 
 import userRoute from "../api/routes/auth.route.js";
 import productRoute from "../api/routes/product.route.js";
@@ -20,7 +24,7 @@ import productManagementRoutes from "../api/routes/productManagementRoutes.js";
 const app = express();
 const PORT = 8800;
 
-
+app.use(cors({origin: process.env.CLIENT_URL, credentials: true}));
 app.use(express.json());
 app.use(cookieParser());
 

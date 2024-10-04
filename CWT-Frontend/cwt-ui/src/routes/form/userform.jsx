@@ -268,10 +268,62 @@
 // }
 
 import React, { useState } from 'react';
-import './userform.scss';
+import "./userform.scss";
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 export default function UserForm() {
-  const [formData, setFormData] = useState({
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target); 
+    
+    const companyName = formData.get('companyName');
+    const address = formData.get('address');
+    const city = formData.get('city');
+    const province = formData.get('province');
+    const postalCode = formData.get('postalCode');
+    const phoneNumber = formData.get('phoneNumber');
+    const email = formData.get('email');
+    const owner = formData.get('owner');
+    const firstName = formData.get('firstName');
+    const lastName = formData.get('lastName');
+    const operationYear = formData.get('operationYear');
+    const annualPurchase = formData.get('annualPurchase');
+    const comments = formData.get('comments');
+
+    try {
+
+      const res = axios.post("http://localhost:8800/api/auth/register", {
+        companyName,
+        address,
+        city,
+        province,
+        postalCode,
+        phoneNumber,
+        email,
+        owner,
+        firstName,
+        lastName,
+        operationYear,
+        annualPurchase,
+        comments
+      });
+
+      navigate("/login");
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+    }
+  
+
+
+  //AAryan's work - commented by Khushbu
+  /*const [formData, setFormData] = useState({
     companyName: '',
     address: '',
     city: '',
@@ -327,14 +379,17 @@ export default function UserForm() {
       }
     } catch (error) {
       console.error('Error:', error);
-    }
+    }*/
   };
 
   return (
     <div className="user-form-container">
       <div className="form-wrapper">
-        <h2>To open an account, please fill out the following form</h2>
+        
+        <h2>Please fill out the following form to be a member with CWT</h2>
+        
         <form onSubmit={handleSubmit}>
+         
           {/* Business Details */}
           <div className="form-section">
             <h3>Business Details*</h3>
@@ -430,9 +485,10 @@ export default function UserForm() {
           {/* Submit Button */}
           <div className="form-group">
             <button type="submit" className="btn-submit">Submit</button>
+            {error && <span>{error}</span>}
           </div>
         </form>
       </div>
     </div>
   );
-}
+
