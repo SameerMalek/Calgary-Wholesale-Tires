@@ -380,7 +380,7 @@ export default function UserForm() {
     } catch (error) {
       console.error('Error:', error);
     }*/
-  };
+  
 
   return (
     <div className="user-form-container">
@@ -491,4 +491,4 @@ export default function UserForm() {
       </div>
     </div>
   );
-
+};
