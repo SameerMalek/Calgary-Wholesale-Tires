@@ -323,7 +323,7 @@ export default function UserForm() {
 
 
   //AAryan's work - commented by Khushbu
-  /*const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     companyName: '',
     address: '',
     city: '',
@@ -344,42 +344,42 @@ export default function UserForm() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:5000/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch('http://localhost:5000/api/users', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log('User created:', data);
-        // Optionally reset the form or show a success message
-        setFormData({
-          companyName: '',
-          address: '',
-          city: '',
-          province: '',
-          postalCode: '',
-          phoneNumber: '',
-          email: '',
-          owner: '',
-          firstName: '',
-          lastName: '',
-          operationYear: '',
-          annualPurchase: '',
-          comments: '',
-        });
-      } else {
-        console.error('Failed to create user:', response.status);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }*/
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log('User created:', data);
+  //       // Optionally reset the form or show a success message
+  //       setFormData({
+  //         companyName: '',
+  //         address: '',
+  //         city: '',
+  //         province: '',
+  //         postalCode: '',
+  //         phoneNumber: '',
+  //         email: '',
+  //         owner: '',
+  //         firstName: '',
+  //         lastName: '',
+  //         operationYear: '',
+  //         annualPurchase: '',
+  //         comments: '',
+  //       });
+  //     } else {
+  //       console.error('Failed to create user:', response.status);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
   
 
   return (

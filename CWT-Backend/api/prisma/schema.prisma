@@ -32,16 +32,15 @@ model User {
   updatedAt      DateTime @updatedAt
 
   // Opposite Relations
- orders         Order[] @relation("UserOrders") 
-  cartItems      Cart[]
-  wishlistItems  Wishlist[]
-  discounts      Discount[]
-  reviews        Review[]
-  notifications  Notification[]
+  orders             Order[]             @relation("UserOrders")
+  cartItems          Cart[]
+  wishlistItems      Wishlist[]
+  discounts          Discount[]
+  reviews            Review[]
+  notifications      Notification[]
   inventoryTrackings InventoryTracking[]
   productManagements ProductManagement[]
 }
-
 
 // Category Model:
 
@@ -52,6 +51,8 @@ model Category {
   name        String   @unique
   /// Description of the category
   description String?
+  /// Image of the category
+  image       String?
   /// Slug for SEO-friendly URL
   slug        String   @unique
   /// Boolean flag to check if category is active
@@ -92,7 +93,7 @@ model SubCategory {
 }
 
 // Product Model:
- 
+
 model Product {
   /// Primary key for the product
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -116,12 +117,22 @@ model Product {
   stockQuantity     Int      @default(0)
   /// Minimum stock threshold before warning
   minStockThreshold Int      @default(1)
-  /// Brand of the product
+  /// Brand of the product (new field)
   brand             String?
+  /// Tire width (new field)
+  tireWidth         Int?
+  /// Aspect ratio (new field)
+  aspectRatio       Int?
+  /// Rim size (new field)
+  rimSize           Int?
+  /// Product type (new field, e.g., Winter Tires, Tire Package)
+  productType       String?
+  /// Availability (new field, e.g., On Sale, New)
+  availability      String?
   /// Weight of the product
-  weight            Float    @default(0)
-  /// Dimensions of the product (optional)
-  dimensions        String?
+  weight            Float?    @default(0)
+  /// Dimensions of the product
+  dimensions         Json?
   /// URL to the main image of the product
   featuredImage     String?
   /// Boolean to indicate if the product is active
@@ -140,19 +151,17 @@ model Product {
 
   ProductFilter ProductFilter[]
 
-  BundleProduct BundleProduct[]
-    // Opposite Relations
-  orderItems        OrderItem[]
-  cartItems         Cart[]
-  wishlistItems     Wishlist[]
-  discounts         Discount[]
-  reviews           Review[]
-  inventoryTrackings InventoryTracking[]
+  BundleProduct           BundleProduct[]
+  // Opposite Relations
+  orderItems              OrderItem[]
+  cartItems               Cart[]
+  wishlistItems           Wishlist[]
+  discounts               Discount[]
+  reviews                 Review[]
+  inventoryTrackings      InventoryTracking[]
   bestSellingSalesReports SalesReport[]
-  productManagements ProductManagement[]
-
+  productManagements      ProductManagement[]
 }
-
 
 // Variants model:
 
@@ -288,7 +297,7 @@ model Order {
   updatedAt        DateTime @updatedAt
 
   // Relations
-  user       User   @relation(fields: [user_id], references: [id], name: "UserOrders")  // Add the relation name here
+  user       User        @relation(fields: [user_id], references: [id], name: "UserOrders") // Add the relation name here
   orderItems OrderItem[]
   shipments  Shipment[]
 }
@@ -296,12 +305,12 @@ model Order {
 // Order_Item Model:
 
 model OrderItem {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  order_id    String   @db.ObjectId
-  product_id  String   @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  order_id    String @db.ObjectId
+  product_id  String @db.ObjectId
   quantity    Int
   price       Float
-  discount    Float?   // Optional discount amount
+  discount    Float? // Optional discount amount
   total_price Float
 
   // Relations
@@ -342,7 +351,7 @@ model Discount {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   user_id        String   @db.ObjectId
   product_id     String   @db.ObjectId
-  discount_type  String   // Can be percentage or fixed
+  discount_type  String // Can be percentage or fixed
   discount_value Float
   start_date     DateTime
   end_date       DateTime
@@ -356,14 +365,14 @@ model Discount {
 // Reviews Model:
 
 model Review {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  user_id    String   @db.ObjectId
-  product_id String   @db.ObjectId
-  rating     Int
-  comment    String?
-  is_approved Boolean @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  user_id     String   @db.ObjectId
+  product_id  String   @db.ObjectId
+  rating      Int
+  comment     String?
+  is_approved Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
   user    User    @relation(fields: [user_id], references: [id])
@@ -373,30 +382,29 @@ model Review {
 // Notification Model:
 
 model Notification {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  user_id    String   @db.ObjectId
-  type       String   // Can be restock, promotion, order_status
-  message    String
-  status     String   @default("unread")
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user_id   String   @db.ObjectId
+  type      String // Can be restock, promotion, order_status
+  message   String
+  status    String   @default("unread")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
   user User @relation(fields: [user_id], references: [id])
 }
 
-
 // Shipment Model:
 
 model Shipment {
-  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
-  order_id              String   @db.ObjectId
-  tracking_number       String
-  carrier               String
-  status                String   @default("processing") // Can be processing, shipped, in_transit, delivered
-  estimated_delivery    DateTime
-  actual_delivery       DateTime?
-  shipping_cost         Float
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
+  order_id           String    @db.ObjectId
+  tracking_number    String
+  carrier            String
+  status             String    @default("processing") // Can be processing, shipped, in_transit, delivered
+  estimated_delivery DateTime
+  actual_delivery    DateTime?
+  shipping_cost      Float
 
   // Relations
   order Order @relation(fields: [order_id], references: [id])
@@ -405,12 +413,12 @@ model Shipment {
 // Inventory_Tracking Model:
 
 model InventoryTracking {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  product_id     String   @db.ObjectId
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  product_id      String   @db.ObjectId
   change_quantity Int
-  location       String
-  date           DateTime @default(now())
-  updated_by     String   @db.ObjectId
+  location        String
+  date            DateTime @default(now())
+  updated_by      String   @db.ObjectId
 
   // Relations
   product Product @relation(fields: [product_id], references: [id])
@@ -420,14 +428,14 @@ model InventoryTracking {
 //  Sales_Reports Model:
 
 model SalesReport {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  date               DateTime
-  total_sales        Float
-  total_orders       Int
-  total_customers    Int
-  best_selling_product_id String @db.ObjectId
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                      String   @id @default(auto()) @map("_id") @db.ObjectId
+  date                    DateTime
+  total_sales             Float
+  total_orders            Int
+  total_customers         Int
+  best_selling_product_id String   @db.ObjectId
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   // Relation to best-selling product
   best_selling_product Product @relation(fields: [best_selling_product_id], references: [id])
@@ -436,17 +444,16 @@ model SalesReport {
 // Product_Management Model:
 
 model ProductManagement {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  product_id     String   @db.ObjectId
-  admin_id       String   @db.ObjectId
-  action         String
-  description    String?
-  change_date    DateTime @default(now())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  product_id  String   @db.ObjectId
+  admin_id    String   @db.ObjectId
+  action      String
+  description String?
+  change_date DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
   product Product @relation(fields: [product_id], references: [id])
   admin   User    @relation(fields: [admin_id], references: [id])
 }
-

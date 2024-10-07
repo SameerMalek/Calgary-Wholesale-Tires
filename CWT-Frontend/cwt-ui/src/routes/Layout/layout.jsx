@@ -16,7 +16,6 @@ import Footer from "../../components/footer/footer";
     </div>
     <div className="footer">
      <Footer />
-     
     </div>
   </div>
   )

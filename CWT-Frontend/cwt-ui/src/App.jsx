@@ -41,11 +41,11 @@ function App() {
           element: <UserForm/>,
         },
         {
-          path: "/products", 
+          path: "/category/:categoryId/products", 
           element: <ProductPage />,
         },
         {
-          path: "/products/:id", 
+          path: "/product/:id", 
           element: <DetailedProductPage />,
         },
         {
