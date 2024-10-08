@@ -14,6 +14,7 @@ import CartProvider from './context/CartContext';
 import User from './AdminPanel/components/users/User';
 import AdminProduct from "./AdminPanel/components/adminproduct/adminproduct";
 import AdProduct from "./AdminPanel/components/adminproduct/adproduct";
+import TermsAndConditions from "./routes/termscondition/termscondition";
 
 function App() {
   const router = createBrowserRouter([
@@ -64,6 +65,10 @@ function App() {
         {
           path: "/inventory",  
           element: <AdProduct />,
+        },
+        {
+          path: "/termscondition",
+          element: <TermsAndConditions />,
         },
       ],
     },
