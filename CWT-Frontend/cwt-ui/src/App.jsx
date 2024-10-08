@@ -13,6 +13,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import CartProvider from './context/CartContext';
 import User from './AdminPanel/components/users/User';
 import AdminProduct from "./AdminPanel/components/adminproduct/adminproduct";
+import OrderManagement from './AdminPanel/components/order/OrderManagement'; // Correct import from AdminPanel/components/order
 
 function App() {
   const router = createBrowserRouter([
@@ -66,6 +67,10 @@ function App() {
       path: "/admin",
       element: <AdminHome/>,
     },
+    {
+      path: "/admin/orders",  // <-- Route for Order Management (show all orders)
+      element: <OrderManagement/>, // OrderManagement page for viewing and managing orders
+    },
   ]);
 
   return (
@@ -76,3 +81,4 @@ function App() {
 }
 
 export default App;
+
