@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import TermsAndConditionsModal from '../../components/termsandconditionmodal/TermsAndConditionsModal';
 import "./CartPage.scss";
 
 const CartPage = () => {
@@ -8,8 +9,19 @@ const CartPage = () => {
     useContext(CartContext);
   const navigate = useNavigate();
 
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleBackClick = () => {
     navigate(-1);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -29,7 +41,6 @@ const CartPage = () => {
                 />
                 <div className="cart-item-details">
                   <h3>{item.name}</h3>
-                  {/* Display the selected variant name */}
                   {item.selectedVariant && (
                     <p className="variant">
                       Variant: {item.selectedVariant.title}
@@ -89,7 +100,11 @@ const CartPage = () => {
             <label htmlFor="terms">
               <b>*TERMS AND CONDITIONS</b>
             </label>
+            <span className="terms-link" onClick={openModal}>
+              (Read Terms and Conditions)
+            </span>
           </div>
+
           <div className="cart-options">
             <button className="back-button" onClick={handleBackClick}>
               BACK
@@ -98,6 +113,9 @@ const CartPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Include the modal component */}
+      <TermsAndConditionsModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };

@@ -1,0 +1,54 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6); // Dark overlay
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; // Ensure it overlays all content
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 80%; // Adjust width as needed
+    max-width: 800px; // Set max width
+    max-height: 80vh;
+    overflow-y: auto; // Make it scrollable for large content
+    text-align: left;
+  
+    h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: #333;
+      text-align: center;
+    }
+  
+    .terms-content {
+      padding: 10px; // Add padding to the terms content
+    }
+  
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+  
+      .btn {
+        background-color: #000;
+        color: white;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: #333;
+        }
+      }
+    }
+  }
+  
