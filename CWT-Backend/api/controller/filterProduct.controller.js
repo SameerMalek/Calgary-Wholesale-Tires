@@ -8,6 +8,11 @@ export const filterProducts = async (req, res) => {
     priceRange,
     dimensions,
     tags,
+    tireWidth,
+    aspectRatio,
+    rimSize,
+    productType,
+    availability,
   } = req.query;
 
   try {
@@ -55,6 +60,52 @@ export const filterProducts = async (req, res) => {
       });
     }
 
+    // New filters for tire width, aspect ratio, rim size, product type, and availability
+    if (tireWidth) {
+      const tireWidthArray = tireWidth.split(',').map(Number);
+      filters.AND.push({
+        tireWidth: {
+          in: tireWidthArray,
+        },
+      });
+    }
+
+    if (aspectRatio) {
+      const aspectRatioArray = aspectRatio.split(',').map(Number);
+      filters.AND.push({
+        aspectRatio: {
+          in: aspectRatioArray,
+        },
+      });
+    }
+
+    if (rimSize) {
+      const rimSizeArray = rimSize.split(',').map(Number);
+      filters.AND.push({
+        rimSize: {
+          in: rimSizeArray,
+        },
+      });
+    }
+
+    if (productType) {
+      const productTypeArray = productType.split(',').map(type => type.trim());
+      filters.AND.push({
+        productType: {
+          in: productTypeArray,
+        },
+      });
+    }
+
+    if (availability) {
+      const availabilityArray = availability.split(',').map(avail => avail.trim());
+      filters.AND.push({
+        availability: {
+          in: availabilityArray,
+        },
+      });
+    }
+
     const products = await prisma.product.findMany({
       where: filters,
       include: {
@@ -70,3 +121,4 @@ export const filterProducts = async (req, res) => {
     res.status(500).json({ message: 'Error filtering products', error: err.message });
   }
 };
+

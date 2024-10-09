@@ -14,6 +14,11 @@ export const addProduct = async (req, res) => {
     stockQuantity,
     minStockThreshold,
     brand,
+    tireWidth,         // New field: Tire width
+    aspectRatio,       // New field: Aspect ratio
+    rimSize,           // New field: Rim size
+    productType,       // New field: Product type
+    availability,      // New field: Availability status
     weight,
     dimensions,
     featuredImage,
@@ -33,6 +38,10 @@ export const addProduct = async (req, res) => {
   if (!categoryName || !subCategoryName) {
     return res.status(400).json({ message: 'Category and Subcategory names are required.' });
   }
+
+  // Optionally parse numeric inputs for tireWidth and aspectRatio, defaulting to null if not provided
+  const parsedTireWidth = tireWidth != null ? parseInt(tireWidth, 10) : null;
+  const parsedAspectRatio = aspectRatio != null ? parseInt(aspectRatio, 10) : null;
 
   try {
     // Fetch the category by name
@@ -56,8 +65,17 @@ export const addProduct = async (req, res) => {
     // Create the product with relationships to variants, images, and tags
     const newProduct = await prisma.product.create({
       data: {
-        categoryId: category.id,
-        subCategoryId: subCategory.id,
+        category: {
+          connect: {
+            id: category.id, // Connect to the category
+          },
+        },
+        subCategory: {
+          connect: {
+            id: subCategory.id, // Connect to the subcategory
+          },
+        },
+
         name,
         description,
         handle,
@@ -67,6 +85,11 @@ export const addProduct = async (req, res) => {
         stockQuantity: parseInt(stockQuantity, 10) || 0, // Ensure stockQuantity is an integer
         minStockThreshold: parseInt(minStockThreshold, 10) || 1,
         brand,
+        tireWidth: parsedTireWidth, // Use parsed value, which can be null
+        aspectRatio: parsedAspectRatio, // Use parsed value, which can be null
+        rimSize: parseInt(rimSize, 10),  // Ensure rimSize is an integer
+        productType,  // New field: Product type as string
+        availability, // New field: Availability status as string
         weight: parseFloat(weight) || 0, // Ensure weight is a float
         dimensions,
         featuredImage,
@@ -106,6 +129,7 @@ export const addProduct = async (req, res) => {
   }
 };
 
+
 // Delete a product by ID
 export const deleteProduct = async (req, res) => {
   const { productId } = req.params;
@@ -135,6 +159,11 @@ export const updateProduct = async (req, res) => {
     stockQuantity,
     minStockThreshold,
     brand,
+    tireWidth,         // New field: Tire width
+    aspectRatio,       // New field: Aspect ratio
+    rimSize,           // New field: Rim size
+    productType,       // New field: Product type
+    availability,      // New field: Availability status
     weight,
     dimensions,
     featuredImage,
@@ -157,6 +186,11 @@ export const updateProduct = async (req, res) => {
         stockQuantity: parseInt(stockQuantity, 10) || 0,
         minStockThreshold: parseInt(minStockThreshold, 10) || 1,
         brand,
+        tireWidth: parseInt(tireWidth, 10),  // New field: Ensure tireWidth is an integer
+        aspectRatio: parseInt(aspectRatio, 10),  // New field: Ensure aspectRatio is an integer
+        rimSize: parseInt(rimSize, 10),  // New field: Ensure rimSize is an integer
+        productType,  // New field: Product type as string
+        availability, // New field: Availability status as string
         weight: parseFloat(weight) || 0,
         dimensions,
         featuredImage,
@@ -196,6 +230,28 @@ export const updateProduct = async (req, res) => {
   } catch (err) {
     console.error('Error updating product:', err);
     res.status(500).json({ message: 'Error updating product', error: err.message });
+  }
+};
+
+// Get all products:
+export const getAllProducts = async (req, res) => {
+  try {
+    const product = await prisma.product.findMany({
+      include: {
+        variants: true,  // Include variants in the response
+        images: true,    // Include images in the response
+        tags: true,      // Include tags in the response
+      },
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.status(200).json({ product });
+  } catch (err) {
+    console.error('Error fetching product:', err);
+    res.status(500).json({ message: 'Error fetching product', error: err.message });
   }
 };
 

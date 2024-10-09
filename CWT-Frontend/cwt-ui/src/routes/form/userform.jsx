@@ -4,7 +4,60 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 export default function UserForm() {
-  // Form data state
+ 
+  
+
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target); 
+    
+    const companyName = formData.get('companyName');
+    const address = formData.get('address');
+    const city = formData.get('city');
+    const province = formData.get('province');
+    const postalCode = formData.get('postalCode');
+    const phoneNumber = formData.get('phoneNumber');
+    const email = formData.get('email');
+    const owner = formData.get('owner');
+    const firstName = formData.get('firstName');
+    const lastName = formData.get('lastName');
+    const operationYear = formData.get('operationYear');
+    const annualPurchase = formData.get('annualPurchase');
+    const comments = formData.get('comments');
+
+    try {
+
+      const res = axios.post("http://localhost:8800/api/auth/register", {
+        companyName,
+        address,
+        city,
+        province,
+        postalCode,
+        phoneNumber,
+        email,
+        owner,
+        firstName,
+        lastName,
+        operationYear,
+        annualPurchase,
+        comments
+      });
+
+      navigate("/login");
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+    }
+  
+
+
+  //AAryan's work - commented by Khushbu
+
   const [formData, setFormData] = useState({
     companyName: '',
     address: '',
@@ -30,6 +83,7 @@ export default function UserForm() {
     setFormData({ ...formData, [name]: value });
   };
 
+ 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,6 +96,45 @@ export default function UserForm() {
       setError(err.response.data.message);
     }
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch('http://localhost:5000/api/users', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log('User created:', data);
+  //       // Optionally reset the form or show a success message
+  //       setFormData({
+  //         companyName: '',
+  //         address: '',
+  //         city: '',
+  //         province: '',
+  //         postalCode: '',
+  //         phoneNumber: '',
+  //         email: '',
+  //         owner: '',
+  //         firstName: '',
+  //         lastName: '',
+  //         operationYear: '',
+  //         annualPurchase: '',
+  //         comments: '',
+  //       });
+  //     } else {
+  //       console.error('Failed to create user:', response.status);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  
+ 
 
   return (
     <div className="user-form-container">

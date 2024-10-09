@@ -56,7 +56,7 @@ const filters = [
 const Filter = () => {
   const location = useLocation();
   const [isFilterActive, setIsFilterActive] = useState(true);
-  
+
   // Initial state for filters
   const initialFilters = {
     width: "",
@@ -68,8 +68,11 @@ const Filter = () => {
   const [selectedFilters, setSelectedFilters] = useState(initialFilters);
 
   useEffect(() => {
-    if (location.pathname === "/products") {
-      setIsFilterActive(false); // Hide filter bar on products page
+    // Regular expression to match /category/:categoryId/products
+    const productPathRegex = /^\/category\/[^/]+\/products$/;
+
+    if (productPathRegex.test(location.pathname)) {
+      setIsFilterActive(false); // Hide filter bar for the products page with category
     } else {
       setIsFilterActive(true); // Show filter bar on other pages
     }

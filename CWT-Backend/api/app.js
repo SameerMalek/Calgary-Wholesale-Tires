@@ -2,12 +2,13 @@
 
 import express from "express";
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import cors from "cors";
 
 //console.log('Environment Variables:',process.env);
 
 import userRoute from "../api/routes/auth.route.js";
 import productRoute from "../api/routes/product.route.js";
+import categoryRoute from "../api/routes/category.route.js";
 import filterProductRoute from "../api/routes/filterProduct.route.js";
 import orderRoutes from "../api/routes/orderRoutes.js";
 import orderItemRoutes from "../api/routes/orderItemRoutes.js";
@@ -31,6 +32,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", userRoute);
 app.use("/api", productRoute);
+app.use("/api", categoryRoute);
 app.use("/api", filterProductRoute);
 app.use("/api/orders", orderRoutes); 
 app.use("/api/order-items", orderItemRoutes); 
