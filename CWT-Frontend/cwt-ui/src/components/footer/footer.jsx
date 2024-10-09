@@ -34,7 +34,7 @@ const Footer = () => {
               <a href="/">Delivery</a>
             </li>
             <li>
-              <a href="/">Terms & Conditions</a>
+              <a href="/termscondition">Terms & Conditions</a>
             </li>
             <li>
               <a href="/">Privacy</a>

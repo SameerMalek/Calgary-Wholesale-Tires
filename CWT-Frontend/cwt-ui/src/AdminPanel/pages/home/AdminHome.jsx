@@ -38,6 +38,7 @@ import Widget from "../../components/widget/Widget";
 import Featured from "../../components/featured/Featured";
 import Table from "../../components/table/Table";
 import AdminProduct from "../../components/adminproduct/adminproduct";
+import AdProduct from "../../components/adminproduct/adproduct";
 
 const AdminHome = () => {
   // State to track the currently active panel
@@ -66,7 +67,8 @@ const AdminHome = () => {
         );
       case "products":
         return <AdminProduct />;
-      // Add more cases here for other panels like "users", "orders", etc.
+      case "inventory":
+        return <AdProduct />;
       default:
         return (
           <div>

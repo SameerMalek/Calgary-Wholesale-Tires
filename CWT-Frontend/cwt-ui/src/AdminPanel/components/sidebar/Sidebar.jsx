@@ -37,6 +37,10 @@ const Sidebar = ({ setActivePanel }) => {
           </li>
           <li onClick={() => setActivePanel('products')}>
             <StoreIcon className="icon" />
+            <span>Inventory</span>
+          </li>
+          <li onClick={() => setActivePanel('inventory')}>
+            <StoreIcon className="icon" />
             <span>Products</span>
           </li>
           {/* Change from onClick to Link for Orders */}
