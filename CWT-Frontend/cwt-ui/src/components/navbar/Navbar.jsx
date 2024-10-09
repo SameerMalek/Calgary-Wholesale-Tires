@@ -86,7 +86,7 @@ const Navbar = () => {
           <a href="/">My Acount</a>
         </div>
       </div>
-
+      
       {/* Botttom Filter */}
       <Filter  />
     </nav>

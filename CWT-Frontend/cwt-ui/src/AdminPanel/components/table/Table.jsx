@@ -6,6 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Link } from 'react-router-dom';  // Import Link from react-router-dom
 
 const List = () => {
   const rows = [
@@ -77,7 +78,11 @@ const List = () => {
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.id}>
-              <TableCell className="tableCell">{row.id}</TableCell>
+              <TableCell className="tableCell">
+                <Link to={`/admin/orders/${row.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {row.id}
+                </Link>
+              </TableCell>
               <TableCell className="tableCell">
                 <div className="cellWrapper">
                   <img src={row.img} alt="" className="image" />
