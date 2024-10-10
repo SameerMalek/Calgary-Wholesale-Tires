@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "cwt-backend": "file:",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.9.0"
   }
 }
