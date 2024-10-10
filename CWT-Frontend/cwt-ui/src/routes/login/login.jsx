@@ -1,15 +1,72 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link,Navigate,useNavigate } from 'react-router-dom'; // Import useNavigate
 import './login.scss';
-import ForgotPassword from '../../components/forgotpassword/ForgotPassword.jsx';
+//import ForgotPassword from '../../components/forgotpassword/ForgotPassword.jsx';
+import apiRequest from '../../lib/apiRequest.js';
 
 export default function Login() {
-  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+  
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+  
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      setIsLoading(false);
+      return;
+    }
+  
+    try {
+      const res = await apiRequest.post("/auth/login", {
+        email,
+        password,
+      });
+  
+      console.log("Login response:", res);
+  
+      if (res.status === 200) {
+        // Check if we can access the data
+        if (res.data) {
+          console.log("Login successful. User data:", res.data);
+          localStorage.setItem("user", JSON.stringify(res.data));
+          navigate("/");
+        } else {
+          console.log("Login successful, but unable to access response data.");
+          // You might want to handle this case differently
+          localStorage.setItem("user", JSON.stringify({ email }));
+          navigate("/");
+        }
+      } else {
+        setError("Unexpected response from server");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      if (err.response) {
+        setError(err.response.data?.message || "An error occurred during login.");
+      } else if (err.request) {
+        setError("No response received from the server. Please try again.");
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  /*const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const navigate = useNavigate(); // Initialize the navigate function
 
   const openForgotPasswordModal = () => setIsForgotPasswordOpen(true);
   const closeForgotPasswordModal = () => setIsForgotPasswordOpen(false);
-
+*/
   // Function to navigate to UserForm page
   const navigateToCreateAccount = () => {
     navigate("/form"); // This will take the user to the "/create-account" route
@@ -22,18 +79,19 @@ export default function Login() {
       </div>
       <div className="login-content">
         <div className="existing-user">
-          <h3>Existing Customer</h3>
-          <form>
+          <h3>Welcome back</h3>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input type="text" id="username" placeholder="Username" />
+              <label htmlFor="email">EmailId</label>
+              <input type="email" id="email" placeholder="email" required  />
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input type="password" id="password" placeholder="Password" />
              </div>
-            <button type="submit" className="btn-sign-in">Sign In</button>
-            <a href="#" className="forgot-password" onClick={openForgotPasswordModal}>Forgot Password?</a>
+            <button type="submit" className="btn-sign-in" disabled={isLoading}>Sign In</button>
+            {error && <p className="error-message">{error}</p>}
+            <a href="#" className="forgot-password">Forgot Password?</a>
           </form>
         </div>
         <div className="new-user">
@@ -47,9 +105,7 @@ export default function Login() {
           </button>
         </div>
       </div>
-
-      {/* Render the Forgot Password modal */}
-      <ForgotPassword isOpen={isForgotPasswordOpen} onClose={closeForgotPasswordModal} />
-    </div>
+     
+          </div>
   );
 }

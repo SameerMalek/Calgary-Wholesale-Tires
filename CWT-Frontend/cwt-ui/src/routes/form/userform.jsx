@@ -266,19 +266,22 @@
 //     </div>
 //   );
 // }
-
-import React, { useState } from 'react';
 import "./userform.scss";
+import React, { useState } from 'react';
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import apiRequest from '../../lib/apiRequest';
 
 export default function UserForm() {
   const [error, setError] = useState("");
+  const [isLoading,setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setIsLoading
 
     const formData = new FormData(e.target); 
     
@@ -289,6 +292,7 @@ export default function UserForm() {
     const postalCode = formData.get('postalCode');
     const phoneNumber = formData.get('phoneNumber');
     const email = formData.get('email');
+    const password = formData.get('password');
     const owner = formData.get('owner');
     const firstName = formData.get('firstName');
     const lastName = formData.get('lastName');
@@ -298,7 +302,7 @@ export default function UserForm() {
 
     try {
 
-      const res = axios.post("http://localhost:8800/api/auth/register", {
+      const res = await apiRequest.post("/auth/register", {
         companyName,
         address,
         city,
@@ -306,6 +310,7 @@ export default function UserForm() {
         postalCode,
         phoneNumber,
         email,
+        password,
         owner,
         firstName,
         lastName,
@@ -317,8 +322,10 @@ export default function UserForm() {
       navigate("/login");
     } catch (err) {
       setError(err.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
-    }
+    };
   
 
 
@@ -395,20 +402,20 @@ export default function UserForm() {
             <h3>Business Details*</h3>
             <div className="form-group">
               <label htmlFor="company-name">Company Name*</label>
-              <input name="companyName" id="company-name" type="text" placeholder="Enter company name" required onChange={handleChange} value={formData.companyName} />
+              <input name="companyName" id="company-name" type="text" placeholder="Enter company name" required />
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="address">Address*</label>
-                <input name="address" id="address" type="text" placeholder="Enter address" required onChange={handleChange} value={formData.address} />
+                <input name="address" id="address" type="text" placeholder="Enter address" required/>
               </div>
               <div className="form-group">
                 <label htmlFor="city">City*</label>
-                <input name="city" id="city" type="text" placeholder="Enter city" required onChange={handleChange} value={formData.city} />
+                <input name="city" id="city" type="text" placeholder="Enter city" required />
               </div>
               <div className="form-group">
                 <label htmlFor="province">Province*</label>
-                <select name="province" id="province" required onChange={handleChange} value={formData.province}>
+                <select name="province" id="province" required>
                   <option value="">Select province</option>
                   <option value="AB">Alberta</option>
                   <option value="BC">British Columbia</option>
@@ -429,15 +436,19 @@ export default function UserForm() {
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="postal-code">Postal Code*</label>
-                <input name="postalCode" id="postal-code" type="text" placeholder="Enter postal code" required onChange={handleChange} value={formData.postalCode} />
+                <input name="postalCode" id="postal-code" type="text" placeholder="Enter postal code" required />
               </div>
               <div className="form-group">
                 <label htmlFor="phone-number">Phone no.*</label>
-                <input name="phoneNumber" id="phone-number" type="tel" placeholder="Enter phone number" pattern="[0-9]{10}" title="Enter a 10-digit phone number" required onChange={handleChange} value={formData.phoneNumber} />
+                <input name="phoneNumber" id="phone-number" type="tel" placeholder="Enter phone number" pattern="[0-9]{10}" title="Enter a 10-digit phone number" required />
               </div>
               <div className="form-group">
                 <label htmlFor="email">Email Id*</label>
-                <input name="email" id="email" type="email" placeholder="Enter email id" required onChange={handleChange} value={formData.email} />
+                <input name="email" id="email" type="email" placeholder="Enter email id" required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password*</label>
+                <input name="password" id="password" type="password" placeholder="Generate Your Password" required />
               </div>
             </div>
           </div>
@@ -449,11 +460,11 @@ export default function UserForm() {
               <label>Are you the company's owner?</label>
               <div className="radio-group">
                 <label>
-                  <input type="radio" name="owner" value="yes" required onChange={handleChange} />
+                  <input type="radio" name="owner" value="yes" required />
                   Yes
                 </label>
                 <label>
-                  <input type="radio" name="owner" value="no" onChange={handleChange} />
+                  <input type="radio" name="owner" value="no" />
                   No
                 </label>
               </div>
@@ -461,30 +472,30 @@ export default function UserForm() {
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="firstname">Firstname*</label>
-                <input name="firstName" id="firstname" type="text" placeholder="Enter first name" required onChange={handleChange} value={formData.firstName} />
+                <input name="firstName" id="firstname" type="text" placeholder="Enter first name" required />
               </div>
               <div className="form-group">
                 <label htmlFor="lastname">Lastname*</label>
-                <input name="lastName" id="lastname" type="text" placeholder="Enter last name" required onChange={handleChange} value={formData.lastName} />
+                <input name="lastName" id="lastname" type="text" placeholder="Enter last name" required />
               </div>
             </div>
             <div className="form-group">
               <label htmlFor="operation-year">In operation since:</label>
-              <input name="operationYear" id="operation-year" type="text" placeholder="Enter year of operation" onChange={handleChange} value={formData.operationYear} />
+              <input name="operationYear" id="operation-year" type="text" placeholder="Enter year of operation" />
             </div>
             <div className="form-group">
               <label htmlFor="annual-purchase">Annual purchased planned:</label>
-              <input name="annualPurchase" id="annual-purchase" type="text" placeholder="Enter annual purchase plan" onChange={handleChange} value={formData.annualPurchase} />
+              <input name="annualPurchase" id="annual-purchase" type="text" placeholder="Enter annual purchase plan" />
             </div>
             <div className="form-group">
               <label htmlFor="comments">Comments:</label>
-              <textarea name="comments" id="comments" rows="5" placeholder="Enter any comments" onChange={handleChange} value={formData.comments}></textarea>
+              <textarea name="comments" id="comments" rows="5" placeholder="Enter any comments" ></textarea>
             </div>
           </div>
 
           {/* Submit Button */}
           <div className="form-group">
-            <button type="submit" className="btn-submit">Submit</button>
+            <button type="submit" className="btn-submit" disabled={isLoading}>Register</button>
             {error && <span>{error}</span>}
           </div>
         </form>

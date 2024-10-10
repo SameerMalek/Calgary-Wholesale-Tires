@@ -63,18 +63,22 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
+  if(!email || !password) {
+    return res.status(400).json({ message: "All fields are required!" });
+  }
+
   try {
-    const user = await prisma.user.findUnique({ where: {email}, });
+    const user = await prisma.user.findUnique({ where: {email} });
     
     // Checking if user exists:
      if (!user) 
-      return res.status(400).json({ message: "Invalid Credentials!" });
+      return res.status(400).json({ message: "Invalid EmailId!" });
 
     // Checking if password is correct:
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
       
       if (!isPasswordCorrect)
-        return res.status(400).json({ message: "Invalid Credentials!" });
+        return res.status(400).json({ message: "Invalid Password!" });
 
       //Generate Cookie Token and Send to the User:
       
@@ -88,17 +92,19 @@ export const login = async (req, res) => {
         { expiresIn: age }
       ); 
 
-      const { password, ...info } = user;
+      const { password: _, ...info } = user;
 
       res.cookie("token", token, { 
         httpOnly: true, 
-        // secure:true,
+        secure: process.env.NODE_ENV === "production",
         maxAge: age })
-      .status(200).json(info);
+      .status(200)
+      .json(info);
       
     } 
     catch (err) {
-      console.log(err);
+      //console.log(err);
+      console.error("Failed to login!", err);
       res.status(500).json({ message: "Failed to login!" });  
     } 
 };
