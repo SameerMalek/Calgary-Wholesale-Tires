@@ -15,4 +15,10 @@
     gap: 20px;
     padding: 20px;
   }
+
+  .category-image {
+    width: 100%; /* Ensure the image takes up space */
+    height: auto;
+    object-fit: cover; /* Ensure the image fits within its container */
+  }
   

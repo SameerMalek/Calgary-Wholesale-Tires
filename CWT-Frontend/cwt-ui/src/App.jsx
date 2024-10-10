@@ -13,6 +13,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import CartProvider from './context/CartContext';
 import User from './AdminPanel/components/users/User';
 import AdminProduct from "./AdminPanel/components/adminproduct/adminproduct";
+import OrderManagement from './AdminPanel/components/order/OrderManagement'; // Correct import for OrderManagement
+import AdProduct from "./AdminPanel/components/adminproduct/adproduct";
+import TermsAndConditions from "./routes/termscondition/termscondition";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,26 +29,26 @@ function App() {
         },
         {
           path: "/login",
-          element: <Login/>,
+          element: <Login />,
         },
         {
           path: "/about",
-          element: <AboutUs/>,
+          element: <AboutUs />,
         },
         {
           path: "/contact",
-          element: <ContactUs/>,
+          element: <ContactUs />,
         },
         {
           path: "/form",
-          element: <UserForm/>,
+          element: <UserForm />,
         },
         {
-          path: "/products", 
+          path: "/category/:categoryId/products", 
           element: <ProductPage />,
         },
         {
-          path: "/products/:id", 
+          path: "/product/:id", 
           element: <DetailedProductPage />,
         },
         {
@@ -60,17 +63,29 @@ function App() {
           path: "/product",  
           element: <AdminProduct />,
         },
+        {
+          path: "/inventory",  
+          element: <AdProduct />,
+        },
+        {
+          path: "/termscondition",
+          element: <TermsAndConditions />,
+        },
       ],
     },
     {
       path: "/admin",
-      element: <AdminHome/>,
+      element: <AdminHome />,
+    },
+    {
+      path: "/admin/orders",  // <-- Route for Order Management (show all orders)
+      element: <OrderManagement />, // OrderManagement page for viewing and managing orders
     },
   ]);
 
   return (
     <CartProvider>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </CartProvider>
   );
 }

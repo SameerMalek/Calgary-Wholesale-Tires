@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
-import React, { useState } from "react";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
+import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
 import { PlusIcon, MinusIcon } from "@heroicons/react/20/solid";
-import productData from "../../lib/brandProductsDetailed.json";
+import axios from "axios";
 import "./ProductPage.scss";
 
 const filters = [
@@ -75,6 +79,7 @@ const filters = [
 ];
 
 const ProductPage = () => {
+  const { categoryId } = useParams();
   const [selectedFilters, setSelectedFilters] = useState({
     width: [],
     aspectRatio: [],
@@ -83,6 +88,9 @@ const ProductPage = () => {
     brand: [],
     availability: [],
   });
+
+  const [allProducts, setAllProducts] = useState([]); // State to hold all products initially
+  const [filteredProducts, setFilteredProducts] = useState([]); // State to hold filtered products
 
   const handleFilterChange = (filterId, value) => {
     setSelectedFilters((prevFilters) => ({
@@ -93,127 +101,176 @@ const ProductPage = () => {
     }));
   };
 
-  const filteredProducts = productData.filter((product) => {
-    const widthMatch =
-      selectedFilters.width.length === 0 ||
-      selectedFilters.width.includes(product.width.toString());
-    const aspectRatioMatch =
-      selectedFilters.aspectRatio.length === 0 ||
-      selectedFilters.aspectRatio.includes(product.aspectRatio.toString());
-    const rimSizeMatch =
-      selectedFilters.rimSize.length === 0 ||
-      selectedFilters.rimSize.includes(product.rimSize.toString());
-    const productTypeMatch =
-      selectedFilters.productType.length === 0 ||
-      selectedFilters.productType.includes(product.type.toLowerCase());
-    const brandMatch =
-      selectedFilters.brand.length === 0 ||
-      selectedFilters.brand.includes(product.brand.toLowerCase());
-    const availabilityMatch =
-      selectedFilters.availability.length === 0 ||
-      selectedFilters.availability.includes(product.availability.toLowerCase());
+  // Function to filter products based on selected filters
+  const filterProducts = () => {
+    const filtered = allProducts.filter((product) => {
+      const widthMatch =
+        (selectedFilters.width && selectedFilters.width.length === 0) ||
+        selectedFilters.width?.includes(product.tireWidth?.toString() || "");
+      const aspectRatioMatch =
+        (selectedFilters.aspectRatio &&
+          selectedFilters.aspectRatio.length === 0) ||
+        selectedFilters.aspectRatio?.includes(
+          product.aspectRatio?.toString() || ""
+        );
+      const rimSizeMatch =
+        (selectedFilters.rimSize && selectedFilters.rimSize.length === 0) ||
+        selectedFilters.rimSize?.includes(product.rimSize?.toString() || "");
+      const productTypeMatch =
+        (selectedFilters.productType &&
+          selectedFilters.productType.length === 0) ||
+        selectedFilters.productType?.includes(
+          product.type?.toLowerCase() || ""
+        );
+      const brandMatch =
+        (selectedFilters.brand && selectedFilters.brand.length === 0) ||
+        selectedFilters.brand?.includes(product.brand?.toLowerCase() || "");
+      const availabilityMatch =
+        (selectedFilters.availability &&
+          selectedFilters.availability.length === 0) ||
+        selectedFilters.availability?.includes(
+          product.availability?.toLowerCase() || ""
+        );
 
-    return (
-      widthMatch &&
-      aspectRatioMatch &&
-      rimSizeMatch &&
-      productTypeMatch &&
-      brandMatch &&
-      availabilityMatch
-    );
-  });
+      return (
+        widthMatch &&
+        aspectRatioMatch &&
+        rimSizeMatch &&
+        productTypeMatch &&
+        brandMatch &&
+        availabilityMatch
+      );
+    });
+
+    setFilteredProducts(filtered);
+  };
+
+  // Fetch all products when the component mounts
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8800/api/category/${categoryId}/products`
+      );
+      setAllProducts(response.data.products || []); // Store all products
+      setFilteredProducts(response.data.products || []); // Initially show all products
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  // Fetch products on component mount
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // Re-filter products whenever filters change
+  useEffect(() => {
+    filterProducts();
+  }, [selectedFilters]);
 
   return (
     <div className="product-page">
-      <div className="container">
-        {/* Sidebar Filters */}
-        <aside className="filter-section">
-          <form>
-            {filters.map((section) => (
-              <Disclosure as="div" key={section.id} className="filter-group">
-                {({ open }) => (
-                  <>
-                    <DisclosureButton className="disclosure-button">
-                      <span className="filter-title">{section.name}</span>
-                      <span className="toggle-icon">
-                        {open ? (
-                          <MinusIcon className="icon" aria-hidden="true" />
-                        ) : (
-                          <PlusIcon className="icon" aria-hidden="true" />
-                        )}
-                      </span>
-                    </DisclosureButton>
-                    <DisclosurePanel className="filter-panel">
-                      <div className="space-y-4">
-                        {section.options.map((option, idx) => (
-                          <div key={option.value} className="flex items-center">
-                            <input
-                              id={`filter-${section.id}-${idx}`}
-                              name={`${section.id}[]`}
-                              type="checkbox"
-                              checked={selectedFilters[section.id].includes(option.value)}
-                              onChange={() => handleFilterChange(section.id, option.value)}
-                              className="checkbox"
-                            />
-                            <label
-                              htmlFor={`filter-${section.id}-${idx}`}
-                              className="label"
+        <div className="container">
+          {/* Sidebar Filters */}
+          <aside className="filter-section">
+            <form>
+              {filters.map((section) => (
+                <Disclosure as="div" key={section.id} className="filter-group">
+                  {({ open }) => (
+                    <>
+                      <DisclosureButton className="disclosure-button">
+                        <span className="filter-title">{section.name}</span>
+                        <span className="toggle-icon">
+                          {open ? (
+                            <MinusIcon className="icon" aria-hidden="true" />
+                          ) : (
+                            <PlusIcon className="icon" aria-hidden="true" />
+                          )}
+                        </span>
+                      </DisclosureButton>
+                      <DisclosurePanel className="filter-panel">
+                        <div className="space-y-4">
+                          {section.options.map((option, idx) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center"
                             >
-                              {option.label}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </DisclosurePanel>
-                  </>
-                )}
-              </Disclosure>
-            ))}
-          </form>
-        </aside>
+                              <input
+                                id={`filter-${section.id}-${idx}`}
+                                name={`${section.id}[]`}
+                                type="checkbox"
+                                checked={selectedFilters[section.id].includes(
+                                  option.value
+                                )}
+                                onChange={() =>
+                                  handleFilterChange(section.id, option.value)
+                                }
+                                className="checkbox"
+                              />
+                              <label
+                                htmlFor={`filter-${section.id}-${idx}`}
+                                className="label"
+                              >
+                                {option.label}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </DisclosurePanel>
+                    </>
+                  )}
+                </Disclosure>
+              ))}
+            </form>
+          </aside>
 
-        {/* Product Grid */}
-        <div className="product-grid">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <div key={product.id} className="product-item">
-                <Link to={`/products/${product.id}`}>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="product-image"
-                  />
-                  <div className="product-info">
-                    <h3 className="product-name">{product.name}</h3>
-                    <p className="product-description-title">DESCRIPTION</p>
-                    <p className="product-description">{product.description}</p>
-                    <p>
-                      <strong>Diameter(in'):</strong> {product.diameter}
-                    </p>
-                    <p>
-                      <strong>Offset:</strong> {product.offset}
-                    </p>
-                    <p>
-                      <strong>Width(in'):</strong> {product.width}
-                    </p>
-                    <p>
-                      <strong>Bolt Pattern:</strong> {product.boltPattern}
-                    </p>
-                    <p>
-                      <strong>Center Bore:</strong> {product.centerBore}
-                    </p>
-                    <p>
-                      <strong>Color:</strong> {product.color}
-                    </p>
-                  </div>
-                </Link>
-              </div>
-            ))
-          ) : (
-            <p>No products found with selected filters.</p>
-          )}
+          {/* Product Grid */}
+          <div className="product-grid">
+            {filteredProducts && filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <div key={product.id} className="product-item">
+                  <Link to={`/product/${product.id}`}>
+                    <img
+                      src={product.featuredImage}
+                      alt={product.name}
+                      className="product-image"
+                    />
+                    <div className="product-info">
+                      <h3 className="product-name">{product.name}</h3>
+                      <p className="product-description-title">DESCRIPTION</p>
+                      <p className="product-description">
+                        {product.description}
+                      </p>
+                      <p>
+                        <strong>Price:</strong> ${product.price.toFixed(2)}
+                      </p>
+                      <p>
+                        <strong>Availability:</strong> {product.availability}
+                      </p>
+                      <p>
+                        <strong>Stock Quantity:</strong> {product.stockQuantity}
+                      </p>
+                      <p>
+                        <strong>Width:</strong> {product.tireWidth}
+                      </p>
+                      <p>
+                        <strong>Aspect Ratio:</strong> {product.aspectRatio}
+                      </p>
+                      <p>
+                        <strong>Rim Size:</strong> {product.rimSize}
+                      </p>
+                      <p>
+                        <strong>Brand:</strong> {product.brand}
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <p>No products found with selected filters.</p>
+            )}
+          </div>
         </div>
-      </div>
     </div>
   );
 };

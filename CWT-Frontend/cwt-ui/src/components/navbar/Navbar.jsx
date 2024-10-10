@@ -64,7 +64,7 @@ const Navbar = () => {
             <img src="/assets/user.png" alt="user" />
             <span>Sign In</span>
           </a>
-          <a className="cart" href="/">
+          <a className="cart" href="/cart">
             <img src="/assets/cart.png" alt="cart" />
             <span>Cart</span>
           </a>
@@ -86,9 +86,9 @@ const Navbar = () => {
           <a href="/">My Acount</a>
         </div>
       </div>
-
+      
       {/* Botttom Filter */}
-      <Filter />
+      <Filter  />
     </nav>
   );
 };

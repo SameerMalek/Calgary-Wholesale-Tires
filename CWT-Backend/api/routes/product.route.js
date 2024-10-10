@@ -6,12 +6,16 @@ import {
   getProductById,
   getProductsByCategory,
   getProductsBySubCategory,
+  getAllProducts,
 } from '../controller/product.controller.js';
 
 const router = express.Router();
 
 // Add product
 router.post('/product', addProduct);
+
+// Get all products
+router.get('/product', getAllProducts);
 
 // Delete product by ID
 router.delete('/product/:productId', deleteProduct);

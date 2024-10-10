@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cwt-frontend": "file:"
+    "cwt-frontend": "file:",
+    "react-modal": "^3.16.1"
   }
 }
