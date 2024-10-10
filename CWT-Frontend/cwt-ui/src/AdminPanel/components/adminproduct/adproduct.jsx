@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./adproduct.scss";
-import productData from "../../../lib/products.json";
+import productData from "../../../lib/brandProductsDetailed.json"; // Assuming the detailed description is stored here
 
 const AdProduct = () => {
   const [products, setProducts] = useState([]); // Store products
@@ -8,7 +8,7 @@ const AdProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
   useEffect(() => {
-    setProducts(productData); // Load products from the JSON file
+    setProducts(productData); // Load products from the detailed JSON file
   }, []);
 
   // Open modal for a specific product
