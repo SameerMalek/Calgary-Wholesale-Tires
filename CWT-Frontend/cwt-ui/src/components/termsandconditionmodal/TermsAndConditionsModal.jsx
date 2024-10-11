@@ -8,9 +8,8 @@ export default function TermsAndConditionsModal({ isOpen, onClose }) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Terms of Service</h2>
         <div className="terms-content">
-          {/* Render the existing TermsAndConditions component inside the modal */}
+          {/* Rendering the existing TermsAndConditions component inside the modal */}
           <TermsAndConditions />
         </div>
         <div className="modal-buttons">

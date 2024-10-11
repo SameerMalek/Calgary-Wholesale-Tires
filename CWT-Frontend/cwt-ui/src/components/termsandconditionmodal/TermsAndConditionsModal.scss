@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; // Ensure it overlays all content
+    z-index: 1000;
   }
   
   .modal-content {
@@ -38,7 +38,7 @@
       margin-top: 1.5rem;
   
       .btn {
-        background-color: #000;
+        background-color: rgb(243, 60, 60);
         color: white;
         padding: 0.75rem 2rem;
         border: none;
