@@ -1,48 +1,97 @@
 .main {
+    background-color: #fff; /* Neutral white background */
+    padding: 20px;
+  
     .image {
-
-        display: flex;
-        justify-content: center;
-
-        img {
-            height: 290px;
-            width: 40%;
-            max-width: 800px;
-            margin: 20px 50px;
-            border-radius: 10px;
-            object-fit: cover;
-        }
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 100px;
+  
+      img {
+        height: 300px; /* Fixed height for both images */
+        width: 500px;  /* Fixed width for both images */
+        max-width: 100%; /* Ensures responsiveness on smaller screens */
+        margin: 20px 0;
+        border-radius: 10px;
+        object-fit: cover; /* Ensures the images retain aspect ratio and don't stretch */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      }
     }
-
+  
     .heading {
-        font-size: 1.1rem;
-        margin-top: 20px;
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1.60rem; /* Larger font size for main heading */
+      color: black;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    
+  
     .sub-heading {
-        font-size: 1.25rem;
-        margin-top: 10px;
+      text-align: left;
+      font-size:xx-large;
+      font-weight: 600;
+      color: black; /* Deep purple for sub-headings */
+      letter-spacing: 0.5px;
     }
-
+  
+    .your-store-heading {
+      text-align: center;
+      font-size: 1.8rem; /* Slightly larger to stand out */
+      color: #452e75; /* Purple color to align with overall theme */
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 25px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #f0e68c; /* Accent yellow underline */
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+  
     .info {
-        margin-top: 15px;
-        font-size: 1rem;
-        line-height: 1.6;
-        color: #333;
+      margin-top: 20px;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #333;
+      padding: 0 15px;
+  
+      h3 {
+        font-size: 1.3rem;
+        color: #2e1065;
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+  
+      p {
+        margin-bottom: 15px;
+      }
     }
-
+  
     @media (max-width: 768px) {
-        .image img {
-            width: 100%;
-            height: auto;
+      .image {
+        flex-direction: column;
+        img {
+          width: 100%; /* Full width for small screens */
+          height: auto; /* Automatically adjust height for small screens */
+          margin: 15px 0;
         }
-
-        .sub-heading {
-            font-size: 1.1rem;
-        }
-
-        .info {
-            font-size: 0.9rem;
-        }
+      }
+  
+      .your-store-heading {
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+      }
+  
+      .sub-heading {
+        font-size: 1.2rem;
+      }
+  
+      .info {
+        font-size: 0.95rem;
+      }
     }
-}
+  }
+  
