@@ -60,29 +60,41 @@ const OrderManagement = () => {
 
   const [expandedRows, setExpandedRows] = useState([]);
 
+  // Function to handle status change and move orders between sections
+  const handleStatusChange = (e, orderGroup, billNo) => {
+    const newStatus = e.target.value;
+
+    const orderToMove = orders[orderGroup].find(order => order.billNo === billNo);
+
+    
+    const updatedCurrentGroup = orders[orderGroup].filter(order => order.billNo !== billNo);
+
+    
+    const updatedOrder = { ...orderToMove, status: newStatus };
+
+    let targetGroup = "newOrders";
+    if (newStatus === "Preparing") {
+      targetGroup = "preparing";
+    } else if (newStatus === "Ready for Delivery") {
+      targetGroup = "readyForDelivery";
+    }
+
+    
+    const updatedTargetGroup = [...orders[targetGroup], updatedOrder];
+
+    setOrders({
+      ...orders,
+      [orderGroup]: updatedCurrentGroup,
+      [targetGroup]: updatedTargetGroup
+    });
+  };
+
   const toggleExpandRow = (billNo) => {
     if (expandedRows.includes(billNo)) {
       setExpandedRows(expandedRows.filter(row => row !== billNo));
     } else {
       setExpandedRows([...expandedRows, billNo]);
     }
-  };
-
-  const handleStatusChange = (e, orderGroup, billNo) => {
-    const updatedOrders = orders[orderGroup].map(order =>
-      order.billNo === billNo ? { ...order, status: e.target.value } : order
-    );
-    setOrders({ ...orders, [orderGroup]: updatedOrders });
-  };
-
-  const handleEditOrder = (billNo) => {
-    alert(`Editing order: ${billNo}`);
-    
-  };
-
-  const handleCancelRefund = (billNo) => {
-    alert(`Cancel/Refund order: ${billNo}`);
-   
   };
 
   const renderOrderGroup = (groupTitle, group) => (
@@ -111,8 +123,8 @@ const OrderManagement = () => {
             </div>
             <div className="tableItem actions">
               <button className="viewBtn" onClick={() => toggleExpandRow(order.billNo)}>View Products</button>
-              <button className="editBtn" onClick={() => handleEditOrder(order.billNo)}>Edit</button>
-              <button className="cancelBtn" onClick={() => handleCancelRefund(order.billNo)}>Cancel/Refund</button>
+              <button className="editBtn" onClick={() => alert(`Editing order: ${order.billNo}`)}>Edit</button>
+              <button className="cancelBtn" onClick={() => alert(`Cancel/Refund order: ${order.billNo}`)}>Cancel/Refund</button>
             </div>
           </div>
 
