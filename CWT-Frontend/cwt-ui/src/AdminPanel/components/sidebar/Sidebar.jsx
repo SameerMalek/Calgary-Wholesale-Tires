@@ -69,7 +69,7 @@ const Sidebar = ({ setActivePanel }) => {
             <span>Reports</span>
           </li>
           <p className="title">USER</p>
-          <li onClick={() => setActivePanel('profile')}>
+          <li onClick={() => setActivePanel('info')}>
             <AccountCircleOutlinedIcon className="icon" />
             <span>Profile</span>
           </li>

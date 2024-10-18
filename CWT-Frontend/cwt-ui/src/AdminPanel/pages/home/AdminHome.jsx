@@ -39,6 +39,7 @@ import Featured from "../../components/featured/Featured";
 import Table from "../../components/table/Table";
 import AdminProduct from "../../components/adminproduct/adminproduct";
 import AdProduct from "../../components/adminproduct/adproduct";
+import AdminProfile from "../../components/adminprofile/adminprofile";
 
 const AdminHome = () => {
   // State to track the currently active panel
@@ -69,6 +70,8 @@ const AdminHome = () => {
         return <AdminProduct />;
       case "inventory":
         return <AdProduct />;
+      case "info":
+        return <AdminProfile />;
       default:
         return (
           <div>

@@ -16,6 +16,7 @@ import AdminProduct from "./AdminPanel/components/adminproduct/adminproduct";
 import OrderManagement from './AdminPanel/components/order/OrderManagement'; // Correct import for OrderManagement
 import AdProduct from "./AdminPanel/components/adminproduct/adproduct";
 import TermsAndConditions from "./routes/termscondition/termscondition";
+import AdminProfile from "./AdminPanel/components/adminprofile/adminprofile";
 
 function App() {
   const router = createBrowserRouter([
@@ -71,6 +72,11 @@ function App() {
           path: "/termscondition",
           element: <TermsAndConditions />,
         },
+        {
+          path: "/products",
+          element: <AdminProfile />,
+        },
+        
       ],
     },
     {
@@ -81,6 +87,7 @@ function App() {
       path: "/admin/orders",  // <-- Route for Order Management (show all orders)
       element: <OrderManagement />, // OrderManagement page for viewing and managing orders
     },
+    
   ]);
 
   return (
