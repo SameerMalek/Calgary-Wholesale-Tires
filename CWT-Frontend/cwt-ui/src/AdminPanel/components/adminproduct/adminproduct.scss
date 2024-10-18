@@ -98,7 +98,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; // Ensure it takes up the full viewport height
+  min-height: 100vh;
   margin: 0 auto;
   padding: 40px;
   background: #f8f9fa;
@@ -160,6 +160,24 @@
           min-height: 100px;
         }
       }
+      select.selectInput {
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        cursor: pointer;
+
+        &:hover {
+          border-color: #6c757d;
+        }
+
+        &:focus {
+          outline: none;
+          border-color: #80bdff;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+      }
 
       .formGroupRow {
         display: flex;
@@ -174,6 +192,115 @@
       .formGroup input[type="checkbox"] {
         margin-right: 10px;
         transform: scale(1.2);
+      }
+
+      .formGroup input[type="file"] {
+        padding: 8px;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .variantGroup {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+
+        input {
+          flex: 1;
+          padding: 10px;
+          border: 1px solid #ced4da;
+          border-radius: 8px;
+          background-color: #f8f9fa;
+
+          &:hover {
+            border-color: #6c757d;
+          }
+
+          &:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+          }
+        }
+
+        button {
+          padding: 10px;
+          background-color: #28a745;
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #218838;
+          }
+        }
+      }
+
+      .imageGroup {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        input {
+          flex: 1;
+          padding: 10px;
+          border: 1px solid #ced4da;
+          border-radius: 8px;
+          background-color: #f8f9fa;
+        }
+
+        button {
+          padding: 10px;
+          background-color: #28a745;
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #218838;
+          }
+        }
+      }
+
+      button[type="button"] {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+      }
+
+      .loadingSpinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top-color: #007bff;
+        animation: spin 1s linear infinite;
+        margin-left: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
       button[type="submit"] {
@@ -206,10 +333,21 @@
         .formGroupRow {
           flex-direction: column;
         }
+
         .formGroup {
           flex: 1 1 100%;
+        }
+
+        .variantGroup {
+          flex-direction: column;
+        }
+
+        .imageGroup {
+          flex-direction: column;
         }
       }
     }
   }
 }
+
+
