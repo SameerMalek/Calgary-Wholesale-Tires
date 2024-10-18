@@ -278,3 +278,73 @@ nav {
     }
   }
 }
+.right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding-right: 20px;
+
+  @include sm {
+    display: none; // Hide on small screens
+  }
+
+  @include md {
+    display: none; // Hide on medium screens
+  }
+
+  .signIn,
+  .wishlist,
+  .cart {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: inherit; // Inherit color from the parent (navbar)
+
+    img {
+      width: 25px;
+    }
+
+    // Heart icon (filled black)
+    .heartIcon {
+      width: 25px; // Same size as the other icons
+      height: 25px;
+      color: black; // Filled black heart icon
+      border: none; // Ensure no border around the icon
+      background: none; // Ensure no background color
+      outline: none; // Remove outline
+    }
+
+    // Wishlist button styling
+    .wishlist {
+      display: flex;
+      align-items: center;
+      background: none; // Remove any background
+      border: none; // Remove any border
+      outline: none; // Remove outline on focus
+      padding: 0; // Remove all padding
+      text-decoration: none; // Remove any text underline
+      color: inherit; // Inherit text color
+      cursor: pointer;
+
+      span {
+        padding: 0; // No padding around text
+        color: inherit; // Inherit text color from parent
+      }
+
+      &:hover .heartIcon {
+        color: black; // Keep the heart icon black on hover
+      }
+
+      &:hover {
+        color: inherit; // Ensure consistent hover color for text
+      }
+
+      &:focus,
+      &:active {
+        border: none; // Ensure no border on focus or active state
+        outline: none; // Remove any focus outline
+      }
+    }
+  }
+}
