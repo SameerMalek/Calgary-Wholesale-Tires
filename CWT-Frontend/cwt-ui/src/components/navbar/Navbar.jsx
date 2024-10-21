@@ -68,11 +68,11 @@ const Navbar = () => {
             <span>Sign In</span>
           </a>
 
-          {/* Wishlist Button */}
-          <button className="wishlist" onClick={handleWishlistClick}>
+          {}
+          <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
             <IoIosHeart className="heartIcon" /> {/* Filled heart icon */}
-            <span className="wishlistText">Wishlist</span> {/* No box around this */}
-          </button>
+            <span className="wishlistText">Wishlist</span> 
+          </a>
 
           <a className="cart" href="/cart">
             <img src="/assets/cart.png" alt="cart" />

@@ -17,6 +17,7 @@ import OrderManagement from './AdminPanel/components/order/OrderManagement'; // 
 import AdProduct from "./AdminPanel/components/adminproduct/adproduct";
 import TermsAndConditions from "./routes/termscondition/termscondition";
 import AdminProfile from "./AdminPanel/components/adminprofile/adminprofile";
+import Wishlist from "./routes/wishlist/wishlist";
 
 function App() {
   const router = createBrowserRouter([
@@ -75,6 +76,10 @@ function App() {
         {
           path: "/products",
           element: <AdminProfile />,
+        },
+        {
+          path: "/wishlist",
+          element: <Wishlist />,
         },
         
       ],
