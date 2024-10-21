@@ -1,75 +1,321 @@
+// .admin-profile {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   height: 100vh;
+//   background-color: white; /* Light background to fit the Calgary Wholesale Tires theme */
+  
+//   .profile-container {
+//     display: flex;
+//     background-color: #ffffff; /* White for the profile section */
+//     padding: 40px; /* Extra padding to make it spacious */
+//     border-radius: 15px; /* Rounded corners */
+//     border: 2px solid #ccc; /* Subtle border */
+//     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+//     width: 85%; /* Make it take up a good portion of the screen width */
+//     max-width: 1200px; /* Limit max width */
+//     height: 90%; /* Almost full height */
+//     margin: auto; /* Center horizontally */
+
+//     .profile-left {
+//       flex: 1;
+//       display: flex;
+//       flex-direction: column;
+//       align-items: center;
+//       justify-content: flex-start;
+//       padding: 20px;
+//       border-right: 2px solid #ccc;
+
+//       h2 {
+//         font-size: 26px;
+//         color: #333; /* Dark gray for headings */
+//         margin-bottom: 20px;
+//       }
+
+//       .profile-symbol {
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//         background-color: #ccc; /* Gray for admin badge */
+//         color: white; /* Light text/icon */
+//         width: 180px;
+//         height: 180px;
+//         border-radius: 50%;
+//         margin-bottom: 20px;
+
+//         .admin-icon {
+//           font-size: 70px; /* Icon size */
+//         }
+//       }
+
+//       .profile-description {
+//         text-align: center;
+//         margin-top: 20px;
+
+//         h3 {
+//           font-size: 20px;
+//           color: #333; /* Dark gray for headings */
+//           margin-bottom: 10px;
+//         }
+
+//         p {
+//           font-size: 16px;
+//           color: #666; /* Slightly lighter gray for description text */
+//           padding: 0 10px;
+//           line-height: 1.5;
+//         }
+//       }
+//     }
+
+//     .profile-right {
+//       flex: 2;
+//       padding: 20px;
+//       display: flex;
+//       flex-direction: column;
+//       justify-content: center;
+
+//       h3 {
+//         font-size: 24px;
+//         color: #333; /* Dark gray for headings */
+//         margin-bottom: 20px;
+//       }
+
+//       form {
+//         display: grid;
+//         grid-template-columns: 1fr 1fr;
+//         gap: 20px;
+
+//         .form-group {
+//           display: flex;
+//           flex-direction: column;
+
+//           label {
+//             color: #333; /* Dark gray for labels */
+//             margin-bottom: 8px;
+//             font-size: 14px;
+//           }
+
+//           input, textarea {
+//             padding: 12px;
+//             border: 1px solid #ccc; /* Light border */
+//             border-radius: 4px;
+//             font-size: 16px;
+//             background-color: #f9f9f9;
+//             color: #333; /* Dark text for input */
+//             transition: border-color 0.3s;
+
+//             &:focus {
+//               border-color: #333; /* Dark border on focus */
+//             }
+//           }
+
+//           input:disabled {
+//             background-color: #eaeaea; /* Disabled input background */
+//             cursor: not-allowed;
+//           }
+
+//           textarea {
+//             resize: none; /* Disable resizing of the textarea */
+//           }
+//         }
+
+//         .btn {
+//           grid-column: span 2;
+//           background-color: #333; /* Dark button */
+//           color: #fdf7f0; /* Light text */
+//           padding: 12px;
+//           border: none;
+//           border-radius: 4px;
+//           cursor: pointer;
+//           font-size: 18px;
+//           margin-top: 20px;
+//           text-align: center;
+
+//           &:hover {
+//             background-color: #000; /* Darker on hover */
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
 .admin-profile {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  background-color: #2e1065; /* Deep purple */
-  color: #fdf7f0; /* Light text */
-  padding: 30px;
-  border-radius: 8px;
-  max-width: 600px;
-  margin: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+  background-color: white; /* Light background to fit the Calgary Wholesale Tires theme */
 
-  .profile-header {
-    text-align: center;
-    margin-bottom: 20px;
+  .profile-container {
+    display: flex;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    border: 2px solid #ccc;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 85%;
+    max-width: 1200px;
+    height: 90%;
+    margin: auto;
 
-    h1 {
-      color: #f0e68c; /* Warm yellow */
-      margin-bottom: 10px;
+    .profile-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border-right: 2px solid #ccc;
+
+      h2 {
+        font-size: 26px;
+        color: #333; /* Dark gray for headings */
+        margin-bottom: 20px;
+      }
+
+      .profile-symbol {
+        background-color: #ccc; /* Gray for admin badge */
+        color: white; /* Light text/icon */
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .admin-icon {
+          font-size: 70px; /* Icon size */
+        }
+      }
+
+      .profile-description {
+        text-align: center;
+        margin-top: 20px;
+
+        h3 {
+          font-size: 20px;
+          color: #333; /* Dark gray for headings */
+          margin-bottom: 10px;
+        }
+
+        p {
+          font-size: 16px;
+          color: #666; /* Slightly lighter gray for description text */
+          padding: 0 10px;
+          line-height: 1.5;
+        }
+      }
     }
 
-    p {
-      color: #fdf7f0;
-      font-size: 14px;
+    .profile-right {
+      flex: 2;
+      padding: 20px;
+
+      h3 {
+        font-size: 24px;
+        color: #333; /* Dark gray for headings */
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          margin-bottom: 8px;
+          font-size: 14px;
+          color: #333;
+        }
+
+        input {
+          padding: 12px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 16px;
+          background-color: #f9f9f9;
+          color: #333;
+          margin-bottom: 15px;
+        }
+
+        input:disabled {
+          background-color: #eaeaea; /* Disabled input background */
+        }
+      }
+
+      .btn {
+        background-color: #333; /* Dark button */
+        color: #fdf7f0; /* Light text */
+        padding: 12px;
+        border: none;
+        border-radius: 4px;
+        font-size: 18px;
+        cursor: pointer;
+        margin-top: 20px;
+
+        &:hover {
+          background-color: #000; /* Darker on hover */
+        }
+      }
     }
   }
 
-  .profile-form {
-    width: 100%;
-    background-color: #452e75; /* Slightly lighter purple */
-    padding: 20px;
-    border-radius: 8px;
+  /* Modal Styling */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Background for the modal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 15px;
+    .modal {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      width: 500px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 
-      label {
-        color: #f0e68c; /* Warm yellow for labels */
-        margin-bottom: 5px;
-        font-size: 14px;
+      h3 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333; /* Dark gray for headings */
       }
 
-      input {
-        padding: 10px;
-        border: 1px solid #ccc;
+      .form-group {
+        margin-bottom: 15px;
+
+        input {
+          width: 100%; /* Make input take full width in the modal */
+          padding: 12px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 16px;
+          background-color: #f9f9f9;
+          color: #333;
+        }
+      }
+
+      .btn {
+        background-color: #333; /* Dark button */
+        color: #fdf7f0; /* Light text */
+        padding: 10px 20px;
         border-radius: 4px;
-        font-size: 14px;
-        background-color: #fdf7f0; /* Light input background */
-        color: #333;
+        cursor: pointer;
+        margin-right: 10px;
+
+        &:hover {
+          background-color: #000; /* Darker on hover */
+        }
       }
 
-      input:disabled {
-        background-color: #eaeaea; /* Disabled input background */
-        cursor: not-allowed;
-      }
-    }
-
-    .btn {
-      background-color: #f0e68c; /* Warm yellow button */
-      color: #2e1065; /* Deep purple text */
-      padding: 10px;
-      width: 100%;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-
-      &:hover {
-        background-color: #e0d080; /* Darken button on hover */
+      .btn-cancel {
+        background-color: #ccc; /* Cancel button background */
+        &:hover {
+          background-color: #bbb; /* Slightly darker on hover */
+        }
       }
     }
   }
