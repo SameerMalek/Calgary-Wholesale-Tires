@@ -19,21 +19,20 @@
       gap: 15px;
       margin-bottom: 15px;
 
-      input {
-        flex: 1 1 30%; /* 3 equal columns, each taking up roughly 30% of the space */
-        min-width: 100px; /* Ensures inputs don’t shrink too much on small screens */
+      input, textarea {
         padding: 12px;
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 16px;
       }
 
+      input {
+        flex: 1 1 30%;
+        min-width: 100px;
+      }
+
       textarea {
         width: 100%;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
         height: 120px;
         resize: vertical;
       }
@@ -44,24 +43,29 @@
       justify-content: space-between;
       margin-top: 20px;
 
-      button {
+      a.back-btn {
+        background-color: #000; 
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+
+      button.submit-btn {
+        background-color: red;
+        color: white;
+        border: none;
         padding: 10px 20px;
         border-radius: 5px;
         font-size: 16px;
         cursor: pointer;
         transition: opacity 0.3s ease;
-
-        &.back-btn {
-          background-color: #000;
-          color: #fff;
-          border: none;
-        }
-
-        &.submit-btn {
-          background-color: red;
-          color: #fff;
-          border: none;
-        }
 
         &:hover {
           opacity: 0.8;

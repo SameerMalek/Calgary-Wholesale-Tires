@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import "./Navbar.scss";
 import Filter from "../filter/filter";
-import { IoIosSearch } from "react-icons/io";
+import { IoIosSearch, IoIosHeart } from "react-icons/io"; // Use filled heart icon
 import { RxHamburgerMenu } from "react-icons/rx";
-import Dropdown from "./../dropdown/dropdown";
+import Dropdown from "./../dropdown/dropdown"; // Dropdown component
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+
   const handleMenu = () => {
     setOpenMenu((prev) => !prev);
   };
-  const [searchQuery, setSearchQuery]= useState({
-    search: "",
-  })
+
+  const handleWishlistClick = () => {
+    console.log("Wishlist clicked!"); // Add any logic you need here
+  };
+
   return (
     <nav>
       {/* Top Part */}
@@ -55,7 +58,7 @@ const Navbar = () => {
               className="input"
             />
             <button className="searchIcon">
-              <IoIosSearch  className="svg"/>
+              <IoIosSearch className="svg" />
             </button>
           </form>
         </div>
@@ -64,6 +67,13 @@ const Navbar = () => {
             <img src="/assets/user.png" alt="user" />
             <span>Sign In</span>
           </a>
+
+          {}
+          <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
+            <IoIosHeart className="heartIcon" /> {/* Filled heart icon */}
+            <span className="wishlistText">Wishlist</span> 
+          </a>
+
           <a className="cart" href="/cart">
             <img src="/assets/cart.png" alt="cart" />
             <span>Cart</span>
@@ -83,12 +93,12 @@ const Navbar = () => {
           <a href="/">Products</a>
           <a href="/">Sign In</a>
           <a href="/">Cart</a>
-          <a href="/">My Acount</a>
+          <a href="/">My Account</a>
         </div>
       </div>
       
-      {/* Botttom Filter */}
-      <Filter  />
+      {/* Bottom Filter */}
+      <Filter />
     </nav>
   );
 };
