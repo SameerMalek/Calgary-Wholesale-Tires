@@ -1,0 +1,59 @@
+@import "../../responsive.scss";
+
+.filteredproduct-page {
+  .container {
+    max-width: 1347px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+    @include sm {
+      grid-template-columns: 1fr; // Stack for small screens
+    }
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+
+    @include sm {
+      grid-template-columns: 1fr; // Stack on small screens
+    }
+  }
+
+  .product-item {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; // Add smooth transition effect
+
+    &:hover {
+      transform: scale(1.05); // Slightly expand the card on hover
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); // Enhance the shadow on hover
+    }
+
+    .product-image {
+      width: 100px;
+      height: auto;
+      border-radius: 8px;
+      margin-right: 20px;
+    }
+
+    .product-info {
+      h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: red;
+        margin-bottom: 10px;
+      }
+      
+      // Additional styles for the product info
+    }
+  }
+}
