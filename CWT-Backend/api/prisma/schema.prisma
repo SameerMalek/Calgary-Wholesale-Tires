@@ -106,7 +106,7 @@ model Product {
   /// Description of the product
   description       String?
   /// SEO-friendly slug for URL
-  handle            String   @unique
+  handle            String?   @unique
   /// Stock Keeping Unit (SKU)
   sku               String   @unique
   /// Product price

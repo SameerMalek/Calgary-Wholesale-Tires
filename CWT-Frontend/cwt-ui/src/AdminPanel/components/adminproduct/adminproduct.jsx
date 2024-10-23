@@ -14,8 +14,8 @@ const AdminProductPage = () => {
     dimensions: "",
     featuredImage: "",
     compareAtPrice: 0,
-    categoryId: "",
-    subCategoryId: "",
+    categoryName: "", // Updated to categoryName
+    subCategoryName: "", // Updated to subCategoryName
     tireWidth: "", // Optional field for tires
     aspectRatio: "", // Optional field for tires
     productType: "", 
@@ -45,19 +45,19 @@ const AdminProductPage = () => {
   }, []);
 
   const handleCategoryChange = (e) => {
-    const selectedCategoryId = e.target.value;
+    const selectedCategoryName = e.target.value;
     const selectedCategory = categories.find(
-      (category) => category.id === selectedCategoryId
+      (category) => category.name === selectedCategoryName
     );
-    setSubCategories(selectedCategory ? selectedCategory.subCategories : []);
+    
+    // Set the product's category and reset subCategory if the category changes
     setProduct({
       ...product,
-      categoryId: selectedCategoryId,
-      subCategoryId: "",
+      categoryName: selectedCategoryName, // Update to categoryName
+      subCategoryName: "", // Reset subcategory
     });
-    setIsTireCategory(
-      selectedCategory ? selectedCategory.name === "Tires" : false
-    );
+    setSubCategories(selectedCategory ? selectedCategory.subCategories : []);
+    setIsTireCategory(selectedCategory ? selectedCategory.name === "Tires" : false);
   };
 
   const handleChange = (e) => {
@@ -116,19 +116,36 @@ const AdminProductPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(product);
+
+    // Create a modified product object with correct field names
+    const productToSubmit = {
+      ...product,
+      categoryName: product.categoryName, // Correct property
+      subCategoryName: product.subCategoryName, // Correct property
+      dimensions: product.dimensions.split("*").map(Number), // Convert dimensions to array
+      images: product.images.map((image) => ({
+          src: image,
+          altText: "", // Set altText if needed
+      })), // Map images to new structure
+    };
+
+    console.log("Submitting product:", productToSubmit);
+
     try {
       const response = await fetch("http://localhost:8800/api/product", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(product),
+        body: JSON.stringify(productToSubmit),
       });
+
       const result = await response.json();
       console.log(result);
+
       if (response.ok) {
         console.log("Product successfully added");
+
         setProduct({
           name: "",
           description: "",
@@ -141,8 +158,8 @@ const AdminProductPage = () => {
           dimensions: "",
           featuredImage: "",
           compareAtPrice: 0,
-          categoryId: "",
-          subCategoryId: "",
+          categoryName: "", 
+          subCategoryName: "", 
           tireWidth: "",
           aspectRatio: "",
           productType: "",
@@ -375,19 +392,19 @@ const AdminProductPage = () => {
             </>
           )}
 
-          {/* Category */}
+           {/* Category */}
           <div className="formGroup">
-            <label htmlFor="categoryId">Category</label>
+            <label htmlFor="category">Category</label>
             <select
-              name="categoryId"
-              value={product.categoryId}
+              name="category"
+              value={product.category}
               onChange={handleCategoryChange}
               required
               className="selectInput"
             >
               <option value="">Select Category</option>
               {categories.map((category) => (
-                <option key={category.id} value={category.id}>
+                <option key={category.id} value={category.name}>
                   {category.name}
                 </option>
               ))}
@@ -396,16 +413,17 @@ const AdminProductPage = () => {
 
           {/* Sub Category */}
           <div className="formGroup">
-            <label htmlFor="subCategoryId">Sub Category</label>
+            <label htmlFor="subCategory">Sub Category</label>
             <select
-              name="subCategoryId"
-              value={product.subCategoryId}
+              name="subCategoryName"
+              value={product.subCategoryName}
               onChange={handleChange}
               className="selectInput"
+              required
             >
               <option value="">Select Sub Category</option>
               {subCategories.map((subCategory) => (
-                <option key={subCategory.id} value={subCategory.id}>
+                <option key={subCategory.id} value={subCategory.name}>
                   {subCategory.name}
                 </option>
               ))}
