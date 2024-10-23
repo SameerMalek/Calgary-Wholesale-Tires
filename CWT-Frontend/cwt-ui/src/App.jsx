@@ -85,7 +85,7 @@ function App() {
         {
           path:"/filter-products" ,
           element:<FilteredProductPage />,
-        }
+        },
       ],
     },
     {
