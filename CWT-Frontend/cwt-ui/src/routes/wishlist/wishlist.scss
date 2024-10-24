@@ -1,0 +1,145 @@
+@import "../../responsive.scss";
+
+.wishlist-page {
+  margin-bottom: 90px;
+  margin-top: 20px;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+      .wishlist-image {
+        width: 150px;
+        height: auto;
+        margin-right: 20px;
+        border-radius: 10px;
+      }
+
+      .wishlist-details {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        h2 {
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          color: #333;
+        }
+
+        p {
+          margin: 5px 0;
+          color: #555;
+        }
+
+        .product-price {
+          font-size: 20px;
+          color: #e63946;
+          font-weight: bold;
+          margin: 10px 0;
+        }
+      }
+
+      .remove-button {
+        background-color: #e63946;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        align-self: center;
+
+        &:hover {
+          background-color: darkred;
+        }
+      }
+    }
+  }
+
+  /* Media Queries for Responsiveness */
+  @include md {
+    ul {
+      li {
+        flex-direction: column;
+        text-align: center;
+
+        .wishlist-image {
+          margin: 0 auto 15px;
+          width: 80%;
+        }
+
+        .wishlist-details {
+          h2 {
+            font-size: 22px;
+          }
+
+          .product-price {
+            font-size: 18px;
+          }
+
+          .remove-button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  @include sm {
+    ul {
+      li {
+        flex-direction: column;
+        text-align: center;
+
+        .wishlist-image {
+          margin: 0 auto 10px;
+          width: 100%;
+        }
+
+        .wishlist-details {
+          h2 {
+            font-size: 20px;
+          }
+
+          .product-price {
+            font-size: 16px;
+          }
+
+          .remove-button {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}
