@@ -21,6 +21,7 @@ import shipmentRoutes from "../api/routes/shipmentRoutes.js";
 import inventoryTrackingRoutes from "../api/routes/inventoryTrackingRoutes.js";
 import salesReportRoutes from "../api/routes/salesReportRoutes.js";
 import productManagementRoutes from "../api/routes/productManagementRoutes.js";
+import searchRoute from "../api/routes/search.route.js";
 
 const app = express();
 const PORT = 8800;
@@ -45,6 +46,7 @@ app.use("/api/shipments", shipmentRoutes);
 app.use("/api/inventory-tracking", inventoryTrackingRoutes); 
 app.use("/api/sales-reports", salesReportRoutes); 
 app.use("/api/product-management", productManagementRoutes); 
+app.use("/api/products", searchRoute); 
 
 
 app.listen(PORT, () => {
