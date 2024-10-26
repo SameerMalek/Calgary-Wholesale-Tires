@@ -1,47 +1,76 @@
+@import "../../responsive.scss";
+
 .payment-status-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-    background-color: #f4f4f4;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  text-align: center;
+  padding: 20px;
+
   .payment-status-container {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+    background: #ffffff;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    p {
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .home-button {
+      padding: 0.75rem 2rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+
+    .success {
+      color: #28a745;
+
+      h1 {
+        color: #28a745;
+      }
+    }
+
+    .failure {
+      color: #dc3545;
+
+      h1 {
+        color: #dc3545;
+      }
+    }
+
+    .cod {
+      color: #6c757d; 
+
+      h1 {
+        color: #6c757d; 
+      }
+    }
+
   
-  .success {
-    color: green;
   }
-  
-  .failure {
-    color: red;
-  }
-  
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  p {
-    margin-bottom: 2rem;
-    font-size: 1.2rem;
-  }
-  
-  .home-button {
-    padding: 0.75rem 2rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .home-button:hover {
-    background-color: #0056b3;
-  }
-  
+}
+

@@ -10,7 +10,7 @@ export const createCheckoutSession = async (req, res) => {
       payment_method_types: ['card'],
       line_items: req.body.items.map(item => ({
         price_data: {
-          currency: 'usd',
+          currency: 'cad',
           product_data: {
             name: item.name,
           },
