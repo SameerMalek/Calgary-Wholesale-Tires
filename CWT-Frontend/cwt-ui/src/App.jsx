@@ -8,6 +8,7 @@ import DetailedProductPage from './routes/ProductPage/DetailedProductPage';
 import ProductPage from './routes/ProductPage/ProductPage';
 import AdminHome from "./AdminPanel/pages/home/AdminHome";
 import UserForm from "./routes/form/userform";
+import ProfilePage from "./routes/profilePage/profilePage";
 import CartPage from './routes/CartPage/CartPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import CartProvider from './context/CartContext';
@@ -75,6 +76,10 @@ function App() {
         {
           path: "/products",
           element: <AdminProfile />,
+        },
+        {
+          path: "/ProfilePage",
+          element: <ProfilePage />,
         },
         
       ],
