@@ -10,14 +10,16 @@ import AdminHome from "./AdminPanel/pages/home/AdminHome";
 import UserForm from "./routes/form/userform";
 import ProfilePage from "./routes/profilePage/profilePage";
 import CartPage from './routes/CartPage/CartPage';
+import PaymentStatusPage from "./routes/PaymentStatusPage/PaymentStatusPage";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import CartProvider from './context/CartContext';
 import User from './AdminPanel/components/users/User';
 import AdminProduct from "./AdminPanel/components/adminproduct/adminproduct";
-import OrderManagement from './AdminPanel/components/order/OrderManagement'; // Correct import for OrderManagement
+import OrderManagement from './AdminPanel/components/order/OrderManagement';
 import AdProduct from "./AdminPanel/components/adminproduct/adproduct";
 import TermsAndConditions from "./routes/termscondition/termscondition";
 import AdminProfile from "./AdminPanel/components/adminprofile/adminprofile";
+import Wishlist from "./routes/wishlist/wishlist";
 
 function App() {
   const router = createBrowserRouter([
@@ -58,6 +60,10 @@ function App() {
           element: <CartPage />,
         },
         {
+          path: "/payment-status",   
+          element: <PaymentStatusPage />,  
+        },
+        {
           path: "/users",  
           element: <User />,
         },
@@ -81,7 +87,10 @@ function App() {
           path: "/ProfilePage",
           element: <ProfilePage />,
         },
-        
+        {
+          path: "/wishlist",
+          element: <Wishlist />,
+        },
       ],
     },
     {
@@ -89,10 +98,9 @@ function App() {
       element: <AdminHome />,
     },
     {
-      path: "/admin/orders",  // <-- Route for Order Management (show all orders)
-      element: <OrderManagement />, // OrderManagement page for viewing and managing orders
+      path: "/admin/orders",  
+      element: <OrderManagement />, 
     },
-    
   ]);
 
   return (

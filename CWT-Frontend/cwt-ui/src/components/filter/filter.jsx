@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./filter.scss";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const filters = [
   {
@@ -55,9 +56,8 @@ const filters = [
 
 const Filter = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isFilterActive, setIsFilterActive] = useState(true);
-
-  // Initial state for filters
   const initialFilters = {
     width: "",
     aspectRatio: "",
@@ -66,19 +66,34 @@ const Filter = () => {
   };
 
   const [selectedFilters, setSelectedFilters] = useState(initialFilters);
+  const [allProducts, setAllProducts] = useState([]); // State to store all products
 
   useEffect(() => {
-    // Regular expression to match /category/:categoryId/products
     const productPathRegex = /^\/category\/[^/]+\/products$/;
-
     if (productPathRegex.test(location.pathname)) {
-      setIsFilterActive(false); // Hide filter bar for the products page with category
+      setIsFilterActive(false);
     } else {
-      setIsFilterActive(true); // Show filter bar on other pages
+      setIsFilterActive(true);
     }
   }, [location.pathname]);
 
-  // Handle change in select elements
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8800/api/filter");
+        console.log("API Response:", response.data);
+        if (Array.isArray(response.data)) {
+          setAllProducts(response.data); // Store all products
+        } else {
+          throw new Error("Response data is not an array");
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   const handleSelectChange = (filterId, value) => {
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
@@ -86,9 +101,44 @@ const Filter = () => {
     }));
   };
 
-  // Reset filters to initial state
   const handleReset = () => {
     setSelectedFilters(initialFilters);
+  };
+
+  // Handle form submission to filter products
+  const handleSubmit = async () => {
+    const { width, aspectRatio, rimSize, productType } = selectedFilters;
+  
+    try {
+      // Fetch products from the API
+      const response = await axios.get("http://localhost:8800/api/filter");
+      
+      // Ensure you're handling the response properly
+      const data = response.data; // Assign the response data
+      console.log("API Response:", data); // Log to verify structure
+      
+      // If the data contains the products inside an object, adjust this line:
+      const allProducts = Array.isArray(data) ? data : data.products; // Use appropriate path if nested
+  
+      // Now filter the products based on the selected filters
+      const filteredProducts = allProducts.filter((product) => {
+        return (
+          (!width || product.tireWidth === parseInt(width)) &&
+          (!aspectRatio || product.aspectRatio === parseInt(aspectRatio)) &&
+          (!rimSize || product.rimSize === parseInt(rimSize)) &&
+          (!productType || product.productType === productType)
+        );
+      });
+  
+      console.log("Filtered Products:", filteredProducts); // Log filtered products
+  
+      // Navigate to the results page with the filtered products
+      navigate(`/filter-products`, {
+        state: { filteredProducts, allProducts },
+      });
+    } catch (err) {
+      console.error("Error fetching products:", err);
+    }
   };
 
   return (
@@ -111,7 +161,9 @@ const Filter = () => {
           ))}
         </select>
       ))}
-      <button className="filter-button">SUBMIT</button>
+      <button className="filter-button" onClick={handleSubmit}>
+        SUBMIT
+      </button>
       <button className="reset-button" onClick={handleReset}>
         RESET
       </button>

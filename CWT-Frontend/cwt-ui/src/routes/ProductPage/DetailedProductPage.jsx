@@ -47,6 +47,20 @@ const DetailedProductPage = () => {
     navigate("/cart"); // Redirect to cart page after adding item to cart
   };
 
+  // Function to handle adding product to wishlist
+  const handleAddToWishlist = async () => {
+    const userId = "your-user-id"; // Replace with actual user ID from authentication
+    try {
+      await axios.post("/api/wishlist", {
+        user_id: userId,
+        product_id: product.id,
+      });
+      console.log(`${selectedVariant?.title || product?.name} added to wishlist`);
+    } catch (err) {
+      console.error("Error adding item to wishlist:", err);
+    }
+  };
+
   // Function to handle variant selection
   const handleVariantClick = (variant) => {
     setSelectedVariant(variant); // Update selected variant
@@ -96,20 +110,15 @@ const DetailedProductPage = () => {
               {selectedVariant?.sku || product?.sku || "N/A"}
             </p>
             <p>
-              <strong>Price:</strong> $
-              {selectedVariant?.price || product?.price}
+              <strong>Price:</strong> ${selectedVariant?.price || product?.price}
             </p>
             {product?.compareAtPrice && (
               <p>
-                <strong>Was:</strong> $
-                {selectedVariant?.compareAtPrice || product.compareAtPrice}
+                <strong>Was:</strong> ${selectedVariant?.compareAtPrice || product.compareAtPrice}
               </p>
             )}
             <p>
-              <strong>Availability:</strong>{" "}
-              {selectedVariant?.availability ||
-                product?.availability ||
-                "Unknown"}
+              <strong>Availability:</strong> {selectedVariant?.availability || product?.availability || "Unknown"}
             </p>
 
             <h3>Specifications</h3>
@@ -159,12 +168,23 @@ const DetailedProductPage = () => {
                   <li>No variants available</li>
                 )}
               </ul>
+
+              {/* Add to Cart Button */}
               <button
                 className="add-to-cart-button"
                 onClick={handleAddToCart}
                 style={{ cursor: "pointer" }}
               >
                 Add to Cart
+              </button>
+
+              {/* Add to Wishlist Button */}
+              <button
+                className="add-to-wishlist-button"
+                onClick={handleAddToWishlist}
+                style={{ cursor: "pointer", marginLeft: "10px" }}
+              >
+                Add to Wishlist
               </button>
             </div>
           </div>

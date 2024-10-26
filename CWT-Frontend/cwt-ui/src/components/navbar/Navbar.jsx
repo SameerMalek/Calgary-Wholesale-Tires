@@ -4,13 +4,42 @@ import Filter from "../filter/filter";
 import { IoIosSearch, IoIosHeart } from "react-icons/io"; // Use filled heart icon
 import { RxHamburgerMenu } from "react-icons/rx";
 import Dropdown from "./../dropdown/dropdown"; // Dropdown component
+import { useNavigate,createSearchParams } from "react-router-dom"; // Add useNavigate for navigation
+import axios from "axios"; // You might use Axios or fetch API for the backend call
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // Track search input
+  const navigate = useNavigate(); // Use navigate for routing
 
   const handleMenu = () => {
     setOpenMenu((prev) => !prev);
+  };
+
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+    if (searchQuery.trim() === "") return;
+
+    try {
+      console.log("Searching for:", searchQuery);
+      // Make API call to fetch products based on search query
+      const response = await axios.get(`http://localhost:8800/api/products/search`, {
+        params: { query: searchQuery },
+      });
+      console.log("Search response:", response.data);
+      const { filteredProducts, allProducts } = response.data;
+
+      // Navigate to the FilteredProductPage and pass the results
+      navigate("/filter-products", {
+        state: {
+          filteredProducts,
+          allProducts,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
   const handleWishlistClick = () => {
@@ -50,14 +79,16 @@ const Navbar = () => {
         </label>
         {/* Search Bar */}
         <div className="search">
-          <form action="">
-            <input
+          <form onSubmit={handleSearchSubmit}>
+          <input
               type="text"
               name="search"
-              placeholder="Search by part #"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by part # or tag"
               className="input"
             />
-            <button className="searchIcon">
+            <button type="submit" className="searchIcon">
               <IoIosSearch className="svg" />
             </button>
           </form>
@@ -68,11 +99,11 @@ const Navbar = () => {
             <span>Sign In</span>
           </a>
 
-          {/* Wishlist Button */}
-          <button className="wishlist" onClick={handleWishlistClick}>
+          {}
+          <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
             <IoIosHeart className="heartIcon" /> {/* Filled heart icon */}
-            <span className="wishlistText">Wishlist</span> {/* No box around this */}
-          </button>
+            <span className="wishlistText">Wishlist</span> 
+          </a>
 
           <a className="cart" href="/cart">
             <img src="/assets/cart.png" alt="cart" />
