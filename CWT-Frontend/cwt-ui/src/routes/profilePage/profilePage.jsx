@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './ProfilePage.scss'; // Import the SCSS file
 import apiRequest from '../../lib/apiRequest';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+
 
 const ProfilePage = () => {
     const navigate = useNavigate();
