@@ -20,6 +20,7 @@ import AdProduct from "./AdminPanel/components/adminproduct/adproduct";
 import TermsAndConditions from "./routes/termscondition/termscondition";
 import AdminProfile from "./AdminPanel/components/adminprofile/adminprofile";
 import Wishlist from "./routes/wishlist/wishlist";
+import FilteredProductPage from "./routes/filtered-products/filterProductPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -90,6 +91,10 @@ function App() {
         {
           path: "/wishlist",
           element: <Wishlist />,
+        },
+        {
+          path:"/filter-products" ,
+          element:<FilteredProductPage />,
         },
       ],
     },
