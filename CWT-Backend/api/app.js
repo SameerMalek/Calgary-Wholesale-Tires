@@ -24,7 +24,8 @@ import inventoryTrackingRoutes from "../api/routes/inventoryTrackingRoutes.js";
 import salesReportRoutes from "../api/routes/salesReportRoutes.js";
 import productManagementRoutes from "../api/routes/productManagementRoutes.js";
 import searchRoute from "../api/routes/search.route.js";
-import stripeRoutes from "../api/routes/stripeRoutes.js"; // Import Stripe routes
+import stripeRoutes from "../api/routes/stripeRoutes.js";
+import uploadProduct from "../api/routes/uploadProduct.route.js";
 
 // Initialize app
 const app = express();
@@ -52,7 +53,8 @@ app.use("/api/inventory-tracking", inventoryTrackingRoutes);
 app.use("/api/sales-reports", salesReportRoutes);
 app.use("/api/product-management", productManagementRoutes);
 app.use("/api/products", searchRoute);
-app.use("/api/stripe", stripeRoutes); // Add the Stripe route
+app.use("/api/stripe", stripeRoutes); 
+app.use("/api/product", uploadProduct); 
 
 // Start server
 app.listen(PORT, () => {

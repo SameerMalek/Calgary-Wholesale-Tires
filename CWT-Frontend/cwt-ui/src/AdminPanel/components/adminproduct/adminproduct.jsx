@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./adminproduct.scss";
+import BulkProductUpload from "../uploadProduct/uploadProduct";
 
 const AdminProductPage = () => {
   const [product, setProduct] = useState({
@@ -18,11 +19,11 @@ const AdminProductPage = () => {
     subCategoryName: "", // Updated to subCategoryName
     tireWidth: "", // Optional field for tires
     aspectRatio: "", // Optional field for tires
-    productType: "", 
-    availability: "", 
-    variants: [], 
-    images: [], 
-    tags: [], 
+    productType: "",
+    availability: "",
+    variants: [],
+    images: [],
+    tags: [],
     isActive: true,
   });
 
@@ -49,7 +50,7 @@ const AdminProductPage = () => {
     const selectedCategory = categories.find(
       (category) => category.name === selectedCategoryName
     );
-    
+
     // Set the product's category and reset subCategory if the category changes
     setProduct({
       ...product,
@@ -57,7 +58,9 @@ const AdminProductPage = () => {
       subCategoryName: "", // Reset subcategory
     });
     setSubCategories(selectedCategory ? selectedCategory.subCategories : []);
-    setIsTireCategory(selectedCategory ? selectedCategory.name === "Tires" : false);
+    setIsTireCategory(
+      selectedCategory ? selectedCategory.name === "Tires" : false
+    );
   };
 
   const handleChange = (e) => {
@@ -124,8 +127,8 @@ const AdminProductPage = () => {
       subCategoryName: product.subCategoryName, // Correct property
       dimensions: product.dimensions.split("*").map(Number), // Convert dimensions to array
       images: product.images.map((image) => ({
-          src: image,
-          altText: "", // Set altText if needed
+        src: image,
+        altText: "", // Set altText if needed
       })), // Map images to new structure
     };
 
@@ -158,8 +161,8 @@ const AdminProductPage = () => {
           dimensions: "",
           featuredImage: "",
           compareAtPrice: 0,
-          categoryName: "", 
-          subCategoryName: "", 
+          categoryName: "",
+          subCategoryName: "",
           tireWidth: "",
           aspectRatio: "",
           productType: "",
@@ -392,7 +395,7 @@ const AdminProductPage = () => {
             </>
           )}
 
-           {/* Category */}
+          {/* Category */}
           <div className="formGroup">
             <label htmlFor="category">Category</label>
             <select
@@ -518,6 +521,8 @@ const AdminProductPage = () => {
             {isLoading ? "Adding..." : "Add Product"}
           </button>
         </form>
+        <h1>Add New Product</h1>
+        <BulkProductUpload />
       </div>
     </div>
   );
