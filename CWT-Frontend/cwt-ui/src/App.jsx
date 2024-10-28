@@ -21,6 +21,7 @@ import TermsAndConditions from "./routes/termscondition/termscondition";
 import AdminProfile from "./AdminPanel/components/adminprofile/adminprofile";
 import Wishlist from "./routes/wishlist/wishlist";
 import FilteredProductPage from "./routes/filtered-products/filterProductPage";
+import Delivery from "./AdminPanel/components/delivery/Delivery"; 
 
 function App() {
   const router = createBrowserRouter([
@@ -105,6 +106,10 @@ function App() {
     {
       path: "/admin/orders",  
       element: <OrderManagement />, 
+    },
+    {
+      path: "/admin/delivery",  
+      element: <Delivery />,
     },
   ]);
 
