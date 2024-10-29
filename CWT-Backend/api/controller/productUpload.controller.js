@@ -5,12 +5,20 @@ import prisma from "../lib/prisma.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
-// Define dirname equivalent
+// Define dirname equivalent for ES module environment
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Utility function to read file without BOM
+const readFileWithoutBOM = (filePath) => {
+  const content = fs.readFileSync(filePath, "utf8");
+  return content.charCodeAt(0) === 0xFEFF ? content.slice(1) : content;
+};
+
+// Main function to upload products in bulk
 const uploadProductsBulk = async (req, res) => {
   try {
+    // Check if a file was uploaded
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
@@ -18,45 +26,47 @@ const uploadProductsBulk = async (req, res) => {
     const filePath = path.join(__dirname, "../uploads/", req.file.filename);
     console.log("Uploaded file path:", filePath);
 
-    // Check if the file exists
-    if (!fs.existsSync(filePath)) {
-      return res.status(400).json({ message: "File does not exist" });
-    }
-
+    // Read and parse CSV content without BOM
+    const csvContent = readFileWithoutBOM(filePath);
     const products = [];
 
-    // Parse CSV file and create product objects
     fs.createReadStream(filePath)
-      .pipe(csv())
+      .pipe(csv({
+        mapHeaders: ({ header }) => header.replace(/^"|"$/g, '').toLowerCase() // Remove quotes and convert headers to lowercase
+      }))
       .on("data", (data) => {
+        // Ensure correct data parsing and handle each row
+        console.log("CSV Parsed each line:", data);
         products.push({
+          categoryName: data.categoryname,
+          subCategoryName: data.subcategoryname,
           name: data.name,
           description: data.description,
-          price: parseFloat(data.price),
+          handle: data.handle,
           sku: data.sku,
-          stockQuantity: parseInt(data.stockQuantity),
-          minStockThreshold: parseInt(data.minStockThreshold),
+          price: parseFloat(data.price),
+          compareAtPrice: data.compareatprice ? parseFloat(data.compareatprice) : null,
+          stockQuantity: parseInt(data.stockquantity, 10) || 0,
+          minStockThreshold: parseInt(data.minstockthreshold, 10) || 1,
           brand: data.brand,
-          weight: parseFloat(data.weight),
-          dimensions: data.dimensions ? safelyParseJSON(data.dimensions) : null,
-          featuredImage: data.featuredImage,
-          compareAtPrice: parseFloat(data.compareAtPrice),
-          tireWidth: parseInt(data.tireWidth),
-          aspectRatio: parseInt(data.aspectRatio),
-          rimSize: parseInt(data.rimSize),
-          productType: data.productType,
+          tireWidth: data.tirewidth ? parseInt(data.tirewidth, 10) : null,
+          aspectRatio: data.aspectratio ? parseInt(data.aspectratio, 10) : null,
+          rimSize: data.rimsize ? parseInt(data.rimsize, 10) : null,
+          productType: data.producttype,
           availability: data.availability,
-          isActive: data.isActive === "true",
+          weight: parseFloat(data.weight) || 0,
+          dimensions: data.dimensions ? safelyParseJSON(data.dimensions) : null,
+          featuredImage: data.featuredimage,
+          isActive: data.isactive.toLowerCase() === "true",
           tags: data.tags ? data.tags.split(",").map((tag) => tag.trim()) : [],
           variants: data.variants ? safelyParseJSON(data.variants) : [],
           images: data.images ? safelyParseJSON(data.images) : [],
-          categoryName: data.categoryName,
-          subCategoryName: data.subCategoryName,
         });
       })
       .on("end", async () => {
         try {
           for (const product of products) {
+            // Verify category and subcategory exist before inserting
             const category = await prisma.category.findUnique({
               where: { name: product.categoryName },
             });
@@ -64,33 +74,64 @@ const uploadProductsBulk = async (req, res) => {
               where: { name: product.subCategoryName },
             });
 
-            // Skip products if category or subcategory is missing
-            if (!category || !subCategory) continue;
+            // Debug logs for missing categories or subcategories
+            if (!category) {
+              console.warn(`Skipping product "${product.name}" due to missing category: ${product.categoryName}`);
+              continue;
+            }
+            if (!subCategory) {
+              console.warn(`Skipping product "${product.name}" due to missing subcategory: ${product.subCategoryName}`);
+              continue;
+            }
 
+            console.log(`Found category and subcategory for product "${product.name}". Category: ${product.categoryName}, SubCategory: ${product.subCategoryName}`);
+
+            // Insert product into the database
             await prisma.product.create({
               data: {
-                ...product,
-                categoryId: category.id,
-                subCategoryId: subCategory.id,
+                category: { connect: { id: category.id } },
+                subCategory: { connect: { id: subCategory.id } },
+                name: product.name,
+                description: product.description,
+                handle: product.handle,
+                sku: product.sku,
+                price: product.price,
+                compareAtPrice: product.compareAtPrice,
+                stockQuantity: product.stockQuantity,
+                minStockThreshold: product.minStockThreshold,
+                brand: product.brand,
+                tireWidth: product.tireWidth,
+                aspectRatio: product.aspectRatio,
+                rimSize: product.rimSize,
+                productType: product.productType,
+                availability: product.availability,
+                weight: product.weight,
+                dimensions: product.dimensions,
+                featuredImage: product.featuredImage,
+                isActive: product.isActive,
                 tags: {
                   create: product.tags.map((tag) => ({ tagName: tag })),
                 },
                 images: {
-                  create: product.images.map((src) => ({ src })),
+                  create: product.images.map((image) => ({
+                    src: image.src,
+                    altText: image.altText || '',
+                  })),
                 },
                 variants: {
                   create: product.variants.map((variant) => ({
                     title: variant.title,
                     price: parseFloat(variant.price),
                     sku: variant.sku,
-                    quantity: parseInt(variant.quantity),
+                    quantity: parseInt(variant.quantity, 10) || 0,
                   })),
                 },
               },
             });
+            console.log(`Product "${product.name}" added successfully.`);
           }
 
-          fs.unlinkSync(filePath); // Remove file after processing
+          fs.unlinkSync(filePath); // Clean up uploaded file after processing
           res.status(201).json({ message: "Products uploaded successfully" });
         } catch (error) {
           console.error("Error saving products:", error);
@@ -103,24 +144,14 @@ const uploadProductsBulk = async (req, res) => {
   }
 };
 
-// Utility function to safely parse JSON and log errors
-// Utility function to safely parse JSON and log errors
+// Utility function to safely parse JSON and handle errors
 const safelyParseJSON = (value) => {
-  console.log("Attempting to parse JSON:", value); // Log the value before parsing
   try {
-    // Remove any leading or trailing whitespace
     value = value.trim();
-
-    // Check if value is a valid JSON format
-    if (value.startsWith("{") || value.startsWith("[")) {
-      return JSON.parse(value);
-    } else {
-      console.warn("Invalid JSON format:", value); // Log a warning if format is not valid
-      return null; // or an empty array/object if preferable
-    }
+    return value.startsWith("{") || value.startsWith("[") ? JSON.parse(value) : null;
   } catch (error) {
     console.error("JSON parsing error:", error);
-    return null; // or an empty array/object if preferable
+    return null;
   }
 };
 

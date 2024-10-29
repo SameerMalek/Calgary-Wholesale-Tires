@@ -5,6 +5,6 @@ import { upload } from '../middleware/multer.middleware.js';
 const router = Router();
 
 // Bulk upload route
-router.post('/bulk', upload.single('file'), uploadProductsBulk); // Use upload.single
+router.post('/bulk', upload.single('file'), uploadProductsBulk);
 
 export default router;

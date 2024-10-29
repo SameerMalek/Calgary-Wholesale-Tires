@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./uploadProduct.scss";
 
 const BulkProductUpload = () => {
   const [file, setFile] = useState(null);
@@ -21,11 +22,15 @@ const BulkProductUpload = () => {
     setUploadStatus("Uploading...");
 
     try {
-      const response = await axios.post("http://localhost:8800/api/product/bulk", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:8800/api/product/bulk",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.status === 201) {
         setUploadStatus("File uploaded successfully!");
@@ -40,10 +45,18 @@ const BulkProductUpload = () => {
 
   return (
     <div className="bulkUploadContainer">
-      <h2>Bulk Product Upload</h2>
+      <h1>Bulk Product Upload</h1>
       <input type="file" accept=".csv" onChange={handleFileChange} />
       <button onClick={handleUpload}>Upload</button>
-      <p>{uploadStatus}</p>
+      <p
+        className={
+          uploadStatus.includes("error") || uploadStatus.includes("failed")
+            ? "error"
+            : "success"
+        }
+      >
+        {uploadStatus}
+      </p>
     </div>
   );
 };
