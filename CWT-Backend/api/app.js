@@ -4,7 +4,6 @@
 // import cors from "cors";
 // import dotenv from "dotenv";
 
-
 // dotenv.config();
 
 // // Import routes
@@ -39,7 +38,6 @@
 // app.use(express.json());
 // app.use(cookieParser());
 
-
 // app.use("/api/users", userRoute);
 // app.use("/api/posts", postRoute);
 // app.use("/api/auth", authRoute);
@@ -67,10 +65,6 @@
 // app.listen(PORT, () => {
 //   console.log(`Server is successfully started at PORT: ${PORT}`);
 // });
-
-
-
-
 
 // Import dependencies
 import express from "express";
@@ -132,8 +126,8 @@ app.use("/api/inventory-tracking", inventoryTrackingRoutes);
 app.use("/api/sales-reports", salesReportRoutes);
 app.use("/api/product-management", productManagementRoutes);
 app.use("/api/products", searchRoute);
-app.use("/api/stripe", stripeRoutes); 
-app.use("/api/product", uploadProduct); 
+app.use("/api/stripe", stripeRoutes);
+app.use("/api/product", uploadProduct);
 
 // Start server
 app.listen(PORT, () => {
