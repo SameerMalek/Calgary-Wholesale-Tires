@@ -4,7 +4,7 @@ import axios from "axios";
 import "./DetailedProductPage.scss";
 import { CartContext } from "../../context/CartContext";
 
-const DetailedProductPage = () => {
+const DetailedProductPage = () => { 
   const { id } = useParams(); // Get product id from the route
   const { addToCart } = useContext(CartContext);
   const navigate = useNavigate(); // Initialize navigate
@@ -47,20 +47,20 @@ const DetailedProductPage = () => {
     navigate("/cart"); // Redirect to cart page after adding item to cart
   };
 
-  // Function to handle adding product to wishlist
   const handleAddToWishlist = async () => {
-    try {
-      // Send only the product ID since user ID will be derived from the JWT in the backend
-      await axios.post("/api/wishlist", {
-        product_id: product.id,
-      });
-      console.log(`${selectedVariant?.title || product?.name} added to wishlist`);
-      alert('Product added to wishlist!');
-    } catch (err) {
-      console.error("Error adding item to wishlist:", err);
-      alert('Error adding product to wishlist');
-    }
-  };
+  try {
+    await axios.post(
+      'http://localhost:8800/api/wishlist',  // Ensure this matches the backend route
+      { product_id: product.id },
+      { withCredentials: true }  // This ensures cookies (JWT) are sent
+    );
+    alert('Product added to wishlist!');
+  } catch (err) {
+    console.error('Error adding item to wishlist:', err.response || err.message);
+    alert('Error adding product to wishlist');
+  }
+};
+
 
   // Function to handle variant selection
   const handleVariantClick = (variant) => {
