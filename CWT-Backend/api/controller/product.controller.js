@@ -258,7 +258,7 @@ export const updateProduct = async (req, res) => {
 // Get all products:
 export const getAllProducts = async (req, res) => {
   try {
-    const product = await prisma.product.findMany({
+    const products = await prisma.product.findMany({
       include: {
         variants: true, // Include variants in the response
         images: true, // Include images in the response
@@ -266,16 +266,16 @@ export const getAllProducts = async (req, res) => {
       },
     });
 
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+    if (!products) {
+      return res.status(404).json({ message: "No products found" });
     }
 
-    res.status(200).json({ product });
+    res.status(200).json({ products });
   } catch (err) {
-    console.error("Error fetching product:", err);
+    console.error("Error fetching products:", err);
     res
       .status(500)
-      .json({ message: "Error fetching product", error: err.message });
+      .json({ message: "Error fetching products", error: err.message });
   }
 };
 
