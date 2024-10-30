@@ -12,8 +12,14 @@ const CartPage = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("stripe");
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
 
   const handleCheckout = async () => {
+    if (!isTermsAccepted) {
+      alert("Please accept the Terms and Conditions before proceeding.");
+      return;
+    }
+
     if (paymentMethod === "stripe") {
       const stripe = await stripePromise;
       try {
@@ -40,7 +46,6 @@ const CartPage = () => {
         console.error("Error during Stripe checkout:", error);
       }
     } else if (paymentMethod === "cod") {
-      // Navigate to the COD success page
       navigate("/payment-status?status=cod");
     }
   };
@@ -62,7 +67,6 @@ const CartPage = () => {
                   <p className="quantity">QUANTITY: {item.quantity}</p>
                   <p className="price">${item.price}</p>
 
-                  {/* Quantity Controls */}
                   <div className="quantity-controls">
                     <div className="quantity-buttons-container">
                       <button
@@ -120,6 +124,22 @@ const CartPage = () => {
               />
               Cash on Delivery (COD)
             </label>
+          </div>
+
+          {/* Terms and Conditions Checkbox */}
+          <div className="terms">
+            <input 
+              type="checkbox" 
+              id="terms" 
+              checked={isTermsAccepted}
+              onChange={() => setIsTermsAccepted(!isTermsAccepted)} 
+            />
+            <label htmlFor="terms">
+              <b>*TERMS AND CONDITIONS</b>
+            </label>
+            <span className="terms-link" onClick={() => setIsModalOpen(true)}>
+              (Read Terms and Conditions)
+            </span>
           </div>
 
           <div className="cart-options">
