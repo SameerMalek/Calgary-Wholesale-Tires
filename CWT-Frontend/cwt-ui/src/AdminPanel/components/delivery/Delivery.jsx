@@ -13,39 +13,47 @@ const Delivery = () => {
     setDeliveredOrders(orders);
   }, []);
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleDateChange = (e) => {
-    const { name, value } = e.target;
-    setDateRange({ ...dateRange, [name]: value });
-  };
-
-  const handleTrackingUpdate = (billNo, trackingNumber) => {
+  const handleTrackingUpdate = (orderId, trackingNumber) => {
     const updatedOrders = deliveredOrders.map(order =>
-      order.billNo === billNo ? { ...order, trackingNumber } : order
+      order._id === orderId ? { ...order, trackingNumber } : order
     );
     setDeliveredOrders(updatedOrders);
     localStorage.setItem('deliveredOrders', JSON.stringify(updatedOrders));
   };
 
-  const filteredOrders = deliveredOrders.filter(order => {
-    const matchesSearch = order.customerName.toLowerCase().includes(searchTerm.toLowerCase());
-    const orderDate = new Date(order.order_date);
-    const startDate = dateRange.start ? new Date(dateRange.start) : null;
-    const endDate = dateRange.end ? new Date(dateRange.end) : null;
-    const matchesDateRange =
-      (!startDate || orderDate >= startDate) && (!endDate || orderDate <= endDate);
+  const downloadInvoice = async (orderId) => {
+    try {
+      if (!orderId) {
+        console.error("Invalid orderId passed to downloadInvoice:", orderId);
+        return;
+      }
 
-    return matchesSearch && matchesDateRange;
-  });
+      const response = await fetch(`http://localhost:8800/api/orders/order/${orderId}/invoice`, {
+        method: 'GET',
+      });
 
-  const markAsCompleted = (billNo) => {
-    const updatedOrders = deliveredOrders.filter(order => order.billNo !== billNo);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `invoice-${orderId}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error("Failed to download invoice");
+      }
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+    }
+  };
+
+  const markAsComplete = (orderId) => {
+    const updatedOrders = deliveredOrders.filter(order => order._id !== orderId);
     setDeliveredOrders(updatedOrders);
     localStorage.setItem('deliveredOrders', JSON.stringify(updatedOrders));
-    alert(`Order ${billNo} has been marked as completed.`);
   };
 
   return (
@@ -55,17 +63,16 @@ const Delivery = () => {
         <Navbar />
         <div className="content">
           <h2>Delivery Page</h2>
-          
+
           {/* Search and Filter Options */}
           <div className="filters">
             <input
               type="text"
               placeholder="Search by customer name..."
               value={searchTerm}
-              onChange={handleSearch}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="searchInput"
             />
-            
             <div className="dateFilters">
               <label>
                 Start Date:
@@ -73,7 +80,7 @@ const Delivery = () => {
                   type="date"
                   name="start"
                   value={dateRange.start}
-                  onChange={handleDateChange}
+                  onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
                 />
               </label>
               <label>
@@ -82,7 +89,7 @@ const Delivery = () => {
                   type="date"
                   name="end"
                   value={dateRange.end}
-                  onChange={handleDateChange}
+                  onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
                 />
               </label>
             </div>
@@ -90,32 +97,33 @@ const Delivery = () => {
 
           {/* Display Delivered Orders */}
           <div className="deliveryList">
-            {filteredOrders.length === 0 ? (
+            {deliveredOrders.length === 0 ? (
               <p>No delivered orders match your criteria.</p>
             ) : (
-              filteredOrders.map((order) => (
-                <div key={order.billNo} className="deliveryCard">
-                  <div><strong>Bill No:</strong> {order.billNo}</div>
-                  <div><strong>Customer:</strong> {order.customerName}</div>
-                  <div><strong>Address:</strong> {order.address}</div>
-                  <div><strong>Date:</strong> {new Date(order.order_date).toLocaleDateString()}</div>
-                  <div><strong>Total:</strong> ${order.total_amount.toFixed(2)}</div>
-                  
-                  {/* Tracking Information */}
+              deliveredOrders.map((order) => (
+                <div key={`${order._id}-${order.customerName}`} className="deliveryCard">
+                  <div className="orderInfo">
+                    <p><strong>Order ID:</strong> {order._id}</p> {/* Display MongoDB _id */}
+                    <p><strong>Customer:</strong> {order.customerName}</p>
+                  </div>
                   <div>
-                    <strong>Tracking Number:</strong> 
+                    <strong>Tracking Number:</strong>
                     <input
                       type="text"
                       placeholder="Enter tracking number"
                       value={order.trackingNumber || ""}
-                      onChange={(e) => handleTrackingUpdate(order.billNo, e.target.value)}
+                      onChange={(e) => handleTrackingUpdate(order._id, e.target.value)}
                       className="trackingInput"
                     />
                   </div>
-
-                  <button className="completeBtn" onClick={() => markAsCompleted(order.billNo)}>
-                    Mark as Completed
-                  </button>
+                  <div className="buttons">
+                    <button onClick={() => downloadInvoice(order._id)} className="invoiceButton">
+                      Download Invoice
+                    </button>
+                    <button onClick={() => markAsComplete(order._id)} className="completeButton">
+                      Mark as Complete
+                    </button>
+                  </div>
                 </div>
               ))
             )}

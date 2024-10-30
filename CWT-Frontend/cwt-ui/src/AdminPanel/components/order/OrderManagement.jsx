@@ -8,7 +8,7 @@ const OrderManagement = () => {
   const [orders, setOrders] = useState({
     newOrders: [
       {
-        billNo: "878656",
+        _id: "672283fed6ac777264b2aaff",  
         customerName: "John Doe",
         address: "387 New Estate St, Toronto, ON",
         order_date: "2024-09-30",
@@ -18,7 +18,7 @@ const OrderManagement = () => {
     ],
     preparing: [
       {
-        billNo: "234567",
+        _id: "64b8f9f84f1e2d5a089f07a1",  
         customerName: "Jane Smith",
         address: "45 Maple Ave, Vancouver, BC",
         order_date: "2024-09-29",
@@ -28,7 +28,7 @@ const OrderManagement = () => {
     ],
     readyForDelivery: [
       {
-        billNo: "543216",
+        _id: "64e283fed7ac777264b2bbcd",  
         customerName: "Michael Johnson",
         address: "789 Pine St, Calgary, AB",
         order_date: "2024-09-25",
@@ -40,13 +40,13 @@ const OrderManagement = () => {
 
   const navigate = useNavigate();
 
-  const handleStatusChange = (e, currentGroup, billNo) => {
+  const handleStatusChange = (e, currentGroup, orderId) => {
     const newStatus = e.target.value;
-    const orderToUpdate = orders[currentGroup].find(order => order.billNo === billNo);
+    const orderToUpdate = orders[currentGroup].find(order => order._id === orderId);
 
     if (orderToUpdate) {
       orderToUpdate.status = newStatus;
-      const updatedCurrentGroup = orders[currentGroup].filter(order => order.billNo !== billNo);
+      const updatedCurrentGroup = orders[currentGroup].filter(order => order._id !== orderId);
 
       let newGroup;
       switch (newStatus) {
@@ -62,7 +62,7 @@ const OrderManagement = () => {
         case "Delivered":
           const deliveredOrders = JSON.parse(localStorage.getItem('deliveredOrders')) || [];
           localStorage.setItem('deliveredOrders', JSON.stringify([...deliveredOrders, orderToUpdate]));
-          navigate("/admin/delivery");
+          navigate("/admin/delivery"); // Navigate to Delivery page on status change to Delivered
           return;
         default:
           newGroup = "newOrders";
@@ -81,8 +81,8 @@ const OrderManagement = () => {
     <div className="orderGroup">
       <h2 className="orderGroupTitle">{groupTitle}</h2>
       {orders[group].map(order => (
-        <div key={order.billNo} className="tableRow">
-          <div className="tableItem">{order.billNo}</div>
+        <div key={order._id} className="tableRow">
+          <div className="tableItem">{order._id}</div>
           <div className="tableItem">
             <div>{order.customerName}</div>
             <div>{order.address}</div>
@@ -92,7 +92,7 @@ const OrderManagement = () => {
           <div className="tableItem">
             <select
               value={order.status}
-              onChange={(e) => handleStatusChange(e, group, order.billNo)}
+              onChange={(e) => handleStatusChange(e, group, order._id)}
             >
               <option value="Pending">Pending</option>
               <option value="Preparing">Preparing</option>
@@ -126,13 +126,6 @@ const OrderManagement = () => {
           {renderOrderGroup("New Orders", "newOrders")}
           {renderOrderGroup("Preparing", "preparing")}
           {renderOrderGroup("Ready for Delivery", "readyForDelivery")}
-
-          {/* Dedicated Invoice Section */}
-          <div className="invoiceSection">
-            <h2 className="orderGroupTitle">Invoices</h2>
-            <p>Manage all invoices related to orders here.</p>
-            {/* You can add buttons or links to view specific invoices */}
-          </div>
         </div>
       </div>
     </div>

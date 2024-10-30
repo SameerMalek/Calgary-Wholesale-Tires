@@ -1,27 +1,21 @@
 import express from 'express';
 import {
-  addOrder,
-  deleteOrder,
-  updateOrder,
-  getOrderById,
-  getOrdersByUser,
+    addOrder,
+    getOrderById,
+    updateOrder,
+    deleteOrder,
+    getOrdersByUser,
+    generateInvoice
 } from '../controller/order.controller.js';
 
 const router = express.Router();
 
-// Add order
+// Define routes
 router.post('/order', addOrder);
-
-// Delete order by ID
-router.delete('/order/:orderId', deleteOrder);
-
-// Update order by ID
-router.put('/order/:orderId', updateOrder);
-
-// Get order by ID
 router.get('/order/:orderId', getOrderById);
-
-// Get all orders by user
+router.put('/order/:orderId', updateOrder);
+router.delete('/order/:orderId', deleteOrder);
 router.get('/user/:userId/orders', getOrdersByUser);
+router.get('/order/:orderId/invoice', generateInvoice);
 
 export default router;

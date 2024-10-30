@@ -1,171 +1,118 @@
 .delivery {
-    display: flex;
+  display: flex;
 
-    .deliveryContainer {
-        flex: 6;
-        padding: 20px;
-        background-color: #f3f4f6; // Slightly darker background for contrast
+  .deliveryContainer {
+    flex: 6;
+    padding: 20px;
+    background-color: #f3f4f6;
 
-        .content {
-            padding: 25px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-            
-            h2 {
-                font-size: 26px;
-                font-weight: bold;
-                color: #333;
-                margin-bottom: 25px;
-                text-align: center;
-                border-bottom: 2px solid #ddd;
-                padding-bottom: 10px;
-            }
+    .content {
+      padding: 25px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 
-            .filters {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 20px;
-                
-                .searchInput {
-                    padding: 10px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    width: 250px;
-                    transition: border-color 0.3s ease;
+      h2 {
+        font-size: 26px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+      }
 
-                    &:focus {
-                        border-color: #007bff;
-                        outline: none;
-                    }
-                }
+      .filters {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
 
-                .dateFilters {
-                    display: flex;
-                    gap: 15px;
-
-                    label {
-                        display: flex;
-                        flex-direction: column;
-                        font-size: 14px;
-                        font-weight: bold;
-                        color: #555;
-                        
-                        input {
-                            padding: 8px;
-                            border: 1px solid #ccc;
-                            border-radius: 5px;
-                            transition: border-color 0.3s ease;
-
-                            &:focus {
-                                border-color: #007bff;
-                                outline: none;
-                            }
-                        }
-                    }
-                }
-            }
-
-            .deliveryList {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 20px;
-                
-                .deliveryCard {
-                    background-color: #ffffff;
-                    padding: 20px;
-                    border-radius: 12px;
-                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                    transition: box-shadow 0.3s ease, transform 0.3s ease;
-                    display: flex;
-                    flex-direction: column;
-
-                    &:hover {
-                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-                        transform: translateY(-5px);
-                    }
-                    
-                    .orderInfo {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        padding-bottom: 15px;
-                        border-bottom: 1px solid #e0e0e0;
-                        margin-bottom: 15px;
-                        
-                        .orderDetail {
-                            flex: 3;
-                            text-align: left;
-                            padding: 5px 15px;
-                            font-size: 16px;
-                            color: #333;
-                        }
-            
-                        .orderStatus {
-                            flex: 1;
-                            text-align: right;
-                            font-weight: bold;
-                            color: #17a2b8; // Status color
-                            padding: 5px;
-                            border-radius: 5px;
-                            background-color: #e9f7fc; // Light blue for readability
-                        }
-                    }
-
-                    .trackingInput {
-                        width: 100%;
-                        padding: 10px;
-                        margin-top: 15px;
-                        border: 1px solid #ccc;
-                        border-radius: 5px;
-                        transition: border-color 0.3s ease;
-                        font-size: 15px;
-
-                        &:focus {
-                            border-color: #007bff;
-                            outline: none;
-                        }
-                    }
-
-                    .completeBtn {
-                        align-self: center;
-                        padding: 10px 20px;
-                        background-color: #28a745;
-                        color: #ffffff;
-                        border: none;
-                        border-radius: 8px;
-                        cursor: pointer;
-                        transition: background-color 0.3s ease;
-                        margin-top: 20px;
-                        font-weight: bold;
-                        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-
-                        &:hover {
-                            background-color: #218838;
-                        }
-                    }
-
-                    .invoiceBtn {
-                        align-self: center;
-                        padding: 8px 15px;
-                        background-color: #6c757d;
-                        color: #ffffff;
-                        border: none;
-                        border-radius: 8px;
-                        cursor: pointer;
-                        transition: background-color 0.3s ease;
-                        margin-top: 10px;
-                        font-size: 14px;
-                        font-weight: bold;
-                        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-
-                        &:hover {
-                            background-color: #5a6268;
-                        }
-                    }
-                }
-            }
+        .searchInput {
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          width: 250px;
+          &:focus {
+            border-color: #007bff;
+          }
         }
+
+        .dateFilters {
+          display: flex;
+          gap: 15px;
+
+          label {
+            font-weight: bold;
+            input {
+              padding: 8px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              &:focus {
+                border-color: #007bff;
+              }
+            }
+          }
+        }
+      }
+
+      .deliveryList {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+
+        .deliveryCard {
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+          .orderInfo {
+            margin-bottom: 15px;
+            font-size: 16px;
+          }
+
+          .trackingInput {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            &:focus {
+              border-color: #007bff;
+            }
+          }
+
+          .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+
+            .invoiceButton {
+              padding: 8px 15px;
+              background-color: #6c757d;
+              color: #ffffff;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              &:hover {
+                background-color: #5a6268;
+              }
+            }
+
+            .completeButton {
+              padding: 8px 15px;
+              background-color: #28a745;
+              color: #ffffff;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              &:hover {
+                background-color: #218838;
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }
+
+
