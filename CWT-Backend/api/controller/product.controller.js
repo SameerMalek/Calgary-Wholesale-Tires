@@ -141,26 +141,35 @@ export const addProduct = async (req, res) => {
 
 // Delete a product by ID
 export const deleteProduct = async (req, res) => {
-  const { productId } = req.params;
+  const { id } = req.params;
+  console.log("Attempting to delete product with ID:", id);
 
   try {
+    // First, delete related records that have productId foreign key
+    await prisma.variant.deleteMany({ where: { productId: id } });
+    await prisma.productImage.deleteMany({ where: { productId: id } });
+    await prisma.productTag.deleteMany({ where: { productId: id } });
+
+    // Now, delete the main product
     const deletedProduct = await prisma.product.delete({
-      where: { id: productId },
+      where: { id },
     });
 
     res.status(200).json({
-      message: "Product deleted successfully!",
+      message: "Product and associated data deleted successfully!",
       product: deletedProduct,
     });
   } catch (err) {
     console.error("Error deleting product:", err);
-    res
-      .status(500)
-      .json({ message: "Error deleting product", error: err.message });
+    res.status(500).json({
+      message: "Error deleting product",
+      error: err.message,
+    });
   }
 };
 
 // Update a product by ID
+// Ensure the response format in the backend is consistent
 export const updateProduct = async (req, res) => {
   const { productId } = req.params;
   const {
@@ -173,11 +182,11 @@ export const updateProduct = async (req, res) => {
     stockQuantity,
     minStockThreshold,
     brand,
-    tireWidth, // New field: Tire width
-    aspectRatio, // New field: Aspect ratio
-    rimSize, // New field: Rim size
-    productType, // New field: Product type
-    availability, // New field: Availability status
+    tireWidth,
+    aspectRatio,
+    rimSize,
+    productType,
+    availability,
     weight,
     dimensions,
     featuredImage,
@@ -188,6 +197,12 @@ export const updateProduct = async (req, res) => {
   } = req.body;
 
   try {
+    // Step 1: Delete existing related data for `variants`, `images`, and `tags`
+    await prisma.variant.deleteMany({ where: { productId } });
+    await prisma.productImage.deleteMany({ where: { productId } });
+    await prisma.productTag.deleteMany({ where: { productId } });
+
+    // Step 2: Update the main product fields
     const updatedProduct = await prisma.product.update({
       where: { id: productId },
       data: {
@@ -200,58 +215,63 @@ export const updateProduct = async (req, res) => {
         stockQuantity: parseInt(stockQuantity, 10) || 0,
         minStockThreshold: parseInt(minStockThreshold, 10) || 1,
         brand,
-        tireWidth: parseInt(tireWidth, 10), // New field: Ensure tireWidth is an integer
-        aspectRatio: parseInt(aspectRatio, 10), // New field: Ensure aspectRatio is an integer
-        rimSize: parseInt(rimSize, 10), // New field: Ensure rimSize is an integer
-        productType, // New field: Product type as string
-        availability, // New field: Availability status as string
+        tireWidth: parseInt(tireWidth, 10),
+        aspectRatio: parseInt(aspectRatio, 10),
+        rimSize: parseInt(rimSize, 10),
+        productType,
+        availability,
         weight: parseFloat(weight) || 0,
         dimensions,
         featuredImage,
         isActive,
-
-        // Update variants
-        variants: {
-          deleteMany: {}, // First delete existing variants
-          create:
-            variants?.map((variant) => ({
-              title: variant.title,
-              price: parseFloat(variant.price),
-              sku: variant.sku,
-              quantity: parseInt(variant.quantity, 10) || 0,
-            })) || [],
-        },
-
-        // Update images
-        images: {
-          deleteMany: {}, // First delete existing images
-          create:
-            images?.map((image) => ({
-              src: image.src,
-              altText: image.altText || "",
-            })) || [],
-        },
-
-        // Update tags
-        tags: {
-          deleteMany: {}, // First delete existing tags
-          create:
-            tags?.map((tag) => ({
-              tagName: tag,
-            })) || [],
-        },
       },
     });
 
+    // Step 3: Recreate related data
+    if (variants) {
+      await prisma.variant.createMany({
+        data: variants.map((variant) => ({
+          productId,
+          title: variant.title,
+          price: parseFloat(variant.price),
+          sku: variant.sku,
+          quantity: parseInt(variant.quantity, 10) || 0,
+        })),
+      });
+    }
+
+    if (images) {
+      await prisma.productImage.createMany({
+        data: images.map((image) => ({
+          productId,
+          src: image.src,
+          altText: image.altText || "",
+        })),
+      });
+    }
+
+    if (tags) {
+      await prisma.productTag.createMany({
+        data: tags.map((tag) => ({
+          productId,
+          tagName: tag,
+        })),
+      });
+    }
+
+    console.log("Product updated successfully:", updatedProduct);
+
+    // Send the response back to client
     res.status(200).json({
       message: "Product updated successfully!",
       product: updatedProduct,
     });
   } catch (err) {
     console.error("Error updating product:", err);
-    res
-      .status(500)
-      .json({ message: "Error updating product", error: err.message });
+    res.status(500).json({
+      message: "Error updating product",
+      error: err.message,
+    });
   }
 };
 

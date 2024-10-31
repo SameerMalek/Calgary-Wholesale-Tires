@@ -18,7 +18,7 @@ router.post("/product", addProduct);
 router.get("/product", getAllProducts);
 
 // Delete product by ID
-router.delete("/product/:productId", deleteProduct);
+router.delete("/product/:id", deleteProduct);
 
 // Update product by ID
 router.put("/product/:productId", updateProduct);
