@@ -11,7 +11,7 @@ const Wishlist = () => {
   useEffect(() => {
     const fetchWishlistItems = async () => {
       try {
-        const response = await axios.get(`/api/wishlist/${userId}`);
+        const response = await axios.post(`/api/wishlist/${userId}`);
         setWishlistItems(response.data.wishlistItems);
         setLoading(false);
       } catch (err) {

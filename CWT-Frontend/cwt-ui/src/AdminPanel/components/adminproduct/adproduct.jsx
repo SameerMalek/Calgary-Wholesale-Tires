@@ -128,6 +128,7 @@ const AdProduct = () => {
     <div className="products">
       <h1>Product Inventory</h1>
       <div className="product-list">
+<<<<<<< Updated upstream
         {products.length > 0 ? (
           products.map((product) => (
             <div className="product-item" key={product.id}>
@@ -139,6 +140,23 @@ const AdProduct = () => {
                 <button className="edit-btn" onClick={() => handleEdit(product)}>Edit</button>
                 <button className="delete-btn" onClick={() => handleDelete(product.id)}>Delete</button>
               </div>
+=======
+      {console.log('Products state in render:', products)} {/* Log products in render */}
+      {products.length > 0 ? (
+        products.map((product) => (
+          <div className="product-item" key={product.id}>
+            <img src={product.featuredImage} alt={product.name} />
+            <h2>{product.name}</h2>
+            <p>{product.description}</p>
+            <p>Price: ${product.price}</p>
+            <div className="product-actions">
+              <button className="edit-btn" onClick={() => handleEdit(product)}>
+                Edit
+              </button>
+              <button className="delete-btn" onClick={() => handleDelete(product.id)}>
+                Delete
+              </button>
+>>>>>>> Stashed changes
             </div>
           ))
         ) : (
