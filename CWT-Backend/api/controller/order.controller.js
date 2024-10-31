@@ -28,6 +28,18 @@ export const addOrder = async (req, res) => {
     }
 };
 
+// Fetch all orders
+export const getOrders = async (req, res) => {
+    try {
+        const orders = await prisma.order.findMany({
+            include: { orderItems: true },
+        });
+        res.status(200).json({ orders });
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching orders', error: err.message });
+    }
+};
+
 // Get order by ID
 export const getOrderById = async (req, res) => {
     const { orderId } = req.params;

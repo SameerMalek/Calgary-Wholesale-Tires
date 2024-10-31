@@ -8,7 +8,7 @@ const OrderManagement = () => {
   const [orders, setOrders] = useState({
     newOrders: [
       {
-        _id: "672283fed6ac777264b2aaff",  
+        _id: "672283fed6ac777264b2aaff",
         customerName: "John Doe",
         address: "387 New Estate St, Toronto, ON",
         order_date: "2024-09-30",
@@ -18,7 +18,7 @@ const OrderManagement = () => {
     ],
     preparing: [
       {
-        _id: "64b8f9f84f1e2d5a089f07a1",  
+        _id: "64b8f9f84f1e2d5a089f07a1",
         customerName: "Jane Smith",
         address: "45 Maple Ave, Vancouver, BC",
         order_date: "2024-09-29",
@@ -28,14 +28,14 @@ const OrderManagement = () => {
     ],
     readyForDelivery: [
       {
-        _id: "64e283fed7ac777264b2bbcd",  
+        _id: "64e283fed7ac777264b2bbcd",
         customerName: "Michael Johnson",
         address: "789 Pine St, Calgary, AB",
         order_date: "2024-09-25",
         total_amount: 89.99,
         status: "Ready for Delivery",
       },
-    ]
+    ],
   });
 
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ const OrderManagement = () => {
         case "Delivered":
           const deliveredOrders = JSON.parse(localStorage.getItem('deliveredOrders')) || [];
           localStorage.setItem('deliveredOrders', JSON.stringify([...deliveredOrders, orderToUpdate]));
-          navigate("/admin/delivery"); // Navigate to Delivery page on status change to Delivered
+          navigate("/admin/delivery");
           return;
         default:
           newGroup = "newOrders";
@@ -75,6 +75,16 @@ const OrderManagement = () => {
         [newGroup]: updatedNewGroup,
       });
     }
+  };
+
+  const handleEdit = (orderId) => {
+    // Handle edit logic here
+    alert(`Edit order with ID: ${orderId}`);
+  };
+
+  const handleCancelRefund = (orderId) => {
+    // Handle cancel/refund logic here
+    alert(`Cancel/Refund order with ID: ${orderId}`);
   };
 
   const renderOrderGroup = (groupTitle, group) => (
@@ -101,8 +111,8 @@ const OrderManagement = () => {
             </select>
           </div>
           <div className="tableItem actions">
-            <button className="editBtn">Edit</button>
-            <button className="cancelBtn">Cancel/Refund</button>
+            <button className="editBtn" onClick={() => handleEdit(order._id)}>Edit</button>
+            <button className="cancelBtn" onClick={() => handleCancelRefund(order._id)}>Cancel/Refund</button>
           </div>
         </div>
       ))}
@@ -133,3 +143,4 @@ const OrderManagement = () => {
 };
 
 export default OrderManagement;
+
