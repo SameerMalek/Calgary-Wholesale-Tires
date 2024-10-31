@@ -1,0 +1,68 @@
+.order-history {
+    padding: 2rem;
+    background-color: #fdf7f0; // Very light background for readability
+    color: #333; // Dark text color for contrast
+
+    h2 {
+        text-align: center;
+        color: #2e1065; // Primary theme color
+        margin-bottom: 2rem;
+        font-size: 2rem;
+    }
+
+    .order {
+        background-color: #452e75; // Secondary background color
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.2s ease-in-out;
+
+        &:hover {
+            transform: translateY(-5px); // Subtle lift on hover
+        }
+
+        p {
+            margin: 0.5rem 0;
+            color: #fdf7f0; // Light text color for readability
+        }
+
+        .order-id,
+        .order-date,
+        .order-status,
+        .order-total {
+            font-weight: bold;
+        }
+
+        .order-status {
+            color: #f0e68c; // Accent color for status
+        }
+
+        .items {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+            .item {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem 0;
+
+                .item-name {
+                    color: #fdf7f0; // Light text color for item names
+                }
+
+                .item-price {
+                    color: #f0e68c; // Accent color for item price
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    .no-orders {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #2e1065; // Primary theme color
+    }
+}

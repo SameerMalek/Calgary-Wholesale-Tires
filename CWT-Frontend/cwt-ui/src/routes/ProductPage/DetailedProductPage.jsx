@@ -57,6 +57,7 @@ const DetailedProductPage = () => {
     alert('Product added to wishlist!');
   } catch (err) {
     console.error('Error adding item to wishlist:', err.response || err.message);
+    console.log (err);
     alert('Error adding product to wishlist');
   }
 };
