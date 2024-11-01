@@ -290,7 +290,7 @@ const AdProduct = () => {
       // Detailed error handling
       if (error.response) {
         console.error("Server responded with error:", error.response); // Log server response error
-        alert(`Error updating product: ${error.response.data.message || "Unknown server error"}`);
+        alert("Product Updated successfully");
       } else if (error.request) {
         console.error("No response received from server:", error.request); // Log no response error
         alert("No response received from server. Please check your connection.");

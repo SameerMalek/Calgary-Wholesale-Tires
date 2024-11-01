@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
-import './login.scss';
 import apiRequest from '../../lib/apiRequest.js';
 import { AuthContext } from '../../context/AuthContext';
+import './Login.scss';
 
 export default function Login() {
   const [error, setError] = useState("");
@@ -102,7 +102,7 @@ export default function Login() {
             <button type="submit" className="btn-sign-in" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Login"}</button>
             {error && <p className="error-message">{error}</p>}
-            <span className='forgot-password' onClick={navigateToForgotPassword}>Forgot Password?</span>
+            <span className='forgot-password' onClick={navigateToForgotPassword}></span>
             </div>  
           </form>
         </div>

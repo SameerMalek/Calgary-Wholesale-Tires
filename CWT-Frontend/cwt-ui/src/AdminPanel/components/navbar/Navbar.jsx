@@ -16,11 +16,11 @@ const Navbar = ({ setActivePanel }) => {
         </div>
         <div className="items">
           <div className="item">
-            <LanguageOutlinedIcon className="icon" />
-            English
+            
+            
           </div>
           <div className="item">
-            <FullscreenExitOutlinedIcon className="icon" />
+            
           </div>
           <div className="item">
             <NotificationsNoneOutlinedIcon className="icon" />

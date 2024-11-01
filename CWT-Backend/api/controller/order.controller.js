@@ -136,7 +136,7 @@ export const generateInvoice = async (req, res) => {
             "marginBottom": 25,
             "sender": {
                 "company": "Calgary Wholesale Tire",
-                "address": "1234 Street, Calgary",
+                "address": "1234 Street, NW",
                 "city": "Calgary",
                 "country": "Canada",
                 "phone": "(555) 123-4567"
@@ -167,7 +167,7 @@ export const generateInvoice = async (req, res) => {
                     "quantity": 1,
                     "description": "Shipping Fees",
                     "tax-rate": 5,
-                    "price": 30.00
+                    "price": 200.00
                 }
             ],
             "bottom-notice": "Thank you for your business!",

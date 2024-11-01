@@ -95,26 +95,26 @@ const Navbar = () => {
             </button>
           </form>
         </div>
-        
+      
         <div className="right">
         {currentUser ? (
           <div className="user">
             <span>Welcome, {currentUser.firstName}</span>
            <>
            <div className="right">
-            <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
-              <IoIosHeart className="heartIcon" /> {/* Filled heart icon */}
-              <span className="wishlistText">Wishlist</span> 
-            </a>
+            {/* <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
+              <IoIosHeart className="heartIcon" /> Filled heart icon */}
+              <span className="wishlistText"></span> 
+            {/* </a> */}
             </div>
             <div className="right">
             <a className="cart" href="/cart">
-              <img src="/assets/cart.png" alt="cart" />
+              <img src="/assets/cart.png" alt="cart"  className="hertIcon"/>
               <span>Cart</span>
             </a>
             </div>
             </>
-          </div> 
+          </div>
         ) : (
           /*<Link to="/login" className="signIn">
             <img src="/assets/user.png" alt="user" />

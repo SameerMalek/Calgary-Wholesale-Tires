@@ -181,13 +181,13 @@ const DetailedProductPage = () => {
               </button>
 
               {/* Add to Wishlist Button */}
-              <button
+              {/* <button
                 className="add-to-wishlist-button"
                 onClick={handleAddToWishlist}
                 style={{ cursor: "pointer", marginLeft: "10px" }}
               >
                 Add to Wishlist
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

@@ -7,11 +7,41 @@ const Delivery = () => {
   const [deliveredOrders, setDeliveredOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateRange, setDateRange] = useState({ start: "", end: "" });
+  const [filteredOrders, setFilteredOrders] = useState([]);
 
   useEffect(() => {
     const orders = JSON.parse(localStorage.getItem('deliveredOrders')) || [];
     setDeliveredOrders(orders);
   }, []);
+
+  useEffect(() => {
+    filterOrders();
+  }, [searchTerm, dateRange, deliveredOrders]);
+
+  const filterOrders = () => {
+    let filtered = deliveredOrders;
+
+    // Filter by customer name
+    if (searchTerm) {
+      filtered = filtered.filter(order =>
+        order.customerName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by date range
+    if (dateRange.start) {
+      filtered = filtered.filter(order =>
+        new Date(order.order_date) >= new Date(dateRange.start)
+      );
+    }
+    if (dateRange.end) {
+      filtered = filtered.filter(order =>
+        new Date(order.order_date) <= new Date(dateRange.end)
+      );
+    }
+
+    setFilteredOrders(filtered);
+  };
 
   const handleTrackingUpdate = (orderId, trackingNumber) => {
     const updatedOrders = deliveredOrders.map(order =>
@@ -97,13 +127,13 @@ const Delivery = () => {
 
           {/* Display Delivered Orders */}
           <div className="deliveryList">
-            {deliveredOrders.length === 0 ? (
+            {filteredOrders.length === 0 ? (
               <p>No delivered orders match your criteria.</p>
             ) : (
-              deliveredOrders.map((order) => (
+              filteredOrders.map((order) => (
                 <div key={`${order._id}-${order.customerName}`} className="deliveryCard">
                   <div className="orderInfo">
-                    <p><strong>Order ID:</strong> {order._id}</p> {/* Display MongoDB _id */}
+                    <p><strong>Order ID:</strong> {order._id}</p>
                     <p><strong>Customer:</strong> {order.customerName}</p>
                   </div>
                   <div>
@@ -135,3 +165,4 @@ const Delivery = () => {
 };
 
 export default Delivery;
+
