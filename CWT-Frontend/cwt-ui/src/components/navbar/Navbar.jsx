@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext,useState } from "react";
 import "./Navbar.scss";
 import Filter from "../filter/filter";
 import { IoIosSearch, IoIosHeart } from "react-icons/io"; // Use filled heart icon
 import { RxHamburgerMenu } from "react-icons/rx";
 import Dropdown from "./../dropdown/dropdown"; // Dropdown component
-import { useNavigate,createSearchParams } from "react-router-dom"; // Add useNavigate for navigation
+import { useNavigate,createSearchParams, Link } from "react-router-dom"; // Add useNavigate for navigation
 import axios from "axios"; // You might use Axios or fetch API for the backend call
+import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // Track search input
   const navigate = useNavigate(); // Use navigate for routing
+  const {currentUser} = useContext(AuthContext); // Access current user from Context
 
   const handleMenu = () => {
     setOpenMenu((prev) => !prev);
@@ -93,22 +95,37 @@ const Navbar = () => {
             </button>
           </form>
         </div>
+        
         <div className="right">
+        {currentUser ? (
+          <div className="user">
+            <span>Welcome, {currentUser.firstName}</span>
+           <>
+           <div className="right">
+            <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
+              <IoIosHeart className="heartIcon" /> {/* Filled heart icon */}
+              <span className="wishlistText">Wishlist</span> 
+            </a>
+            </div>
+            <div className="right">
+            <a className="cart" href="/cart">
+              <img src="/assets/cart.png" alt="cart" />
+              <span>Cart</span>
+            </a>
+            </div>
+            </>
+          </div> 
+        ) : (
+          /*<Link to="/login" className="signIn">
+            <img src="/assets/user.png" alt="user" />
+            <span>Sign In</span></Link>*/
           <a className="signIn" href="/login">
             <img src="/assets/user.png" alt="user" />
             <span>Sign In</span>
           </a>
-
-          {}
-          <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
-            <IoIosHeart className="heartIcon" /> {/* Filled heart icon */}
-            <span className="wishlistText">Wishlist</span> 
-          </a>
-
-          <a className="cart" href="/cart">
-            <img src="/assets/cart.png" alt="cart" />
-            <span>Cart</span>
-          </a>
+        
+        )}
+          
         </div>
         <div className="menuIcon">
           <img

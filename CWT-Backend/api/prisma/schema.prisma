@@ -7,29 +7,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admin {
+  id        String   @id @default(cuid()) @map("_id") @db.ObjectId
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  position  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // User Model:
 
 model User {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  companyName    String   @unique
-  avatar         String?
-  address        String
-  city           String
-  province       String
-  postalCode     String
-  phoneNumber    String   @unique
-  email          String   @unique
-  password       String
-  owner          String
-  firstName      String
-  lastName       String
-  operationYear  String
-  annualPurchase String?
-  comments       String?
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  companyName      String    @unique
+  avatar           String?
+  address          String
+  city             String
+  province         String
+  postalCode       String
+  phoneNumber      String    @unique
+  email            String    @unique
+  password         String
+  owner            String
+  firstName        String
+  lastName         String
+  operationYear    String
+  annualPurchase   String?
+  comments         String?
   /// Date when category was created
-  createdAt      DateTime @default(now())
+  createdAt        DateTime  @default(now())
   /// Date when category was last updated
-  updatedAt      DateTime @updatedAt
+  updatedAt        DateTime  @updatedAt
+  resetToken       String? // Token for password reset
+  resetTokenExpiry DateTime? // Expiry for the reset token
 
   // Opposite Relations
   orders             Order[]             @relation("UserOrders")
@@ -106,7 +120,7 @@ model Product {
   /// Description of the product
   description       String?
   /// SEO-friendly slug for URL
-  handle            String?   @unique
+  handle            String?  @unique
   /// Stock Keeping Unit (SKU)
   sku               String   @unique
   /// Product price
@@ -130,9 +144,9 @@ model Product {
   /// Availability (new field, e.g., On Sale, New)
   availability      String?
   /// Weight of the product
-  weight            Float?    @default(0)
+  weight            Float?   @default(0)
   /// Dimensions of the product
-  dimensions         Json?
+  dimensions        Json?
   /// URL to the main image of the product
   featuredImage     String?
   /// Boolean to indicate if the product is active

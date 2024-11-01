@@ -1,26 +1,39 @@
-import React, { useState } from 'react';
-import { Link,Navigate,useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useContext, useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
 import './login.scss';
-//import ForgotPassword from '../../components/forgotpassword/ForgotPassword.jsx';
 import apiRequest from '../../lib/apiRequest.js';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function Login() {
-
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false); 
+  const {updateUser} = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setSuccess(false);
   
-    const email = e.target.email.value;
+    const email = e.target.email.value.trim();
     const password = e.target.password.value;
   
+    // Basic email and password validations
     if (!email || !password) {
       setError("Please enter both email and password");
+      setIsLoading(false);
+      return;
+    }
+    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i.test(email)) {
+      setError("Please enter a valid email address.");
+      setIsLoading(false);
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
       setIsLoading(false);
       return;
     }
@@ -29,47 +42,30 @@ export default function Login() {
       const res = await apiRequest.post("/auth/login", {
         email,
         password,
-      });
-  
-      console.log("Login response:", res);
-  
-      if (res.status === 200) {
-        // Check if we can access the data
-        if (res.data) {
-          console.log("Login successful. User data:", res.data);
-          localStorage.setItem("user", JSON.stringify(res.data));
-          navigate("/");
-        } else {
-          console.log("Login successful, but unable to access response data.");
-          // You might want to handle this case differently
-          localStorage.setItem("user", JSON.stringify({ email }));
-          navigate("/");
-        }
-      } else {
-        setError("Unexpected response from server");
-      }
-    } catch (err) {
+      }, { withCredentials: true});
+      
+      console.log("Login response:", res.data);
+      updateUser(res.data);
+      navigate("/");
+    } 
+    catch (err) {
       console.error("Login error:", err);
-      if (err.response) {
-        setError(err.response.data?.message || "An error occurred during login.");
-      } else if (err.request) {
-        setError("No response received from the server. Please try again.");
-      } else {
-        setError("An error occurred. Please try again.");
-      }
-    } finally {
+      setError("Login failed. Please check your email and password.", err.response.data.message);
+    } 
+    finally {
       setIsLoading(false);
     }
   };
-  /*const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
-  const navigate = useNavigate(); // Initialize the navigate function
+  
 
-  const openForgotPasswordModal = () => setIsForgotPasswordOpen(true);
-  const closeForgotPasswordModal = () => setIsForgotPasswordOpen(false);
-*/
   // Function to navigate to UserForm page
   const navigateToCreateAccount = () => {
     navigate("/form"); // This will take the user to the "/create-account" route
+  };
+
+  // Function to navigate to ForgotPassword page
+  const navigateToForgotPassword = () => {
+    navigate("/forgot-password"); // This will take the user to the "/forgot-password" route
   };
 
   return (
@@ -80,18 +76,34 @@ export default function Login() {
       <div className="login-content">
         <div className="existing-user">
           <h3>Welcome back</h3>
+          <p>Enter your email and password to access your account.</p>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="email">EmailId</label>
-              <input type="email" id="email" placeholder="email" required  />
+              <label htmlFor="email">Email:</label>
+              <input type="email" id="email" name='email'  required  />
             </div>
             <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input type="password" id="password" placeholder="Password" />
-             </div>
-            <button type="submit" className="btn-sign-in" disabled={isLoading}>Sign In</button>
+              <label htmlFor="password" placeholder="Enter your password">Password</label>
+              <input type={showPassword ? "text" : "password"}
+            id="password"
+            name="password"
+            required />
+            </div>
+            
+             <label>
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+            />
+            Show Password
+          </label>
+          <div className='btn-container'>
+            <button type="submit" className="btn-sign-in" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Login"}</button>
             {error && <p className="error-message">{error}</p>}
-            <a href="#" className="forgot-password">Forgot Password?</a>
+            <span className='forgot-password' onClick={navigateToForgotPassword}>Forgot Password?</span>
+            </div>  
           </form>
         </div>
         <div className="new-user">
@@ -106,6 +118,7 @@ export default function Login() {
         </div>
       </div>
      
-          </div>
+    </div>
   );
 }
+

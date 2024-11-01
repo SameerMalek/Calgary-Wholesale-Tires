@@ -8,7 +8,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Import routes
-import userRoute from "../api/routes/auth.route.js";
 import productRoute from "../api/routes/product.route.js";
 import categoryRoute from "../api/routes/category.route.js";
 import filterProductRoute from "../api/routes/filterProduct.route.js";
@@ -30,9 +29,15 @@ import testRoute from "../api/routes/test.route.js";
 import searchRoute from "../api/routes/search.route.js";
 import stripeRoutes from "../api/routes/stripeRoutes.js"; // Import Stripe routes
 
+
 // Initialize app
 const app = express();
 const PORT = 8800;
+
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
 
 // Middleware
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));

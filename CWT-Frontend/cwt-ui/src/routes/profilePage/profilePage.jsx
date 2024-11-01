@@ -2,22 +2,33 @@ import React, { useState, useEffect } from 'react';
 import './ProfilePage.scss'; // Import the SCSS file
 import apiRequest from '../../lib/apiRequest';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
 const ProfilePage = () => {
+
+  const {updateUser, currentUser} = useContext(AuthContext);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!currentUser) {
+            navigate('/login');
+        }
+    }, [currentUser, navigate]);
+
     const handleLogout = async () => {
         try{
-            const res = apiRequest.post("auth/logout");
-            localStorage.removeItem("user");
+            await apiRequest.post("/auth/logout");
+            updateUser(null); 
             navigate("/");
         } catch(err){
             console.log(err)
         }
     }
   const [userData, setUserData] = useState({
-    name: '',
-    email: '',
-    phone: '',
+    name: currentUser.lastName,
+    email: currentUser.email,
+    phone: currentUser.phoneNumber,
     address: ''
   });
   const [editMode, setEditMode] = useState(false);
@@ -55,6 +66,7 @@ const ProfilePage = () => {
   };
 
   return (
+    currentUser && (
     <div className="profile-page">
       <div className="profile-header">
         <h2>My Profile</h2>
@@ -66,7 +78,7 @@ const ProfilePage = () => {
       <div className="profile-info">
         <label>Name:</label>
         {editMode ? (
-          <input type="text" name="name" value={userData.name} onChange={handleChange} />
+          <input type="text" name="name" value={currentUser.firstName} onChange={handleChange} />
         ) : (
           <p>{userData.name}</p>
         )}
@@ -110,7 +122,7 @@ const ProfilePage = () => {
         Logout
       </button>
     </div>
-  );
+  ));
 };
 
 export default ProfilePage;

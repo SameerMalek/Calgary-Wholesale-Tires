@@ -9,7 +9,7 @@ const apiRequest = axios.create({
 });
 
 // Add a response interceptor
-apiRequest.interceptors.response.use(
+/*apiRequest.interceptors.response.use(
     (response) => {
         return response;
     },
@@ -17,6 +17,6 @@ apiRequest.interceptors.response.use(
         console.error('API request error:', error);
         return Promise.reject(error);
     }
-);
+);*/
 
 export default apiRequest; 

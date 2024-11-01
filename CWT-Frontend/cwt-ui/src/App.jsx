@@ -20,6 +20,8 @@ import AdProduct from "./AdminPanel/components/adminproduct/adproduct";
 import TermsAndConditions from "./routes/termscondition/termscondition";
 import AdminProfile from "./AdminPanel/components/adminprofile/adminprofile";
 import Wishlist from "./routes/wishlist/wishlist";
+import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
+import ResetPassword from "./routes/ForgotPassword/ResetPassword";
 
 function App() {
   const router = createBrowserRouter([
@@ -34,6 +36,18 @@ function App() {
         {
           path: "/login",
           element: <Login />,
+        },
+        {
+          path: "/ProfilePage",
+          element: <ProfilePage />,
+        },
+        {
+          path: "/forgot-password",
+          element:<ForgotPassword />,
+        },
+        {
+          path: "/reset-password",
+          element:<ResetPassword />,
         },
         {
           path: "/about",
@@ -83,10 +97,7 @@ function App() {
           path: "/products",
           element: <AdminProfile />,
         },
-        {
-          path: "/ProfilePage",
-          element: <ProfilePage />,
-        },
+        
         {
           path: "/wishlist",
           element: <Wishlist />,

@@ -2,8 +2,13 @@ import { Outlet, useLocation } from "react-router-dom";
 import "./layout.scss";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/footer";
+import { AuthContext } from "../../context/AuthContext";
+import { useContext } from "react";
 
  function Layout() {
+
+  const {currentUser} = useContext(AuthContext);
+  console.log(currentUser)
   const location = useLocation();
   const isProductPage = location.pathname === "/products";
   return (

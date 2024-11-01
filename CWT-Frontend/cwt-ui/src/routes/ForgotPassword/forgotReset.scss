@@ -1,0 +1,94 @@
+// forgotReset.scss
+
+// Variables for colors and spacing
+$primary-color: #3498db;
+$secondary-color: #2c3e50;
+$text-color: #333;
+$background-color: #f5f5f5;
+$button-hover-color: darken($primary-color, 10%);
+$form-width: 100%;
+$form-max-width: 400px;
+$input-padding: 10px;
+$button-padding: 12px;
+
+.forgot-reset-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: $background-color;
+  padding: 20px;
+
+  form {
+    background: white;
+    width: $form-width;
+    max-width: $form-max-width;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    h2 {
+      text-align: center;
+      color: $secondary-color;
+      margin-bottom: 1.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: $input-padding;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      color: $text-color;
+
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+      }
+    }
+
+    button {
+      width: 100%;
+      padding: $button-padding;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $button-hover-color;
+      }
+    }
+
+    p {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: $text-color;
+    }
+  }
+}
+
+// Responsive Styles
+@media (max-width: 768px) {
+  .forgot-reset-container {
+    padding: 10px;
+
+    form {
+      padding: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .forgot-reset-container {
+    form {
+      padding: 1rem;
+    }
+  }
+}
