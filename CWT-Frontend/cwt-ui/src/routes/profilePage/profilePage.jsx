@@ -6,9 +6,8 @@ import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
 const ProfilePage = () => {
-
   const {updateUser, currentUser} = useContext(AuthContext);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
     useEffect(() => {
         if (!currentUser) {
@@ -22,48 +21,70 @@ const ProfilePage = () => {
             updateUser(null); 
             navigate("/");
         } catch(err){
-            console.log(err)
+            console.error("Error logging out:", err);
+            alert("Failed to log out. Please try again later.");
         }
-    }
+    };
+
   const [userData, setUserData] = useState({
-    name: currentUser.lastName,
-    email: currentUser.email,
-    phone: currentUser.phoneNumber,
-    address: ''
+    name: `${currentUser?.firstName} ${currentUser?.lastName}` || '',
+    email: currentUser?.email || '',
+    phone: currentUser?.phoneNumber || '',
+    address: currentUser?.city || ''
   });
   const [editMode, setEditMode] = useState(false);
   const [orderHistory, setOrderHistory] = useState([]);
+  const[loading, setLoading] = useState(true);
+  const[error, setError] = useState(null);
 
   // Fetch user data and order history
   useEffect(() => {
-    // Fetch user details
-    apiRequest.get('/api/user/profile').then(response => {
-      setUserData(response.data);
-    });
+    const fetchProfileData = async () => {
+      try {
+        setLoading(true);
+        const [profileResponse, ordersResponse] = await Promise.all([
+          apiRequest.get('/api/user/profile'),
+          apiRequest.get('/api/user/orders')
+        ]);
 
-    // Fetch order history
-    apiRequest.get('/api/user/orders').then(response => {
-      setOrderHistory(response.data);
-    });
-  }, []);
+        setUserData(profileResponse.data);
+        setOrderHistory(ordersResponse.data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching profile data:', err);
+        setError('Failed to load profile information. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (currentUser) {
+      fetchProfileData();
+    }
+  }, [currentUser]);
 
   // Handle input change
   const handleChange = (e) => {
-    setUserData({
-      ...userData,
+    setUserData(prev => ({
+      ...prev,
       [e.target.name]: e.target.value
-    });
+    }));  
   };
 
   // Update user data
-  const handleUpdate = () => {
-    axios.put('/api/user/profile', userData).then(response => {
+  const handleUpdate = async () => {
+    try {
+      const response = await apiRequest.put('/api/user/profile', userData);
       alert('Profile updated successfully!');
       setEditMode(false);
-    }).catch(error => {
-      alert('Failed to update profile.');
-    });
+      // Optionally update user in context
+      updateUser({ ...currentUser, ...userData });
+    } catch (error) {
+      console.error('Update failed:', error);
+      alert(`Failed to update profile: ${error.response?.data?.message || 'Unknown error'}`);
+    }
   };
+
 
   return (
     currentUser && (
@@ -95,7 +116,7 @@ const ProfilePage = () => {
 
         <label>Address:</label>
         {editMode ? (
-          <input type="text" name="address" value={userData.address} onChange={handleChange} />
+          <input type="text" name="address" value={userData.city} onChange={handleChange} />
         ) : (
           <p>{userData.address}</p>
         )}
