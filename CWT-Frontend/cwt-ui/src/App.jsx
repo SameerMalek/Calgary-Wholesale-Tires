@@ -22,6 +22,8 @@ import AdminProfile from "./AdminPanel/components/adminprofile/adminprofile";
 import Wishlist from "./routes/wishlist/wishlist";
 import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
 import ResetPassword from "./routes/ForgotPassword/ResetPassword";
+import FilteredProductPage from "./routes/filtered-products/filterProductPage";
+import Delivery from "./AdminPanel/components/delivery/Delivery"; 
 
 function App() {
   const router = createBrowserRouter([
@@ -102,6 +104,10 @@ function App() {
           path: "/wishlist",
           element: <Wishlist />,
         },
+        {
+          path:"/filter-products" ,
+          element:<FilteredProductPage />,
+        },
       ],
     },
     {
@@ -111,6 +117,10 @@ function App() {
     {
       path: "/admin/orders",  
       element: <OrderManagement />, 
+    },
+    {
+      path: "/admin/delivery",  
+      element: <Delivery />,
     },
   ]);
 

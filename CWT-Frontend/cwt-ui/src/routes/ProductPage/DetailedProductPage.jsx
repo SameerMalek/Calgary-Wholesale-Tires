@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
-import axios from "axios"; // Import axios for API calls
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./DetailedProductPage.scss";
 import { CartContext } from "../../context/CartContext";
 
-const DetailedProductPage = () => {
+const DetailedProductPage = () => { 
   const { id } = useParams(); // Get product id from the route
   const { addToCart } = useContext(CartContext);
   const navigate = useNavigate(); // Initialize navigate
@@ -47,19 +47,21 @@ const DetailedProductPage = () => {
     navigate("/cart"); // Redirect to cart page after adding item to cart
   };
 
-  // Function to handle adding product to wishlist
   const handleAddToWishlist = async () => {
-    const userId = "your-user-id"; // Replace with actual user ID from authentication
-    try {
-      await axios.post("/api/wishlist", {
-        user_id: userId,
-        product_id: product.id,
-      });
-      console.log(`${selectedVariant?.title || product?.name} added to wishlist`);
-    } catch (err) {
-      console.error("Error adding item to wishlist:", err);
-    }
-  };
+  try {
+    await axios.post(
+      'http://localhost:8800/api/wishlist',  // Ensure this matches the backend route
+      { product_id: product.id },
+      { withCredentials: true }  // This ensures cookies (JWT) are sent
+    );
+    alert('Product added to wishlist!');
+  } catch (err) {
+    console.error('Error adding item to wishlist:', err.response || err.message);
+    console.log (err);
+    alert('Error adding product to wishlist');
+  }
+};
+
 
   // Function to handle variant selection
   const handleVariantClick = (variant) => {
@@ -90,7 +92,7 @@ const DetailedProductPage = () => {
               selectedVariant?.image ||
               product?.featuredImage ||
               "default-image.jpg"
-            } // Use variant image if available
+            }
             alt={selectedVariant?.title || product?.name || "Product Image"}
             className="product-image"
           />

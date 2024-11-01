@@ -1,0 +1,3 @@
+name,description,weight,sku,stockQuantity,minStockThreshold,brand,price,dimensions,featuredImage,compareAtPrice,categoryName,subCategoryName,tireWidth,aspectRatio,productType,availability,variants,images,tags,isActive
+Michelin Defender,All-season tire with enhanced grip,2,DEF12345,200,15,Michelin,79.99,,https://www.blackcircles.ca/upload/blackcircles/profiles/bc_ca/toyo-celsius-2-angle/small.jpg,89.99,Tires,All-Season Tires,215,60,All-Season,In Stock,,,"performance, all-weather",TRUE
+Bridgestone Blizzak,Winter tire for snowy conditions,2.3,BLZ67890,100,20,Bridgestone,99.99,,https://www.blackcircles.ca/upload/blackcircles/profiles/bc_ca/westlake_sw606_angle/small.jpg,109.99,Tires,Winter Tires,225,55,Winter,In Stock,,,"winter, ice, snow",TRUE

@@ -12,11 +12,19 @@ const PaymentStatusPage = () => {
 
   return (
     <div className="payment-status-page">
-      <div className="payment-status-container">
+      <div className={`payment-status-container ${status}`}>
         {status === 'success' ? (
           <div className="success">
             <h1>Payment Successful!</h1>
             <p>Your payment has been processed successfully. Thank you for your purchase!</p>
+            <button className="home-button" onClick={() => navigate('/')}>
+              Go to Home
+            </button>
+          </div>
+        ) : status === 'cod' ? (
+          <div className="cod">
+            <h1>Order Confirmed for Cash on Delivery!</h1>
+            <p>Your order has been placed successfully. You can pay at the time of delivery. Thank you for choosing COD!</p>
             <button className="home-button" onClick={() => navigate('/')}>
               Go to Home
             </button>

@@ -1,0 +1,118 @@
+.delivery {
+  display: flex;
+
+  .deliveryContainer {
+    flex: 6;
+    padding: 20px;
+    background-color: #f3f4f6;
+
+    .content {
+      padding: 25px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+
+      h2 {
+        font-size: 26px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+      }
+
+      .filters {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+
+        .searchInput {
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          width: 250px;
+          &:focus {
+            border-color: #007bff;
+          }
+        }
+
+        .dateFilters {
+          display: flex;
+          gap: 15px;
+
+          label {
+            font-weight: bold;
+            input {
+              padding: 8px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              &:focus {
+                border-color: #007bff;
+              }
+            }
+          }
+        }
+      }
+
+      .deliveryList {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+
+        .deliveryCard {
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+          .orderInfo {
+            margin-bottom: 15px;
+            font-size: 16px;
+          }
+
+          .trackingInput {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            &:focus {
+              border-color: #007bff;
+            }
+          }
+
+          .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+
+            .invoiceButton {
+              padding: 8px 15px;
+              background-color: #6c757d;
+              color: #ffffff;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              &:hover {
+                background-color: #5a6268;
+              }
+            }
+
+            .completeButton {
+              padding: 8px 15px;
+              background-color: #28a745;
+              color: #ffffff;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              &:hover {
+                background-color: #218838;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
