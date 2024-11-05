@@ -11,7 +11,8 @@ const OrderHistory = () => {
             try {
                 const response = await axios.get(`/orders/user/${userId}`);
                 setOrders(response.data);
-            } catch (error) {
+            } 
+            catch (error) {
                 console.error("Error fetching order history:", error);
             }
         };

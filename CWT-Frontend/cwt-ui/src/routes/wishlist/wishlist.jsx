@@ -4,9 +4,9 @@ import './wishlist.scss';
 
 const Wishlist = () => {
   const [wishlistItems, setWishlistItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null);
-  const userId = 'user-id-from-auth'; // Replace with actual authenticated user ID
+  const userId = 'lHWpxfbplTmK5qAq3TiSpDsS3gEXg+EEK8xSn/X8uiw='; // Replace with actual authenticated user ID
 
   useEffect(() => {
     const fetchWishlistItems = async () => {

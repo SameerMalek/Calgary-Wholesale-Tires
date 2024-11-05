@@ -18,3 +18,5 @@ router.get('/user/:userId/wishlist', authenticateJWT, getWishlistItemsByUser);
 router.delete('/wishlist/:wishlistId', authenticateJWT, removeItemFromWishlist);
 
 export default router;
+
+

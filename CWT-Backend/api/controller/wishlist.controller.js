@@ -1,8 +1,10 @@
 import prisma from '../lib/prisma.js';
 
 // Add product to wishlist
+// Use user_id from req.user if your middleware sets it
 export const addItemToWishlist = async (req, res) => {
-  const { user_id, product_id } = req.body;
+  const user_id = req.user.id;  // Assuming authenticateJWT middleware adds user details to req.user
+  const { product_id } = req.body;
 
   try {
     const wishlistItem = await prisma.wishlist.create({
@@ -13,9 +15,11 @@ export const addItemToWishlist = async (req, res) => {
     });
     res.status(201).json({ message: 'Item added to wishlist successfully', wishlistItem });
   } catch (err) {
+    console.error("Failed to add item to wishlist:", err);
     res.status(500).json({ message: 'Error adding item to wishlist', error: err.message });
   }
 };
+
 
 // Get all wishlist items by user
 export const getWishlistItemsByUser = async (req, res) => {
