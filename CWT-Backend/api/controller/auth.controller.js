@@ -63,22 +63,18 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
-  if(!email || !password) {
+  if (!email || !password) {
     return res.status(400).json({ message: "All fields are required!" });
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: {email} });
-    
+    const user = await prisma.user.findUnique({ where: { email } });
+
     // Checking if user exists:
-     if (!user) 
-      return res.status(400).json({ message: "Invalid EmailId!" });
+    if (!user) return res.status(400).json({ message: "Invalid EmailId!" });
 
     // Checking if password is correct:
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-      
-      if (!isPasswordCorrect)
-        return res.status(400).json({ message: "Invalid Password!" });
 
       //Generate Cookie Token and Send to the User:
       
@@ -90,28 +86,28 @@ export const login = async (req, res) => {
         },
         process.env.JWT_SECRET_KEY,
         { expiresIn: age }
-      ); 
+      );
+    const { password: _, ...info } = user;
 
-      const { password: _, ...info } = user;
-
-      res.cookie("token", token, { 
-        httpOnly: true, 
+    res
+      .cookie("token", token, {
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        maxAge: age })
+        maxAge: age,
+      })
       .status(200)
       .json(info);
-      
-    } 
-    catch (err) {
-      //console.log(err);
-      console.error("Failed to login!", err);
-      res.status(500).json({ message: "Failed to login!" });  
-    } 
+  } catch (err) {
+    //console.log(err);
+    console.error("Failed to login!", err);
+    res.status(500).json({ message: "Failed to login!" });
+  }
 };
 
 // User Logout:
 export const logout = (req, res) => {
-  res.clearCookie("token")
+  res
+    .clearCookie("token")
     .status(200)
     .json({ message: "User logged out successfully!" });
 };
@@ -139,12 +135,12 @@ export const forgotPassword = async (req, res) => {
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
       auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
-      secure: true
-  });
-  
+      secure: true,
+    });
+
     const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}&email=${email}`;
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -161,7 +157,7 @@ export const forgotPassword = async (req, res) => {
       console.error("Validation Error", error);
     }
     res.status(500).json({ message: "Error sending reset email", error });
-  };
+  }
 };
 
 // User Password Reset:
@@ -174,7 +170,8 @@ export const resetPassword = async (req, res) => {
     }
 
     const isValidToken = await bcrypt.compare(token, user.resetToken);
-    if (!isValidToken) return res.status(400).json({ message: "Invalid token!" });
+    if (!isValidToken)
+      return res.status(400).json({ message: "Invalid token!" });
 
     // Hash new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -182,7 +179,11 @@ export const resetPassword = async (req, res) => {
     // Update password and clear reset token fields
     await prisma.user.update({
       where: { email },
-      data: { password: hashedPassword, resetToken: null, resetTokenExpiry: null },
+      data: {
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpiry: null,
+      },
     });
 
     res.status(200).json({ message: "Password reset successful!" });

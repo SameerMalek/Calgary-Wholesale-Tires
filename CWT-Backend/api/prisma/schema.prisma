@@ -44,6 +44,7 @@ model User {
   updatedAt        DateTime  @updatedAt
   resetToken       String? // Token for password reset
   resetTokenExpiry DateTime? // Expiry for the reset token
+  isApproved       Boolean   @default(false) // New field for admin approval
 
   // Opposite Relations
   orders             Order[]             @relation("UserOrders")
