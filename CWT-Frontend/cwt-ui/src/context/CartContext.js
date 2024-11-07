@@ -16,7 +16,10 @@ const CartProvider = ({ children }) => {
   const addToCart = (product) => {
     setCartItems((prevItems) => {
       const existingItemIndex = prevItems.findIndex(
-        (item) => item.id === product.id && item.selectedVariant.id === product.selectedVariant.id
+        (item) =>
+          item.id === product.id &&
+          item.selectedVariant &&
+          item.selectedVariant.id === product.selectedVariant?.id
       );
 
       if (existingItemIndex >= 0) {
@@ -36,7 +39,9 @@ const CartProvider = ({ children }) => {
 
   // Remove product from cart
   const removeFromCart = (id, variantId) => {
-    const updatedItems = cartItems.filter(item => !(item.id === id && item.selectedVariant.id === variantId));
+    const updatedItems = cartItems.filter(
+      (item) => !(item.id === id && item.selectedVariant?.id === variantId)
+    );
     setCartItems(updatedItems);
     calculateTotal(updatedItems);
   };
@@ -44,12 +49,14 @@ const CartProvider = ({ children }) => {
   // Update product quantity in cart
   const updateQuantity = (id, variantId, newQuantity) => {
     setCartItems((prevItems) => {
-      const updatedItems = prevItems.map((item) => {
-        if (item.id === id && item.selectedVariant.id === variantId) {
-          return { ...item, quantity: Math.max(0, newQuantity) }; // Prevent negative quantities
-        }
-        return item;
-      }).filter(item => item.quantity > 0); // Automatically remove items with 0 quantity
+      const updatedItems = prevItems
+        .map((item) => {
+          if (item.id === id && item.selectedVariant?.id === variantId) {
+            return { ...item, quantity: Math.max(0, newQuantity) }; // Prevent negative quantities
+          }
+          return item;
+        })
+        .filter((item) => item.quantity > 0); // Automatically remove items with 0 quantity
 
       calculateTotal(updatedItems);
       return updatedItems;

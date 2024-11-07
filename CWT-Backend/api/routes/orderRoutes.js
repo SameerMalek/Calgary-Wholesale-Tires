@@ -6,7 +6,8 @@ import {
     deleteOrder,
     getOrdersByUser,
     generateInvoice,
-    getOrders // Importing the new getOrders function
+    getOrders, // Importing the new getOrders function
+    createOrder
 } from '../controller/order.controller.js';
 
 const router = express.Router();
@@ -18,7 +19,7 @@ router.put('/order/:orderId', updateOrder);
 router.delete('/order/:orderId', deleteOrder);
 router.get('/user/:userId/orders', getOrdersByUser);
 router.get('/order/:orderId/invoice', generateInvoice);
-router.get('/orders', getOrders); // Added route to fetch all orders
-
+router.get('/:userId', getOrders); 
+router.post('/', createOrder); 
 export default router;
 

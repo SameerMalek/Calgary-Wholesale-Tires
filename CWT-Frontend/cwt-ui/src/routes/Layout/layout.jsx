@@ -8,7 +8,7 @@ import { useContext } from "react";
  function Layout() {
 
   const {currentUser} = useContext(AuthContext);
-  console.log(currentUser)
+  // console.log(currentUser)
   const location = useLocation();
   const isProductPage = location.pathname === "/products";
   return (
