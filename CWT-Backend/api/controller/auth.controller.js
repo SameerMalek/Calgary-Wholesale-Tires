@@ -369,13 +369,22 @@ export const login = async (req, res) => {
 
     // Verify password
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+      //Generate Cookie Token and Send to the User:
+      
+      const age = 1000 * 60 * 60 * 24 * 7; 
+      const token = jwt.sign(
+        {
+          id: user.id,
+          isAdmin: false,
+        },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: age }
+      );
+    const { password: _, ...info } = user;
+
     if (!isPasswordCorrect)
       return res.status(400).json({ message: "Invalid Password!" });
-
-    // Generate token for authenticated user
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "7d",
-    });
 
     res
       .cookie("token", token, {

@@ -23,6 +23,7 @@ import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
 import ResetPassword from "./routes/ForgotPassword/ResetPassword";
 import FilteredProductPage from "./routes/filtered-products/filterProductPage";
 import Delivery from "./AdminPanel/components/delivery/Delivery"; 
+import OrderHistory from './components/orderhistory/orderhistory';
 import User from "./AdminPanel/components/users/user";
 
 function App() {
@@ -98,6 +99,10 @@ function App() {
         {
           path: "/products",
           element: <AdminProfile />,
+        },
+        {
+          path: "/orderHistory",
+          element: <OrderHistory />,
         },
         
         {

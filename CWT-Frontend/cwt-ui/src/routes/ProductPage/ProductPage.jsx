@@ -133,7 +133,7 @@ const filters = {
 
 const ProductPage = () => {
   const { categoryId } = useParams();
-  console.log(categoryId);
+  // console.log(categoryId);
   const [selectedFilters, setSelectedFilters] = useState({
     width: [],
     aspectRatio: [],

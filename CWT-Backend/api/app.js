@@ -66,9 +66,6 @@
 //   console.log(`Server is successfully started at PORT: ${PORT}`);
 // });
 
-
-
-
 // Import dependencies
 import express from "express";
 import cookieParser from "cookie-parser";
@@ -101,21 +98,27 @@ import searchRoute from "../api/routes/search.route.js";
 import stripeRoutes from "../api/routes/stripeRoutes.js";
 import uploadProductRoute from "../api/routes/uploadProduct.route.js";
 
-
 // Initialize app
 // Initialize the app
 const app = express();
 const PORT = process.env.PORT || 8800;
 
-app.get('/', (req, res) => {
-  res.send('API is running...');
+app.get("/", (req, res) => {
+  res.send("API is running...");
 });
-
 
 // Middleware
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
-app.use(express.json());
 app.use(cookieParser());
+
+// Apply express.json() middleware to all routes except for the Stripe webhook route
+app.use((req, res, next) => {
+  if (req.originalUrl === "/api/stripe/webhook") {
+    next(); // Skip express.json() for the /webhook route
+  } else {
+    express.json()(req, res, next); // Use express.json() for all other routes
+  }
+});
 
 // Use routes
 app.use("/api/users", userRoute); // User routes
@@ -145,5 +148,5 @@ app.use("/api/product", uploadProductRoute); // Product upload routes
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is successfully started at PORT: ${PORT}`);
+  console.log(`Server is successfully started at PORT: ${PORT}`);
 });

@@ -1,14 +1,20 @@
 import React, { useContext, useState } from "react";
-import { CartContext } from "../../context/CartContext";
+import { CartContext } from "../../context/CartContext.js";
+import { AuthContext } from "../../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
-import TermsAndConditionsModal from '../../components/termsandconditionmodal/TermsAndConditionsModal';
+import TermsAndConditionsModal from "../../components/termsandconditionmodal/TermsAndConditionsModal";
 import "./CartPage.scss";
+import OrderHistory from "../../components/orderhistory/orderhistory.jsx";
 
-const stripePromise = loadStripe("pk_test_51QCPgyI59y4OZCeY8ClSbS7YB3M1Crp6nRDbEcR9T9eoAW312Gy8uqXNWE4Ob5bI3MnN84SPxFUnKYftkoqP3Avw00Pp2oHaCc");
+const stripePromise = loadStripe(
+  "pk_test_51QCPgyI59y4OZCeY8ClSbS7YB3M1Crp6nRDbEcR9T9eoAW312Gy8uqXNWE4Ob5bI3MnN84SPxFUnKYftkoqP3Avw00Pp2oHaCc"
+);
 
 const CartPage = () => {
-  const { cartItems, totalAmount, updateQuantity, removeFromCart } = useContext(CartContext);
+  const { cartItems, totalAmount, updateQuantity, removeFromCart } =
+    useContext(CartContext); // Use cart items and total amount from CartContext
+  const { currentUser } = useContext(AuthContext); // Get current user from AuthContext
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("stripe");
@@ -20,33 +26,97 @@ const CartPage = () => {
       return;
     }
 
+    if (!currentUser) {
+      alert("You must be logged in to complete the purchase.");
+      return;
+    }
+
+    const userId = currentUser.id; // Use user ID from AuthContext
+    console.log("Current User ID:", userId); // Debugging: Log user ID
+
+    // Get the user's address from the currentUser object
+    const address = currentUser.address; // Adjust according to your data structure
+    const shippingAddress = address;
+    const billingAddress = address;
+
+    console.log("Shipping Address:", shippingAddress); // Debugging: Log shipping address
+    console.log("Billing Address:", billingAddress); // Debugging: Log billing address
+
     if (paymentMethod === "stripe") {
       const stripe = await stripePromise;
       try {
-        const response = await fetch("http://localhost:8800/api/stripe/create-checkout-session", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            items: cartItems.map(item => ({
-              name: item.name,
-              price: item.price,
-              quantity: item.quantity,
-            })),
-          }),
-        });
+        console.log("Sending data to backend for Stripe Checkout...");
+        const response = await fetch(
+          "http://localhost:8800/api/stripe/create-checkout-session",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              items: cartItems.map((item) => ({
+                productId: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+              })),
+              user_id: userId,
+              shipping_address: shippingAddress,
+              billing_address: billingAddress,
+              total_amount: totalAmount,
+            }),
+          }
+        );
 
         const session = await response.json();
-        const result = await stripe.redirectToCheckout({ sessionId: session.id });
-        if (result.error) {
-          console.error("Stripe redirect error:", result.error.message);
+
+        // Log the response from the server
+        console.log("Stripe Session Response:", session);
+
+        // Check if the session ID exists in the response
+        if (!session.id) {
+          console.error("No session ID received from the backend");
+          return;
+        }
+
+        if (session.id) {
+          const result = await stripe.redirectToCheckout({
+            sessionId: session.id,
+          });
+          if (result.error) {
+            console.error("Stripe redirect error:", result.error.message);
+          }
         }
       } catch (error) {
         console.error("Error during Stripe checkout:", error);
       }
     } else if (paymentMethod === "cod") {
-      navigate("/payment-status?status=cod");
+      // Create the order on backend even for COD
+      try {
+        const response = await fetch("http://localhost:8800/api/orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            items: cartItems.map((item) => ({
+              productId: item.id,
+              quantity: item.quantity,
+              price: item.price,
+            })),
+            total_amount: totalAmount,
+            user_id: userId,
+            shipping_address: shippingAddress,
+            billing_address: billingAddress,
+          }),
+        });
+
+        const order = await response.json();
+        console.log("Order created:", order); // Debugging: Log the created order response
+        navigate(`/payment-status?status=cod&orderId=${order.id}`);
+      } catch (error) {
+        console.error("Error creating order:", error); // Debugging: Catch any error creating the order
+      }
     }
   };
 
@@ -58,48 +128,71 @@ const CartPage = () => {
           {cartItems.length === 0 ? (
             <p>Your cart is empty</p>
           ) : (
-            cartItems.map((item) => (
-              <div key={item.id} className="cart-item">
-                <img src={item?.featuredImage} alt={item.name} className="cart-item-image" />
-                <div className="cart-item-details">
-                  <h3>{item.name}</h3>
-                  <p className="variant">Variant: {item.selectedVariant?.title}</p>
-                  <p className="quantity">QUANTITY: {item.quantity}</p>
-                  <p className="price">${item.price}</p>
+            cartItems
+              .filter((item) => item && item.id)
+              .map((item) => (
+                <div key={item.id} className="cart-item">
+                  <img
+                    src={item?.featuredImage}
+                    alt={item.name}
+                    className="cart-item-image"
+                  />
+                  <div className="cart-item-details">
+                    <h3>{item.name}</h3>
+                    <p className="variant">
+                      Variant: {item.selectedVariant?.title}
+                    </p>
+                    <p className="quantity">QUANTITY: {item.quantity}</p>
+                    <p className="price">${item.price}</p>
 
-                  <div className="quantity-controls">
-                    <div className="quantity-buttons-container">
-                      <button
-                        className="quantity-button"
-                        onClick={() => updateQuantity(item.id, item.selectedVariant?.id, item.quantity - 1)}
-                      >
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        className="quantity-button"
-                        onClick={() => updateQuantity(item.id, item.selectedVariant?.id, item.quantity + 1)}
-                      >
-                        +
-                      </button>
+                    <div className="quantity-controls">
+                      <div className="quantity-buttons-container">
+                        <button
+                          className="quantity-button"
+                          onClick={() =>
+                            updateQuantity(
+                              item.id,
+                              item.selectedVariant?.id,
+                              item.quantity - 1
+                            )
+                          }
+                        >
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          className="quantity-button"
+                          onClick={() =>
+                            updateQuantity(
+                              item.id,
+                              item.selectedVariant?.id,
+                              item.quantity + 1
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  <button
-                    onClick={() => removeFromCart(item.id, item.selectedVariant?.id)}
-                    className="remove-button"
-                  >
-                    Remove
-                  </button>
+                    <button
+                      onClick={() =>
+                        removeFromCart(item.id, item.selectedVariant?.id)
+                      }
+                      className="remove-button"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
+              ))
           )}
         </div>
 
         <div className="cart-summary">
           <p className="cart-total">
-            CART TOTAL: <span className="total-amount">${totalAmount.toFixed(2)}</span>
+            CART TOTAL:{" "}
+            <span className="total-amount">${totalAmount.toFixed(2)}</span>
           </p>
 
           {/* Payment Method Selection */}
@@ -128,11 +221,11 @@ const CartPage = () => {
 
           {/* Terms and Conditions Checkbox */}
           <div className="terms">
-            <input 
-              type="checkbox" 
-              id="terms" 
+            <input
+              type="checkbox"
+              id="terms"
               checked={isTermsAccepted}
-              onChange={() => setIsTermsAccepted(!isTermsAccepted)} 
+              onChange={() => setIsTermsAccepted(!isTermsAccepted)}
             />
             <label htmlFor="terms">
               <b>*TERMS AND CONDITIONS</b>
@@ -152,7 +245,11 @@ const CartPage = () => {
           </div>
         </div>
       </div>
-      <TermsAndConditionsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <TermsAndConditionsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+      <OrderHistory/>
     </div>
   );
 };
