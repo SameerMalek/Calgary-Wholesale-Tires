@@ -1,34 +1,23 @@
-.user-table-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-  
-    h2 {
-      margin-bottom: 20px;
-      font-size: 24px;
-    }
-  }
-  
-  .user-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-  
-    th, td {
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-  
-    th {
-      background-color: #f4f4f4;
-    }
-  
-    tbody tr {
-      &:nth-child(even) {
-        background-color: #f9f9f9;
-      }
-    }
-  }
-  
+/* In AdminUsers.css or a relevant CSS file */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
