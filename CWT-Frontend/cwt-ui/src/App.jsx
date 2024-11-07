@@ -13,7 +13,6 @@ import CartPage from './routes/CartPage/CartPage';
 import PaymentStatusPage from "./routes/PaymentStatusPage/PaymentStatusPage";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import CartProvider from './context/CartContext';
-import User from './AdminPanel/components/users/User';
 import AdminProduct from "./AdminPanel/components/adminproduct/adminproduct";
 import OrderManagement from './AdminPanel/components/order/OrderManagement';
 import AdProduct from "./AdminPanel/components/adminproduct/adproduct";
@@ -24,6 +23,7 @@ import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
 import ResetPassword from "./routes/ForgotPassword/ResetPassword";
 import FilteredProductPage from "./routes/filtered-products/filterProductPage";
 import Delivery from "./AdminPanel/components/delivery/Delivery"; 
+import User from "./AdminPanel/components/users/user";
 
 function App() {
   const router = createBrowserRouter([
