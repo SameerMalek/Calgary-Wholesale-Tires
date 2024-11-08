@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './User.scss';
+import './user.scss';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -44,41 +44,64 @@ const Users = () => {
     }
   };
 
+  // Filter users based on approval status
+  const approvedUsers = users.filter(user => user.isApproved);
+  const pendingUsers = users.filter(user => !user.isApproved);
+
   return (
-    <div>
-      <h2>Registered Users</h2>
+    <div className="users-container">
+      <h2>Users</h2>
       {loading ? (
         <p>Loading users...</p>
       ) : error ? (
         <p className="error-message">{error}</p>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(user => (
-              <tr key={user.id}>
-                <td>{user.firstName} {user.lastName}</td>
-                <td>{user.email}</td>
-                <td>{user.isApproved ? "Approved" : "Pending"}</td>
-                <td>
-                  {!user.isApproved && (
-                    <>
+        <div>
+          <section className="user-section">
+            <h3>Approved Users</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {approvedUsers.map(user => (
+                  <tr key={user.id}>
+                    <td>{user.firstName} {user.lastName}</td>
+                    <td>{user.email}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+
+          <section className="user-section">
+            <h3>Pending Users</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingUsers.map(user => (
+                  <tr key={user.id}>
+                    <td>{user.firstName} {user.lastName}</td>
+                    <td>{user.email}</td>
+                    <td>
                       <button onClick={() => handleApprove(user.id)}>Approve</button>
                       <button onClick={() => handleDecline(user.id)}>Decline</button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        </div>
       )}
     </div>
   );

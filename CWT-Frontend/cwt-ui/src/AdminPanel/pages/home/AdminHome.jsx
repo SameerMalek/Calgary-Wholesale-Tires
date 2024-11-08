@@ -8,7 +8,7 @@ import Table from "../../components/table/Table";
 import AdminProduct from "../../components/adminproduct/adminproduct";
 import AdProduct from "../../components/adminproduct/adproduct";
 import AdminProfile from "../../components/adminprofile/adminprofile";
-import User from "../../components/users/User";
+import User from "../../components/users/user";
 
 const AdminHome = () => {
   // State to track the currently active panel
