@@ -65,7 +65,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './user.scss';
+import './User.scss';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
