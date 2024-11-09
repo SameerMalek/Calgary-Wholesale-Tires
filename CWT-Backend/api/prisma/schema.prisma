@@ -312,11 +312,11 @@ model Order {
   updatedAt        DateTime @updatedAt
 
   // Relations
-  user       User        @relation(fields: [user_id], references: [id], name: "UserOrders")
+  user       User        @relation(fields: [user_id], references: [id], name: "UserOrders") // Add the relation name here
   orderItems OrderItem[]
   shipments  Shipment[]
-  discounts  Discount[]  @relation("OrderDiscount") // Add this line for the relation
 }
+
 // Order_Item Model:
 
 model OrderItem {
@@ -366,8 +366,7 @@ model Discount {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   user_id        String   @db.ObjectId
   product_id     String   @db.ObjectId
-  order_id       String?  @db.ObjectId // Optional field for specific orders
-  discount_type  String   // Can be percentage or fixed
+  discount_type  String // Can be percentage or fixed
   discount_value Float
   start_date     DateTime
   end_date       DateTime
@@ -376,7 +375,6 @@ model Discount {
   // Relations
   user    User    @relation(fields: [user_id], references: [id])
   product Product @relation(fields: [product_id], references: [id])
-  order   Order?  @relation("OrderDiscount", fields: [order_id], references: [id]) // Relation to the specific order
 }
 
 // Reviews Model:

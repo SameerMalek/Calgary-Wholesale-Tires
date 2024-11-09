@@ -69,15 +69,15 @@ export const addOrder = async (req, res) => {
 
   try {
     const billingAddressString =
-    typeof billing_address === "object"
-      ? JSON.stringify(billing_address)
-      : billing_address;
+      typeof billing_address === "object"
+        ? JSON.stringify(billing_address)
+        : billing_address;
     const newOrder = await prisma.order.create({
       data: {
         user_id,
         total_amount: parseFloat(total_amount),
         shipping_address,
-        billing_address:billingAddressString,
+        billing_address: billingAddressString,
         status: status || "pending",
         payment_status: payment_status || "pending",
       },
@@ -190,37 +190,90 @@ export const deleteOrder = async (req, res) => {
 };
 
 // Get all orders by user
-export const getOrdersByUser = async (req, res) => {
-  const { userId } = req.params; // assuming userId is passed as a route parameter
+// export const getOrdersByUser = async (req, res) => {
+//   const { userId } = req.params; // assuming userId is passed as a route parameter
 
-  // Debug: Log the userId received in the request
-  console.log("Received userId:", userId);
+//   // Debug: Log the userId received in the request
+//   console.log("Received userId:", userId);
+
+//   try {
+//     // Debug: Log the query being executed
+//     console.log("Fetching orders for userId:", userId);
+
+//     const orders = await prisma.order.findMany({
+//       where: { user_id: userId },
+//       include: { orderItems: true },
+//     });
+
+//     // Debug: Log the result of the query
+//     console.log("Fetched orders:", orders);
+
+//     // If no orders are found, log and return a 404
+//     if (!orders || orders.length === 0) {
+//       console.log(`No orders found for userId: ${userId}`);
+//       return res.status(404).json({ message: "No orders found for this user" });
+//     }
+
+//     res.status(200).json({ orders });
+//   } catch (err) {
+//     // Debug: Log error details if query fails
+//     console.error("Error fetching orders:", err);
+//     res
+//       .status(500)
+//       .json({ message: "Error fetching orders", error: err.message });
+//   }
+// };
+export const getOrdersByUser = async (req, res) => {
+  const { userId } = req.params;
 
   try {
-    // Debug: Log the query being executed
-    console.log("Fetching orders for userId:", userId);
-
     const orders = await prisma.order.findMany({
       where: { user_id: userId },
-      include: { orderItems: true },
+      include: {
+        orderItems: {
+          include: {
+            product: true, // Include product details if needed
+          },
+        },
+      },
     });
 
-    // Debug: Log the result of the query
-    console.log("Fetched orders:", orders);
-
-    // If no orders are found, log and return a 404
-    if (!orders || orders.length === 0) {
-      console.log(`No orders found for userId: ${userId}`);
+    if (!orders.length) {
       return res.status(404).json({ message: "No orders found for this user" });
     }
 
-    res.status(200).json({ orders });
-  } catch (err) {
-    // Debug: Log error details if query fails
-    console.error("Error fetching orders:", err);
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    res.status(500).json({ message: "Error fetching user orders" });
+  }
+};
+
+export const applyDiscount = async (req, res) => {
+  const { orderId } = req.params;
+  const { discount_type, discount_value } = req.body;
+
+  try {
+    const order = await prisma.order.findUnique({ where: { id: orderId } });
+    let discountedAmount = order.total_amount;
+
+    if (discount_type === "percentage") {
+      discountedAmount = order.total_amount * ((100 - discount_value) / 100);
+    } else if (discount_type === "fixed") {
+      discountedAmount = order.total_amount - discount_value;
+    }
+
+    const updatedOrder = await prisma.order.update({
+      where: { id: orderId },
+      data: { total_amount: discountedAmount },
+    });
+
     res
-      .status(500)
-      .json({ message: "Error fetching orders", error: err.message });
+      .status(200)
+      .json({ message: "Discount applied successfully", order: updatedOrder });
+  } catch (error) {
+    console.error("Error applying discount:", error);
+    res.status(500).json({ message: "Failed to apply discount" });
   }
 };
 
