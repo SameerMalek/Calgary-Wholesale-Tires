@@ -24,7 +24,7 @@ import ResetPassword from "./routes/ForgotPassword/ResetPassword";
 import FilteredProductPage from "./routes/filtered-products/filterProductPage";
 import Delivery from "./AdminPanel/components/delivery/Delivery"; 
 import OrderHistory from './components/orderhistory/orderhistory';
-import User from "./AdminPanel/components/users/user";
+import User from "./AdminPanel/components/users/User";
 
 function App() {
   const router = createBrowserRouter([
