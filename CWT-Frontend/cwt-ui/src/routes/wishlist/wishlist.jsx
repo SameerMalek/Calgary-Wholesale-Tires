@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import './wishlist.scss';
+import { AuthContext } from '../../context/AuthContext'; // Import AuthContext for user data
 
 const Wishlist = () => {
+  const { currentUser } = useContext(AuthContext); // Get current user from AuthContext
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null);
-  const userId = 'lHWpxfbplTmK5qAq3TiSpDsS3gEXg+EEK8xSn/X8uiw='; // Replace with actual authenticated user ID
 
   useEffect(() => {
     const fetchWishlistItems = async () => {
       try {
-        const response = await axios.post(`/api/wishlist/${userId}`);
+        const response = await axios.get(`/api/wishlist/user/${currentUser.id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token for authentication
+          },
+        });
         setWishlistItems(response.data.wishlistItems);
         setLoading(false);
       } catch (err) {
@@ -21,12 +26,21 @@ const Wishlist = () => {
       }
     };
 
-    fetchWishlistItems();
-  }, [userId]);
+    if (currentUser) {
+      fetchWishlistItems();
+    } else {
+      setError('Please log in to view your wishlist.');
+      setLoading(false);
+    }
+  }, [currentUser]);
 
   const handleRemoveItem = async (wishlistId) => {
     try {
-      await axios.delete(`/api/wishlist/${wishlistId}`);
+      await axios.delete(`/api/wishlist/${wishlistId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setWishlistItems((prevItems) => prevItems.filter((item) => item.id !== wishlistId));
       alert('Item removed from wishlist successfully');
     } catch (error) {
