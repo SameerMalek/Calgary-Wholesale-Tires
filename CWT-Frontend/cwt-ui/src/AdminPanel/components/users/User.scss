@@ -134,6 +134,7 @@
   background-color: #ffffff;
   font-family: Arial, sans-serif;
   color: #333;
+  text-align: center;
 
   h2 {
     font-size: 1.8em;
@@ -219,7 +220,7 @@
   }
 }
 
-.modal {
+.modal3 {
   position: absolute;
   top: 0;
   left: 0;
@@ -233,7 +234,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.modal3-content {
   background: white;
   padding: 3rem;
   border-radius: 12px;
@@ -268,18 +269,18 @@
     padding: 0.6rem 1.2rem;
     font-size: 1em;
     color: #fff;
-    background-color: #333;
+    background-color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #555;
+      background-color: black;
     }
 
     &:last-child {
-      background-color: #999;
+      background-color: rgb(25, 19, 45);
     }
   }
 }

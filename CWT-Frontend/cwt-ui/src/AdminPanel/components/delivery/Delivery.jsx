@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/sidebar/Sidebar';
-import Navbar from '../../components/navbar/Navbar';
-import './Delivery.scss';
+import React, { useEffect, useState } from "react";
+import Sidebar from "../../components/sidebar/Sidebar";
+import Navbar from "../../components/navbar/Navbar";
+import "./Delivery.scss";
 
 const Delivery = () => {
   const [deliveredOrders, setDeliveredOrders] = useState([]);
@@ -10,7 +10,7 @@ const Delivery = () => {
   const [filteredOrders, setFilteredOrders] = useState([]);
 
   useEffect(() => {
-    const orders = JSON.parse(localStorage.getItem('deliveredOrders')) || [];
+    const orders = JSON.parse(localStorage.getItem("deliveredOrders")) || [];
     setDeliveredOrders(orders);
   }, []);
 
@@ -23,20 +23,20 @@ const Delivery = () => {
 
     // Filter by customer name
     if (searchTerm) {
-      filtered = filtered.filter(order =>
+      filtered = filtered.filter((order) =>
         order.customerName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Filter by date range
     if (dateRange.start) {
-      filtered = filtered.filter(order =>
-        new Date(order.order_date) >= new Date(dateRange.start)
+      filtered = filtered.filter(
+        (order) => new Date(order.order_date) >= new Date(dateRange.start)
       );
     }
     if (dateRange.end) {
-      filtered = filtered.filter(order =>
-        new Date(order.order_date) <= new Date(dateRange.end)
+      filtered = filtered.filter(
+        (order) => new Date(order.order_date) <= new Date(dateRange.end)
       );
     }
 
@@ -44,11 +44,11 @@ const Delivery = () => {
   };
 
   const handleTrackingUpdate = (orderId, trackingNumber) => {
-    const updatedOrders = deliveredOrders.map(order =>
+    const updatedOrders = deliveredOrders.map((order) =>
       order._id === orderId ? { ...order, trackingNumber } : order
     );
     setDeliveredOrders(updatedOrders);
-    localStorage.setItem('deliveredOrders', JSON.stringify(updatedOrders));
+    localStorage.setItem("deliveredOrders", JSON.stringify(updatedOrders));
   };
 
   const downloadInvoice = async (orderId) => {
@@ -58,16 +58,19 @@ const Delivery = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:8800/api/orders/order/${orderId}/invoice`, {
-        method: 'GET',
-      });
+      const response = await fetch(
+        `http://localhost:8800/api/orders/order/${orderId}/invoice`,
+        {
+          method: "GET",
+        }
+      );
 
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', `invoice-${orderId}.pdf`);
+        link.setAttribute("download", `invoice-${orderId}.pdf`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -76,21 +79,21 @@ const Delivery = () => {
         console.error("Failed to download invoice");
       }
     } catch (error) {
-      console.error('Error downloading invoice:', error);
+      console.error("Error downloading invoice:", error);
     }
   };
 
   const markAsComplete = (orderId) => {
-    const updatedOrders = deliveredOrders.filter(order => order._id !== orderId);
+    const updatedOrders = deliveredOrders.filter(
+      (order) => order._id !== orderId
+    );
     setDeliveredOrders(updatedOrders);
-    localStorage.setItem('deliveredOrders', JSON.stringify(updatedOrders));
+    localStorage.setItem("deliveredOrders", JSON.stringify(updatedOrders));
   };
 
   return (
     <div className="delivery">
-      <Sidebar />
       <div className="deliveryContainer">
-        <Navbar />
         <div className="content">
           <h2>Delivery Page</h2>
 
@@ -110,7 +113,9 @@ const Delivery = () => {
                   type="date"
                   name="start"
                   value={dateRange.start}
-                  onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, start: e.target.value })
+                  }
                 />
               </label>
               <label>
@@ -119,7 +124,9 @@ const Delivery = () => {
                   type="date"
                   name="end"
                   value={dateRange.end}
-                  onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, end: e.target.value })
+                  }
                 />
               </label>
             </div>
@@ -131,10 +138,17 @@ const Delivery = () => {
               <p>No delivered orders match your criteria.</p>
             ) : (
               filteredOrders.map((order) => (
-                <div key={`${order._id}-${order.customerName}`} className="deliveryCard">
+                <div
+                  key={`${order._id}-${order.customerName}`}
+                  className="deliveryCard"
+                >
                   <div className="orderInfo">
-                    <p><strong>Order ID:</strong> {order._id}</p>
-                    <p><strong>Customer:</strong> {order.customerName}</p>
+                    <p>
+                      <strong>Order ID:</strong> {order._id}
+                    </p>
+                    <p>
+                      <strong>Customer:</strong> {order.customerName}
+                    </p>
                   </div>
                   <div>
                     <strong>Tracking Number:</strong>
@@ -142,15 +156,23 @@ const Delivery = () => {
                       type="text"
                       placeholder="Enter tracking number"
                       value={order.trackingNumber || ""}
-                      onChange={(e) => handleTrackingUpdate(order._id, e.target.value)}
+                      onChange={(e) =>
+                        handleTrackingUpdate(order._id, e.target.value)
+                      }
                       className="trackingInput"
                     />
                   </div>
                   <div className="buttons">
-                    <button onClick={() => downloadInvoice(order._id)} className="invoiceButton">
+                    <button
+                      onClick={() => downloadInvoice(order._id)}
+                      className="invoiceButton"
+                    >
                       Download Invoice
                     </button>
-                    <button onClick={() => markAsComplete(order._id)} className="completeButton">
+                    <button
+                      onClick={() => markAsComplete(order._id)}
+                      className="completeButton"
+                    >
                       Mark as Complete
                     </button>
                   </div>
@@ -165,4 +187,3 @@ const Delivery = () => {
 };
 
 export default Delivery;
-

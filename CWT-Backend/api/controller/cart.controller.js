@@ -36,6 +36,7 @@ export const getCartItemsByUser = async (req, res) => {
 // Remove item from cart by ID
 export const removeItemFromCart = async (req, res) => {
   const { cartId } = req.params;
+  console.log("Cart ID received:", cartId);
 
   try {
     const deletedCartItem = await prisma.cart.delete({

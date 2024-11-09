@@ -106,8 +106,6 @@ const Navbar = () => {
               <IoIosHeart className="heartIcon" /> Wishlist
               <span className="wishlistText"></span> 
             </a>
-            </div>
-            <div className="right">
             <a className="cart" href="/cart">
               <img src="/assets/cart.png" alt="cart"  className="hertIcon"/>
               <span>Cart</span>

@@ -5,6 +5,7 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 
 const OrderManagement = () => {
+
   const [orders, setOrders] = useState({
     newOrders: [
       {
@@ -174,9 +175,7 @@ const OrderManagement = () => {
 
   return (
     <div className="orderManagement">
-      <Sidebar />
       <div className="orderManagementContainer">
-        <Navbar />
         <div className="content">
           <div className="tableHeader">
             <div className="tableItem">Bill No.</div>

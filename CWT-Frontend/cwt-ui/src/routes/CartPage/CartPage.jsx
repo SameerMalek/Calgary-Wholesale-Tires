@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../context/CartContext.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
@@ -12,13 +12,32 @@ const stripePromise = loadStripe(
 );
 
 const CartPage = () => {
-  const { cartItems, totalAmount, updateQuantity, removeFromCart } =
-    useContext(CartContext); // Use cart items and total amount from CartContext
+  const {
+    cartItems,
+    totalAmount,
+    updateQuantity,
+    removeFromCart,
+    setCartItems,
+  } = useContext(CartContext); // Use cart items and total amount from CartContext
   const { currentUser } = useContext(AuthContext); // Get current user from AuthContext
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("stripe");
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  console.log("Cart items:", cartItems);
+  
+  // Load cart items from localStorage on initial render
+  useEffect(() => {
+    const savedCartItems = JSON.parse(localStorage.getItem("cartItems"));
+    if (savedCartItems) {
+      setCartItems(savedCartItems);
+    }
+  }, [setCartItems]);
+
+  // Save cart items to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const handleCheckout = async () => {
     if (!isTermsAccepted) {
@@ -55,9 +74,9 @@ const CartPage = () => {
             },
             body: JSON.stringify({
               items: cartItems.map((item) => ({
-                productId: item.id,
-                name: item.name,
-                price: item.price,
+                productId: item.product.id,
+                name: item.product.name,
+                price: item.product.price,
                 quantity: item.quantity,
               })),
               user_id: userId,
@@ -100,9 +119,9 @@ const CartPage = () => {
           },
           body: JSON.stringify({
             items: cartItems.map((item) => ({
-              productId: item.id,
-              quantity: item.quantity,
-              price: item.price,
+              productId: item.product.id,
+              quantity: item.product.quantity,
+              price: item.product.price,
             })),
             total_amount: totalAmount,
             user_id: userId,
@@ -120,6 +139,35 @@ const CartPage = () => {
     }
   };
 
+  const handleRemoveFromCart = async (id) => {
+    console.log("Removing item with cartId:", id);
+    try {
+      const response = await fetch(`http://localhost:8800/api/cart/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (response.ok) {
+        // Check if the item was removed from the backend
+        console.log("Item removed from backend successfully");
+  
+        // Directly update the cartItems state to remove the item
+        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  
+        // Update CartContext by calling removeFromCart (if necessary)
+        removeFromCart(id);
+        window.location.reload(); 
+      } else {
+        console.error("Failed to remove item from cart in the database");
+      }
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
+    }
+  };  
+  
+
   return (
     <div className="cart-page">
       <div className="container">
@@ -129,21 +177,21 @@ const CartPage = () => {
             <p>Your cart is empty</p>
           ) : (
             cartItems
-              .filter((item) => item && item.id)
+              .filter((item) => item && item.product.id)
               .map((item) => (
                 <div key={item.id} className="cart-item">
                   <img
-                    src={item?.featuredImage}
-                    alt={item.name}
+                    src={item.product?.featuredImage}
+                    alt={item.product.name}
                     className="cart-item-image"
                   />
                   <div className="cart-item-details">
-                    <h3>{item.name}</h3>
+                    <h3>{item.product.name}</h3>
                     <p className="variant">
                       Variant: {item.selectedVariant?.title}
                     </p>
                     <p className="quantity">QUANTITY: {item.quantity}</p>
-                    <p className="price">${item.price}</p>
+                    <p className="price">${item.product.price}</p>
 
                     <div className="quantity-controls">
                       <div className="quantity-buttons-container">
@@ -151,8 +199,8 @@ const CartPage = () => {
                           className="quantity-button"
                           onClick={() =>
                             updateQuantity(
-                              item.id,
-                              item.selectedVariant?.id,
+                              item.product.id,
+                              item.product.selectedVariant?.id,
                               item.quantity - 1
                             )
                           }
@@ -164,8 +212,8 @@ const CartPage = () => {
                           className="quantity-button"
                           onClick={() =>
                             updateQuantity(
-                              item.id,
-                              item.selectedVariant?.id,
+                              item.product.id,
+                              item.product.selectedVariant?.id,
                               item.quantity + 1
                             )
                           }
@@ -174,11 +222,8 @@ const CartPage = () => {
                         </button>
                       </div>
                     </div>
-
                     <button
-                      onClick={() =>
-                        removeFromCart(item.id, item.selectedVariant?.id)
-                      }
+                      onClick={() => handleRemoveFromCart(item.id)}
                       className="remove-button"
                     >
                       Remove
@@ -249,7 +294,7 @@ const CartPage = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-      <OrderHistory/>
+      <OrderHistory />
     </div>
   );
 };

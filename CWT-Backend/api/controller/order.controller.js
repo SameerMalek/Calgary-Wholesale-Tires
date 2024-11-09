@@ -11,24 +11,18 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Create Order controller:
 export const createOrder = async (req, res) => {
-  const { user_id, items, shipping_address, billing_address, total_amount, payment_method } = req.body;
+  const { user_id, items, shipping_address, billing_address, total_amount } =
+    req.body;
 
   try {
-    let paymentIntent = null;
-    let paymentStatus = "pending";
+    // Create a Stripe payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(total_amount * 100), // amount in cents
+      currency: "cad",
+      payment_method_types: ["card"],
+    });
 
-    // Only create a payment intent if the method is not COD
-    if (payment_method !== "COD") {
-      paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(total_amount * 100),
-        currency: "usd",
-        payment_method_types: ["card"],
-      });
-      paymentStatus = "pending";
-    } else {
-      paymentStatus = "COD"; // Set payment status directly for COD orders
-    }
-
+    // Store the order in the database
     const newOrder = await prisma.order.create({
       data: {
         user_id,
@@ -36,7 +30,7 @@ export const createOrder = async (req, res) => {
         shipping_address,
         billing_address,
         status: "pending",
-        payment_status: paymentStatus,
+        payment_status: "pending",
         orderItems: {
           create: items.map((item) => ({
             product_id: item.productId,
@@ -55,14 +49,23 @@ export const createOrder = async (req, res) => {
     });
   } catch (err) {
     console.error("Error creating order:", err);
-    res.status(500).json({ message: "Error creating order", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error creating order", error: err.message });
   }
 };
 
 // Add a new order
 export const addOrder = async (req, res) => {
-  const { user_id, total_amount, shipping_address, billing_address, status, payment_status } = req.body;
-  console.log("Data Received:", req.body);
+  const {
+    user_id,
+    total_amount,
+    shipping_address,
+    billing_address,
+    status,
+    payment_status,
+  } = req.body;
+  console.log("Data Recieved", req);
 
   try {
     const billingAddressString =
@@ -74,48 +77,40 @@ export const addOrder = async (req, res) => {
         user_id,
         total_amount: parseFloat(total_amount),
         shipping_address,
-        billing_address: billingAddressString,
+        billing_address:billingAddressString,
         status: status || "pending",
         payment_status: payment_status || "pending",
       },
     });
-    console.log("New Order Created:", newOrder);
-    return res.status(201).json(newOrder);
+    console.log(newOrder);
+    return newOrder;
   } catch (err) {
-    console.error("Error creating order:", err);
-    res.status(500).json({ message: "Error creating order", error: err.message });
+    throw new Error(`Error creating order: ${err.message}`);
   }
 };
 
 // Fetch all orders
 export const getOrders = async (req, res) => {
+  const { userId } = req.params; // assuming userId is passed as a route parameter
   try {
-    console.log("Fetching all orders from the database...");
-
     const orders = await prisma.order.findMany({
-      where: {
-        user_id: {
-          not: undefined, // Exclude records where `user_id` is null or undefined
-        },
-      },
+      where: { user_id: userId },
       include: {
-        orderItems: true,
+        orderItems: {
+          include: {
+            product: true, // Include product details if needed
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
       },
     });
-
-    if (orders.length === 0) {
-      console.log("No orders found in the database.");
-    } else {
-      console.log(`Fetched ${orders.length} orders.`);
-    }
-
-    res.status(200).json(orders);
+    res.status(200).json({ orders });
   } catch (err) {
-    console.error("Error fetching orders:", err);
-    res.status(500).json({ message: "Error fetching orders", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching orders", error: err.message });
   }
 };
 
@@ -132,18 +127,24 @@ export const getOrderById = async (req, res) => {
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
-
     res.status(200).json({ order });
   } catch (err) {
-    console.error("Error fetching order by ID:", err);
-    res.status(500).json({ message: "Error fetching order", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching order", error: err.message });
   }
 };
 
 // Update an order by ID
 export const updateOrder = async (req, res) => {
   const { orderId } = req.params;
-  const { status, total_amount, shipping_address, billing_address, payment_status } = req.body;
+  const {
+    status,
+    total_amount,
+    shipping_address,
+    billing_address,
+    payment_status,
+  } = req.body;
 
   try {
     const updatedOrder = await prisma.order.update({
@@ -157,10 +158,13 @@ export const updateOrder = async (req, res) => {
       },
     });
 
-    res.status(200).json({ message: "Order updated successfully", order: updatedOrder });
+    res
+      .status(200)
+      .json({ message: "Order updated successfully", order: updatedOrder });
   } catch (err) {
-    console.error("Error updating order:", err);
-    res.status(500).json({ message: "Error updating order", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error updating order", error: err.message });
   }
 };
 
@@ -172,72 +176,76 @@ export const deleteOrder = async (req, res) => {
     const deletedOrder = await prisma.order.delete({
       where: { id: orderId },
     });
-    res.status(200).json({ message: "Order deleted successfully", order: deletedOrder });
+    res
+      .status(200)
+      .json({ message: "Order deleted successfully", order: deletedOrder });
   } catch (err) {
-    console.error("Error deleting order:", err);
-    res.status(500).json({ message: "Error deleting order", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error deleting order", error: err.message });
   }
 };
 
 // Get all orders by user
-// export const getOrdersByUser = async (req, res) => {
-//   const { userId } = req.params; // assuming userId is passed as a route parameter
-
-//   // Debug: Log the userId received in the request
-//   console.log("Received userId:", userId);
-
-//   try {
-//     // Debug: Log the query being executed
-//     console.log("Fetching orders for userId:", userId);
-
-//     const orders = await prisma.order.findMany({
-//       where: { user_id: userId },
-//       include: { orderItems: true },
-//     });
-
-//     // Debug: Log the result of the query
-//     console.log("Fetched orders:", orders);
-
-//     // If no orders are found, log and return a 404
-//     if (!orders || orders.length === 0) {
-//       console.log(`No orders found for userId: ${userId}`);
-//       return res.status(404).json({ message: "No orders found for this user" });
-//     }
-
-//     res.status(200).json({ orders });
-//   } catch (err) {
-//     // Debug: Log error details if query fails
-//     console.error("Error fetching orders:", err);
-//     res
-//       .status(500)
-//       .json({ message: "Error fetching orders", error: err.message });
-//   }
-// };
 export const getOrdersByUser = async (req, res) => {
-  const { userId } = req.params;
+  const { userId } = req.params; // assuming userId is passed as a route parameter
+
+  // Debug: Log the userId received in the request
+  console.log("Received userId:", userId);
 
   try {
+    // Debug: Log the query being executed
+    console.log("Fetching orders for userId:", userId);
+
     const orders = await prisma.order.findMany({
       where: { user_id: userId },
-      include: {
-        orderItems: {
-          include: {
-            product: true, // Include product details if needed
-          },
-        },
-      },
+      include: { orderItems: true },
     });
 
-    if (!orders.length) {
+    // Debug: Log the result of the query
+    console.log("Fetched orders:", orders);
+
+    // If no orders are found, log and return a 404
+    if (!orders || orders.length === 0) {
+      console.log(`No orders found for userId: ${userId}`);
       return res.status(404).json({ message: "No orders found for this user" });
     }
 
-    res.status(200).json(orders);
-  } catch (error) {
-    console.error("Error fetching user orders:", error);
-    res.status(500).json({ message: "Error fetching user orders" });
+    res.status(200).json({ orders });
+  } catch (err) {
+    // Debug: Log error details if query fails
+    console.error("Error fetching orders:", err);
+    res
+      .status(500)
+      .json({ message: "Error fetching orders", error: err.message });
   }
 };
+
+// export const getOrdersByUser = async (req, res) => {
+//   const { userId } = req.params;
+
+//   try {
+//     const orders = await prisma.order.findMany({
+//       where: { user_id: userId },
+//       include: {
+//         orderItems: {
+//           include: {
+//             product: true, // Include product details if needed
+//           },
+//         },
+//       },
+//     });
+
+//     if (!orders.length) {
+//       return res.status(404).json({ message: "No orders found for this user" });
+//     }
+
+//     res.status(200).json(orders);
+//   } catch (error) {
+//     console.error("Error fetching user orders:", error);
+//     res.status(500).json({ message: "Error fetching user orders" });
+//   }
+// };
 
 export const applyDiscount = async (req, res) => {
   const { orderId } = req.params;
@@ -356,7 +364,10 @@ export const generateInvoice = async (req, res) => {
     };
 
     const result = await easyinvoice.createInvoice(invoiceData);
-    const filePath = path.join(__dirname, `../../invoices/invoice_${order.id}.pdf`);
+    const filePath = path.join(
+      __dirname,
+      `../../invoices/invoice_${order.id}.pdf`
+    );
 
     if (!fs.existsSync(path.dirname(filePath))) {
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -366,8 +377,8 @@ export const generateInvoice = async (req, res) => {
     res.download(filePath, `invoice_${order.id}.pdf`);
   } catch (err) {
     console.error("Error generating invoice:", err);
-    res.status(500).json({ message: "Error generating invoice", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error generating invoice", error: err.message });
   }
 };
-
-

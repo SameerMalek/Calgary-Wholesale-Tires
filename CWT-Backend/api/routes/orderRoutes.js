@@ -6,33 +6,21 @@ import {
     deleteOrder,
     getOrdersByUser,
     generateInvoice,
-    getOrders, // Importing the getOrders function
-    createOrder
+    getOrders,
+    createOrder,
+    applyDiscount
 } from '../controller/order.controller.js';
 
 const router = express.Router();
 
 // Define routes
-router.post('/order', addOrder); // Add an order with detailed information
-router.get('/order/:orderId', getOrderById); // Get a specific order by ID
-router.put('/order/:orderId', updateOrder); // Update a specific order by ID
-router.delete('/order/:orderId', deleteOrder); // Delete a specific order by ID
-router.get('/user/:userId/orders', getOrdersByUser); // Get all orders for a specific user
-router.get('/order/:orderId/invoice', generateInvoice); // Generate an invoice for a specific order
-
-// Fetch all orders (for admin view, no userId required)
-router.get('/orders', getOrders);
-
-// Create a new order (for user side)
-router.post('/orders', createOrder);
-
 router.post("/order", addOrder);
 router.get("/order/:orderId", getOrderById);
 router.put("/order/:orderId", updateOrder);
 router.delete("/order/:orderId", deleteOrder);
-router.get("/user/:userId/orders", getOrdersByUser);
+router.get("/user/:userId/orders", getOrdersByUser); // For getting orders
 router.get("/order/:orderId/invoice", generateInvoice);
 router.get("/orders/:userId", getOrders);
 router.post("/", createOrder);
 router.post("/orders/:orderId/apply-discount", applyDiscount);
-export default router;
+export default router; 

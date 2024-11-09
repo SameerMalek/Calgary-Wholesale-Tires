@@ -582,7 +582,8 @@ const Users = () => {
   const handleViewOrders = async (user) => {
     try {
       const response = await axios.get(`http://localhost:8800/api/orders/user/${user.id}/orders`);
-      setUserOrders(response.data);
+      console.log(response.data);
+      setUserOrders(response.data.orders);
       setSelectedUser(user);
       setViewingOrders(true);
     } catch (error) {
@@ -699,8 +700,8 @@ const Users = () => {
 
           {/* Order view modal */}
           {viewingOrders && (
-  <div className="modal">
-    <div className="modal-content">
+  <div className="modal3">
+    <div className="modal3-content">
       <h3>Orders for {selectedUser.firstName} {selectedUser.lastName}</h3>
       <table>
         <thead>
@@ -730,8 +731,8 @@ const Users = () => {
 
           {/* Discount assignment modal */}
           {discountModalVisible && (
-            <div className="modal">
-              <div className="modal-content">
+            <div className="modal3">
+              <div className="modal3-content">
                 <h3>Assign Discount to Order {selectedOrder && selectedOrder.id}</h3>
                 <label>
                   Discount Type:
