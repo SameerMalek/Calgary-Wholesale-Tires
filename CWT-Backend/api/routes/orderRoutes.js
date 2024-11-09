@@ -1,4 +1,4 @@
-import express from 'express'; 
+import express from "express";
 import {
     addOrder,
     getOrderById,
@@ -26,5 +26,13 @@ router.get('/orders', getOrders);
 // Create a new order (for user side)
 router.post('/orders', createOrder);
 
+router.post("/order", addOrder);
+router.get("/order/:orderId", getOrderById);
+router.put("/order/:orderId", updateOrder);
+router.delete("/order/:orderId", deleteOrder);
+router.get("/user/:userId/orders", getOrdersByUser);
+router.get("/order/:orderId/invoice", generateInvoice);
+router.get("/orders/:userId", getOrders);
+router.post("/", createOrder);
+router.post("/orders/:orderId/apply-discount", applyDiscount);
 export default router;
-
