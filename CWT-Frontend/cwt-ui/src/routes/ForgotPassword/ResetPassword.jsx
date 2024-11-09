@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import apiRequest from '../../lib/apiRequest.js';
 import './forgotReset.scss';
 
 
@@ -8,7 +8,6 @@ function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
   const location = useLocation();
-  
   const query = new URLSearchParams(location.search);
   const token = query.get("token");
   const email = query.get("email");
@@ -16,10 +15,13 @@ function ResetPassword() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/reset-password', { email, token, newPassword });
-      setMessage(response.data.message);
+      const response = await apiRequest.post('/auth/reset-password', { email, token, newPassword });
+      setMessage(response.data.message, 'Password reset successful!');
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 2000);
     } catch (error) {
-      setMessage(error.response?.data?.message || 'An error occurred');
+      setMessage(error.response?.data?.message || "Failed to reset password. Please check the link or try again.");
     }
   };
 

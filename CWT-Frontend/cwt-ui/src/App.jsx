@@ -22,6 +22,8 @@ import AdminProfile from "./AdminPanel/components/adminprofile/adminprofile";
 import Wishlist from "./routes/wishlist/wishlist";
 import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
 import ResetPassword from "./routes/ForgotPassword/ResetPassword";
+import VerifyOtp from "./routes/ForgotPassword/VerifyOtp";
+import UpdatePassword from "./routes/ForgotPassword/UpdatePassword";
 import FilteredProductPage from "./routes/filtered-products/filterProductPage";
 import Delivery from "./AdminPanel/components/delivery/Delivery"; 
 
@@ -41,11 +43,19 @@ function App() {
         },
         {
           path: "/ProfilePage",
-          element: <ProfilePage />,
+          element:<ProfilePage />,
         },
         {
           path: "/forgot-password",
           element:<ForgotPassword />,
+        },
+        {
+          path: "/verify-otp",
+          element: <VerifyOtp/>,
+        },
+        {
+          path: "/update-password",
+          element: <UpdatePassword/>,
         },
         {
           path: "/reset-password",

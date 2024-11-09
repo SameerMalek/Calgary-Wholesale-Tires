@@ -72,7 +72,7 @@ export const login = async (req, res) => {
     
     // Checking if user exists:
      if (!user) 
-      return res.status(400).json({ message: "Invalid EmailId!" });
+      return res.status(404).json({ message: "Invalid EmailId!" });
 
     // Checking if password is correct:
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -82,25 +82,26 @@ export const login = async (req, res) => {
 
       //Generate Cookie Token and Send to the User:
       
-      const age = 1000 * 60 * 60 * 24 * 7; 
+      const age = 24 * 60 * 60 * 1000; // 1 day 
       const token = jwt.sign(
         {
-          id: user.email,
+          email: user.email,
+          userId: user.id,
           isAdmin: false,
         },
         process.env.JWT_SECRET_KEY,
         { expiresIn: age }
       ); 
 
-      const { password: _, ...info } = user;
-
+      //Send JWT Token as Cookie
       res.cookie("token", token, { 
         httpOnly: true, 
         secure: process.env.NODE_ENV === "production",
-        maxAge: age })
-      .status(200)
-      .json(info);
-      
+        maxAge: age });
+
+    // Remove password field from response
+    const { password: _, ...info } = user;
+    res.status(200).json(info);   
     } 
     catch (err) {
       //console.log(err);
@@ -117,65 +118,109 @@ export const logout = (req, res) => {
 };
 
 //User Forgot Password:
+
+// Send email with reset link
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS
+  },
+  secure: false
+});
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return res.status(404).json({ message: "User not found!" });
+    if (!user) return res.status(404).json({ message: "Email not registered!" });
 
-    // Generate password reset token
-    const resetToken = crypto.randomBytes(32).toString("hex");
+    // Generate OTP and hash it
+    /*const resetToken = crypto.randomBytes(32).toString("hex");
     const resetTokenHash = await bcrypt.hash(resetToken, 10);
-    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour
+    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour*/
 
-    // Update user with reset token and expiry
+    const otp = crypto.randomInt(100000, 999999).toString();
+    const otpHash = await bcrypt.hash(otp, 10);
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+
+    // Update user with OTP and expiry
     await prisma.user.update({
       where: { email },
-      data: { resetToken: resetTokenHash, resetTokenExpiry },
+      data: { resetToken: otpHash, resetTokenExpiry: otpExpiry },
     });
-
-    // Send email with reset link
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-      },
-      secure: true
-  });
   
-    const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}&email=${email}`;
+    //const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}&email=${email}`;
+    
+    //Send OTP via email
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: {
+        name: "CWT",
+        address: process.env.GMAIL_USER
+      },
       to: email,
-      subject: "Password Reset",
-      text: `Reset your password using this link: ${resetUrl}`,
+      subject: "Password Reset OTP",
+      text: `Reset OTP is: ${otp}. It expires in 10 minutes.`,
+      /*html: `
+      <h1>Password Reset OTP Request</h1>
+      <p>Please click the link below to reset your password:</p>
+      <a href="${resetUrl}">Reset Password</a>
+      <p>This link will expire in 1 hour.</p>
+      <p>If you didn't request this, please ignore this email.</p>
+    `*/
     };
 
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: "Password reset email sent!" });
+
+    res.status(200).json({ message: "OTP sent!" });
   } catch (error) {
-    console.error("Error sending password reset email", error);
-    if (error instanceof PrismaClientValidationError) {
+    console.error("Error sending OTP", error);
+   /* if (error instanceof PrismaClientValidationError) {
       console.error("Validation Error", error);
-    }
-    res.status(500).json({ message: "Error sending reset email", error });
+    }*/
+    res.status(500).json({ 
+      message: "Error sending reset email", 
+      error: process.env.NODE_ENV === "development" ? error.message : undefined});
+
   };
+};
+
+// Verify OTP
+export const verifyOtp = async (req, res) => {
+  const { email, otp } = req.body;
+
+  console.log("email on server is:",email);
+  console.log("otp on server is:",otp);
+
+  if(!email || !otp) {
+    
+    return res.status(400).json({ message: "Email and OTP are required!" });
+  }
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user || !user.resetTokenExpiry || new Date() > user.resetTokenExpiry) {
+      return res.status(400).json({ message: "Invalid or expired OTP!" });
+    }
+
+    const isValidOtp = await bcrypt.compare(otp, user.resetToken);
+    if (!isValidOtp) return res.status(400).json({ message: "Invalid OTP!" });
+
+    res.status(200).json({ message: "OTP verified successfully!" });
+  } catch (error) {
+    console.error("Error verifying OTP", error);
+    res.status(500).json({ message: "Error verifying OTP", error });
+  }
 };
 
 // User Password Reset:
 export const resetPassword = async (req, res) => {
-  const { email, token, newPassword } = req.body;
+  const { email, newPassword } = req.body;
+  
+  if(!email || !newPassword) {
+    return res.status(400).json({ message: "Email and new password are required!" });
+  }
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || !user.resetTokenExpiry || new Date() > user.resetTokenExpiry) {
-      return res.status(400).json({ message: "Invalid or expired token!" });
-    }
-
-    const isValidToken = await bcrypt.compare(token, user.resetToken);
-    if (!isValidToken) return res.status(400).json({ message: "Invalid token!" });
-
     // Hash new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
@@ -184,9 +229,18 @@ export const resetPassword = async (req, res) => {
       where: { email },
       data: { password: hashedPassword, resetToken: null, resetTokenExpiry: null },
     });
+    // Send confirmation email
+    /*const confirmationMailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset Successful",
+      text: "Your password has been successfully reset.",
+    };
+    await transporter.sendMail(confirmationMailOptions);*/
+
 
     res.status(200).json({ message: "Password reset successful!" });
   } catch (error) {
-    res.status(500).json({ message: "Error resetting password", error });
+    res.status(500).json({ message: "Error resetting password on serverside", error });
   }
 };

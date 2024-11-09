@@ -1,94 +1,84 @@
-// forgotReset.scss
 
-// Variables for colors and spacing
-$primary-color: #3498db;
-$secondary-color: #2c3e50;
-$text-color: #333;
-$background-color: #f5f5f5;
-$button-hover-color: darken($primary-color, 10%);
-$form-width: 100%;
-$form-max-width: 400px;
-$input-padding: 10px;
-$button-padding: 12px;
 
-.forgot-reset-container {
+.forgot-password, .reset-password {
+  position:absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: $background-color;
-  padding: 20px;
+  gap: 10px;
+  padding: 2rem;
+  //max-width: 400px;
+  margin: auto;
+  justify-content: space-between;
+  background: #f9f9f9;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 48%;
 
-  form {
-    background: white;
-    width: $form-width;
-    max-width: $form-max-width;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-    h2 {
-      text-align: center;
-      color: $secondary-color;
-      margin-bottom: 1.5rem;
+  svg{
+    margin-bottom: 0.6rem;
+    font-size: 1.8rem;
+    //border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0.2rem;
+    width: 40%;
+    height: 40px;
+  }
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+      
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: all 0.2s;
+    outline: none;
+    margin-bottom: 10px;
+    &:focus {
+      border-color: #ff0000;
     }
-
-    input {
-      width: 100%;
-      padding: $input-padding;
-      margin: 0.5rem 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
-      color: $text-color;
-
-      &:focus {
-        border-color: $primary-color;
-        outline: none;
-      }
-    }
-
-    button {
-      width: 100%;
-      padding: $button-padding;
-      background-color: $primary-color;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: $button-hover-color;
-      }
-    }
-
-    p {
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: $text-color;
+    &:hover {
+      border-color: #ff0000;
     }
   }
-}
-
-// Responsive Styles
-@media (max-width: 768px) {
-  .forgot-reset-container {
+  .back-link{
+    margin-top: 10px;
+    color:gray;
+    font-size: 0.8rem;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  button {
+    width: 100%;
     padding: 10px;
-
-    form {
-      padding: 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    background-color: #ff0000;
+    color: white;
+    cursor: pointer;
+    &:hover {
+      background-color: #cc0000;
+    }
+  }
+  
+  p {
+    margin-top: 10px;
+    color: #28a745; // Success message color
+    &.error {
+      color: #dc3545; // Error message color
     }
   }
 }
 
-@media (max-width: 480px) {
-  .forgot-reset-container {
-    form {
-      padding: 1rem;
-    }
-  }
-}

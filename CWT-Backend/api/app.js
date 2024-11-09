@@ -100,6 +100,7 @@ import testRoute from "../api/routes/test.route.js";
 import searchRoute from "../api/routes/search.route.js";
 import stripeRoutes from "../api/routes/stripeRoutes.js";
 import uploadProductRoute from "../api/routes/uploadProduct.route.js";
+import adminRoutes from "../api/routes/admin.routes.js";
 
 
 // Initialize app
@@ -139,6 +140,7 @@ app.use("/api/product-management", productManagementRoutes); // Product manageme
 app.use("/api/products", searchRoute); // Product search routes
 app.use("/api/stripe", stripeRoutes); // Stripe payment routes
 app.use("/api/product", uploadProductRoute); // Product upload routes
+app.use("/api/admin", adminRoutes); // Admin routes
 
 // Commented out redundant line
 // app.use("/api/product", uploadProduct);

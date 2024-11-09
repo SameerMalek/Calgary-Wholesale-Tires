@@ -2,7 +2,9 @@ import React, { useContext, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
 import apiRequest from '../../lib/apiRequest.js';
 import { AuthContext } from '../../context/AuthContext';
-import './Login.scss';
+import { IoLogInSharp } from "react-icons/io5";
+import { MdOutlineAppRegistration } from "react-icons/md";
+import './login.scss';
 
 export default function Login() {
   const [error, setError] = useState("");
@@ -75,21 +77,24 @@ export default function Login() {
       </div>
       <div className="login-content">
         <div className="existing-user">
+        <center><IoLogInSharp className='svg' />
           <h3>Welcome back</h3>
           <p>Enter your email and password to access your account.</p>
+          </center>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="email">Email:</label>
-              <input type="email" id="email" name='email'  required  />
+              <label htmlFor="email">Email *</label>
+              <input type="email" id="email" name='email'  required placeholder='enter your emailid' />
             </div>
             <div className="form-group">
-              <label htmlFor="password" placeholder="Enter your password">Password</label>
+              <label htmlFor="password" >Password *</label>
               <input type={showPassword ? "text" : "password"}
             id="password"
             name="password"
+            placeholder='enter your password'
             required />
             </div>
-            
+            <div className=''>
              <label>
             <input
               type="checkbox"
@@ -98,17 +103,25 @@ export default function Login() {
             />
             Show Password
           </label>
+          </div>
           <div className='btn-container'>
             <button type="submit" className="btn-sign-in" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Login"}</button>
+            </div> 
+            <div style={{ marginTop: "10px", color: "grey", textAlign: "right", textDecoration: "underline" }}>
+                <Link to="/forgot-password">Forgot Password?</Link>
+          </div>   
             {error && <p className="error-message">{error}</p>}
-            <span className='forgot-password' onClick={navigateToForgotPassword}></span>
-            </div>  
           </form>
+          
         </div>
         <div className="new-user">
+       <center> 
+        <MdOutlineAppRegistration />
+
           <h3>New User</h3>
           <p>Create an account to checkout faster, view order history, and more.</p>
+          </center>
           <button 
             className="btn-create-account" 
             onClick={navigateToCreateAccount} // Add onClick to navigate

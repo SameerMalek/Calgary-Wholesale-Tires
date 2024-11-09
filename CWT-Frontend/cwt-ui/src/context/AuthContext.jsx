@@ -2,7 +2,11 @@ import {createContext, useEffect, useState} from 'react';
 
 export const AuthContext = createContext();
 
+// Context provider for authentication
 export const AuthContextProvider = ({children}) => {
+    //const [currentUser, setCurrentUser] = useState(null);
+    const [email, setEmail] = useState("");
+   
     const [currentUser, setCurrentUser] = useState(() => {
         try {
             const userData = localStorage.getItem("user");
@@ -26,7 +30,7 @@ export const AuthContextProvider = ({children}) => {
     }, [currentUser]);
     
     return (
-        <AuthContext.Provider value={{currentUser, updateUser}}>
+        <AuthContext.Provider value={{currentUser, updateUser, email, setEmail}}>
             {children}
         </AuthContext.Provider>
     )

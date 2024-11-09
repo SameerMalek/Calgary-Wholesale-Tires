@@ -1,0 +1,101 @@
+.verify-otp {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 2rem;
+    margin: auto;
+    justify-content: space-between;
+    background: #f9f9f9;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 32%;
+
+    svg {
+      margin-bottom: 0.6rem;
+      font-size: 1.8rem;
+      border-radius: 5px;
+      padding: 0.2rem;
+      width: 40%;
+      height: 40px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .otp-input {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      transition: all 0.2s;
+      outline: none;
+      margin-bottom: 10px;
+      text-align: center;
+      font-weight: 600;
+
+      &:focus {
+        border-color: #ff0000;
+      }
+
+      &:hover {
+        border-color: #ff0000;
+      }
+    }
+
+    .otp-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px; /* Added a realistic gap value */
+    }
+
+    .back-link {
+      margin-top: 10px;
+      color: gray; 
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-align: right;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .otp-time {
+        margin-top: 10px;
+        color: red; 
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    }   
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      outline: none;
+      background-color: #ff0000;
+      color: white;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #cc0000;
+      }
+    }
+
+    p {
+      margin-top: 10px;
+      color: #28a745; // Success message color
+
+      &.error {
+        color: #dc3545; // Error message color
+      }
+    }
+}
