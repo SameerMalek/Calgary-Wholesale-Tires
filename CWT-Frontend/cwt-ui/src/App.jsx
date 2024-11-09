@@ -13,7 +13,6 @@ import CartPage from './routes/CartPage/CartPage';
 import PaymentStatusPage from "./routes/PaymentStatusPage/PaymentStatusPage";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import CartProvider from './context/CartContext';
-import User from './AdminPanel/components/users/User';
 import AdminProduct from "./AdminPanel/components/adminproduct/adminproduct";
 import OrderManagement from './AdminPanel/components/order/OrderManagement';
 import AdProduct from "./AdminPanel/components/adminproduct/adproduct";
@@ -26,6 +25,8 @@ import VerifyOtp from "./routes/ForgotPassword/VerifyOtp";
 import UpdatePassword from "./routes/ForgotPassword/UpdatePassword";
 import FilteredProductPage from "./routes/filtered-products/filterProductPage";
 import Delivery from "./AdminPanel/components/delivery/Delivery"; 
+import OrderHistory from './components/orderhistory/orderhistory';
+import User from "./AdminPanel/components/users/User";
 
 function App() {
   const router = createBrowserRouter([
@@ -108,6 +109,10 @@ function App() {
         {
           path: "/products",
           element: <AdminProfile />,
+        },
+        {
+          path: "/orderHistory",
+          element: <OrderHistory />,
         },
         
         {

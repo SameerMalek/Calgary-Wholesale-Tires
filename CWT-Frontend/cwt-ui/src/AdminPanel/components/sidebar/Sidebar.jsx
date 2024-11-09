@@ -43,12 +43,9 @@ const Sidebar = ({ setActivePanel }) => {
             <StoreIcon className="icon" />
             <span>Products</span>
           </li>
-          {/* Change from onClick to Link for Orders */}
-          <li>
-            <Link to="/admin/orders" style={{ textDecoration: "none", color: "inherit" }}>
-              <CreditCardIcon className="icon" />
-              <span>Orders</span>
-            </Link>
+          <li onClick={() => setActivePanel('order')}>
+            <CreditCardIcon className="icon" />
+            <span>Orders</span>
           </li>
           <li onClick={() => setActivePanel('delivery')}>
             <LocalShippingIcon className="icon" />

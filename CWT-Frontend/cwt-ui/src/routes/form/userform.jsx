@@ -22,7 +22,9 @@ export default function UserForm() {
   });
 
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -31,21 +33,18 @@ export default function UserForm() {
   };
 
   const validateForm = () => {
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError("Please enter a valid email address.");
       return false;
     }
 
-    // Phone number validation (10 digits)
     const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(formData.phoneNumber)) {
       setError("Please enter a valid 10-digit phone number.");
       return false;
     }
 
-    // Password validation (at least 8 characters, 1 uppercase, 1 lowercase, 1 number)
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!passwordRegex.test(formData.password)) {
       setError("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.");
@@ -58,22 +57,28 @@ export default function UserForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
     if (!validateForm()) {
       return;
     }
-
+  
     setIsLoading(true);
-
+  
     try {
       await apiRequest.post("/auth/register", formData);
-      navigate("/login");
+      setIsModalOpen(true); // Open the modal on successful registration
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred during registration");
     } finally {
       setIsLoading(false);
     }
   };
+  
+  const closeModal = () => {
+    setIsModalOpen(false);
+    navigate("/login"); // Redirect to login page after closing the modal
+  };
+  
 
   return (
     <div className="user-form-container">
@@ -297,9 +302,25 @@ export default function UserForm() {
               {isLoading ? "Registering..." : "Register"}
             </button>
             {error && <span className="error-message">{error}</span>}
+            {success && <span className="success-message">{success}</span>}
           </div>
         </form>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Registration Successful!</h2>
+            <p>Your account is pending admin approval. Please wait for the admin to approve your registration.</p>
+            <button className="btn-close" onClick={closeModal}>
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+      
     </div>
   );
 }
+

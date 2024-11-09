@@ -9,12 +9,14 @@ import { authenticateJWT } from '../lib/authenticateJWT.js';  // Import JWT auth
 const router = express.Router();
 
 // Add item to wishlist (Protected Route)
-router.post('/wishlist', authenticateJWT, addItemToWishlist);
+router.post('/', authenticateJWT, addItemToWishlist);
 
 // Get all wishlist items by user (Protected Route)
-router.get('/user/:userId/wishlist', authenticateJWT, getWishlistItemsByUser);
+router.get('/user/:userId', authenticateJWT, getWishlistItemsByUser);
 
 // Remove item from wishlist by ID (Protected Route)
-router.delete('/wishlist/:wishlistId', authenticateJWT, removeItemFromWishlist);
+router.delete('/:wishlistId', authenticateJWT, removeItemFromWishlist);
 
 export default router;
+
+

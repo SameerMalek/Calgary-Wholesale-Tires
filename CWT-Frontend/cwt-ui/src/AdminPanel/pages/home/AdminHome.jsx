@@ -8,6 +8,9 @@ import Table from "../../components/table/Table";
 import AdminProduct from "../../components/adminproduct/adminproduct";
 import AdProduct from "../../components/adminproduct/adproduct";
 import AdminProfile from "../../components/adminprofile/adminprofile";
+import User from "../../components/users/User";
+import Delivery from "./../../components/delivery/Delivery";
+import OrderManagement from "../../components/order/OrderManagement";
 
 const AdminHome = () => {
   // State to track the currently active panel
@@ -39,8 +42,14 @@ const AdminHome = () => {
       case "inventory":
         return <AdProduct />;
       case "info":
-      case "adminlogo":  // Combine both "info" and "adminlogo" to render AdminProfile
+      case "adminlogo":
         return <AdminProfile />;
+      case "users":
+        return <User />;
+      case "order":
+        return <OrderManagement />;
+      case "delivery":
+        return <Delivery />;
       default:
         return (
           <div>

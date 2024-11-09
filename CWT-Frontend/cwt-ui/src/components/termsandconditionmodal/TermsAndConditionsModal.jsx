@@ -1,6 +1,6 @@
 import React from 'react';
 import TermsAndConditions from '../../routes/termscondition/termscondition';
-import './TermsAndConditionsModal.scss'; // Import the SCSS for styling
+import './TermsAndConditionsModal.scss'; 
 
 export default function TermsAndConditionsModal({ isOpen, onClose }) {
   if (!isOpen) return null; // Do not render the modal if it's not open

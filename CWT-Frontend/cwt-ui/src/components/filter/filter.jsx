@@ -81,11 +81,15 @@ const Filter = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get("http://localhost:8800/api/filter");
-        console.log("API Response:", response.data);
+        // console.log("API Response:", response.data);
+  
+        // Check if the data is an array or contains products in a 'products' key
         if (Array.isArray(response.data)) {
-          setAllProducts(response.data); // Store all products
+          setAllProducts(response.data); // If it's an array, use it directly
+        } else if (response.data.products && Array.isArray(response.data.products)) {
+          setAllProducts(response.data.products); // If it's an object with 'products' key, use that
         } else {
-          throw new Error("Response data is not an array");
+          throw new Error("Unexpected response format");
         }
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -93,6 +97,7 @@ const Filter = () => {
     };
     fetchProducts();
   }, []);
+  
 
   const handleSelectChange = (filterId, value) => {
     setSelectedFilters((prevFilters) => ({
@@ -115,7 +120,7 @@ const Filter = () => {
       
       // Ensure you're handling the response properly
       const data = response.data; // Assign the response data
-      console.log("API Response:", data); // Log to verify structure
+      // console.log("API Response:", data); // Log to verify structure
       
       // If the data contains the products inside an object, adjust this line:
       const allProducts = Array.isArray(data) ? data : data.products; // Use appropriate path if nested

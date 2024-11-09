@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './OrderManagement.scss';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 
 const OrderManagement = () => {
+
   const [orders, setOrders] = useState({
     newOrders: [
       {
@@ -40,7 +41,36 @@ const OrderManagement = () => {
 
   const navigate = useNavigate();
 
-  const handleStatusChange = (e, currentGroup, orderId) => {
+  // Fetch orders from the database and update state
+  const fetchOrders = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:8800/api/orders');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const fetchedOrders = await response.json();
+
+      const newFetchedOrders = fetchedOrders.filter(order => order.status === 'Pending');
+      const preparingFetchedOrders = fetchedOrders.filter(order => order.status === 'Preparing');
+      const readyForDeliveryFetchedOrders = fetchedOrders.filter(order => order.status === 'Ready for Delivery');
+
+      setOrders({
+        newOrders: newFetchedOrders,
+        preparing: preparingFetchedOrders,
+        readyForDelivery: readyForDeliveryFetchedOrders,
+      });
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 5000); // Polling every 5 seconds
+    return () => clearInterval(interval);
+  }, [fetchOrders]);
+
+  const handleStatusChange = async (e, currentGroup, orderId) => {
     const newStatus = e.target.value;
     const orderToUpdate = orders[currentGroup].find(order => order._id === orderId);
 
@@ -74,17 +104,41 @@ const OrderManagement = () => {
         [currentGroup]: updatedCurrentGroup,
         [newGroup]: updatedNewGroup,
       });
+
+      // Update order status in the backend
+      try {
+        await fetch(`http://localhost:8800/api/orders/${orderId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus }),
+        });
+      } catch (error) {
+        console.error("Error updating order status:", error);
+      }
     }
   };
 
   const handleEdit = (orderId) => {
-    // Handle edit logic here
     alert(`Edit order with ID: ${orderId}`);
   };
 
-  const handleCancelRefund = (orderId) => {
-    // Handle cancel/refund logic here
-    alert(`Cancel/Refund order with ID: ${orderId}`);
+  const handleCancelRefund = async (orderId, group) => {
+    try {
+      const response = await fetch(`http://localhost:8800/api/order/${orderId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Remove the order from the UI
+      setOrders((prevOrders) => ({
+        ...prevOrders,
+        [group]: prevOrders[group].filter(order => order._id !== orderId),
+      }));
+    } catch (error) {
+      console.error("Error canceling/refunding order:", error);
+    }
   };
 
   const renderOrderGroup = (groupTitle, group) => (
@@ -112,7 +166,7 @@ const OrderManagement = () => {
           </div>
           <div className="tableItem actions">
             <button className="editBtn" onClick={() => handleEdit(order._id)}>Edit</button>
-            <button className="cancelBtn" onClick={() => handleCancelRefund(order._id)}>Cancel/Refund</button>
+            <button className="cancelBtn" onClick={() => handleCancelRefund(order._id, group)}>Cancel/Refund</button>
           </div>
         </div>
       ))}
@@ -121,9 +175,7 @@ const OrderManagement = () => {
 
   return (
     <div className="orderManagement">
-      <Sidebar />
       <div className="orderManagementContainer">
-        <Navbar />
         <div className="content">
           <div className="tableHeader">
             <div className="tableItem">Bill No.</div>
@@ -134,8 +186,8 @@ const OrderManagement = () => {
             <div className="tableItem actionsTitle">Actions</div>
           </div>
           {renderOrderGroup("New Orders", "newOrders")}
-          {renderOrderGroup("Preparing", "preparing")}
-          {renderOrderGroup("Ready for Delivery", "readyForDelivery")}
+          {renderOrderGroup("Preparing Orders", "preparing")}
+          {renderOrderGroup("Ready for Delivery Orders", "readyForDelivery")}
         </div>
       </div>
     </div>
@@ -143,4 +195,6 @@ const OrderManagement = () => {
 };
 
 export default OrderManagement;
+
+
 

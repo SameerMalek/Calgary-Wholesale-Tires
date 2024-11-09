@@ -17,7 +17,6 @@ const Navbar = ({ setActivePanel }) => {
         <div className="items">
           <div className="item">
             
-            
           </div>
           <div className="item">
             
@@ -34,7 +33,6 @@ const Navbar = ({ setActivePanel }) => {
             <ListOutlinedIcon className="icon" />
           </div>
           <div className="item">
-            {/* When logo is clicked, update the active panel to adminlogo */}
             <img
               src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
               alt=""

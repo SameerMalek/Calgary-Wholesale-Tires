@@ -102,12 +102,10 @@ const Navbar = () => {
             <span>Welcome, {currentUser.firstName}</span>
            <>
            <div className="right">
-            {/* <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
-              <IoIosHeart className="heartIcon" /> Filled heart icon */}
+            <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
+              <IoIosHeart className="heartIcon" /> Wishlist
               <span className="wishlistText"></span> 
-            {/* </a> */}
-            </div>
-            <div className="right">
+            </a>
             <a className="cart" href="/cart">
               <img src="/assets/cart.png" alt="cart"  className="hertIcon"/>
               <span>Cart</span>

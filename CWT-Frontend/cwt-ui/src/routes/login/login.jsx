@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import apiRequest from '../../lib/apiRequest.js';
 import { AuthContext } from '../../context/AuthContext';
 import { IoLogInSharp } from "react-icons/io5";
@@ -8,66 +8,65 @@ import './login.scss';
 
 export default function Login() {
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); 
-  const {updateUser} = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const { updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    setSuccess(false);
-  
+
     const email = e.target.email.value.trim();
     const password = e.target.password.value;
-  
-    // Basic email and password validations
+
+    // Basic validations
     if (!email || !password) {
-      setError("Please enter both email and password");
+      setError("Please enter both email and password.");
       setIsLoading(false);
       return;
     }
-    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i.test(email)) {
-      setError("Please enter a valid email address.");
-      setIsLoading(false);
-      return;
-    }
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
-      setIsLoading(false);
-      return;
-    }
-  
+
     try {
-      const res = await apiRequest.post("/auth/login", {
-        email,
-        password,
-      }, { withCredentials: true});
-      
-      console.log("Login response:", res.data);
-      updateUser(res.data);
-      navigate("/");
-    } 
-    catch (err) {
-      console.error("Login error:", err);
-      setError("Login failed. Please check your email and password.", err.response.data.message);
-    } 
-    finally {
+      const res = await apiRequest.post(
+        "/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
+
+      // Check if the account is approved
+      if (!res.data.isApproved) {
+        setError("Your account is pending admin approval.");
+      } else {
+        // Update the user in context if approved and navigate to the home page
+        updateUser(res.data.userInfo); // Use userInfo to populate AuthContext
+        navigate("/");
+      }
+    } catch (err) {
+      // Check specific error messages for incorrect password and unapproved accounts
+      if (err.response) {
+        if (err.response.status === 400 && err.response.data.message === "Invalid Password!") {
+          setError("Incorrect password. Please try again.");
+        } else if (err.response.status === 403 && err.response.data.message === "Your account is pending admin approval.") {
+          setError("Your account is pending admin approval.");
+        } else {
+          setError("Login failed. Please check your email and password.");
+        }
+      } else {
+        setError("Login failed. Please check your email and password.");
+      }
+    } finally {
       setIsLoading(false);
     }
   };
-  
 
-  // Function to navigate to UserForm page
   const navigateToCreateAccount = () => {
-    navigate("/form"); // This will take the user to the "/create-account" route
+    navigate("/form");
   };
 
-  // Function to navigate to ForgotPassword page
   const navigateToForgotPassword = () => {
-    navigate("/forgot-password"); // This will take the user to the "/forgot-password" route
+    navigate("/forgot-password");
   };
 
   return (
@@ -130,8 +129,6 @@ export default function Login() {
           </button>
         </div>
       </div>
-     
     </div>
   );
 }
-

@@ -11,7 +11,7 @@ const ProductGrid = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:8800/api/category"); // Adjust API endpoint to fetch categories
+        const response = await axios.get("http://localhost:8800/api/category");
         // console.log(response.data);
         if (response.data && response.data.categories) {
           // Defensive check for categories data

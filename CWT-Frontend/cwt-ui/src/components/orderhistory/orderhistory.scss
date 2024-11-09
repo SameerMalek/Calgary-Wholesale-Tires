@@ -1,60 +1,95 @@
 .order-history {
     padding: 2rem;
-    background-color: #fdf7f0; // Very light background for readability
-    color: #333; // Dark text color for contrast
+    background-color: #f3f4f6;
+    color: #333;
+    margin-top: 15px;
 
     h2 {
         text-align: center;
-        color: #2e1065; // Primary theme color
+        color: #1a202c;
         margin-bottom: 2rem;
         font-size: 2rem;
+        font-weight: 700;
     }
 
     .order {
-        background-color: #452e75; // Secondary background color
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
         border-radius: 8px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        transition: transform 0.2s ease-in-out;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.2s ease-in-out;
+        cursor: pointer;
 
         &:hover {
-            transform: translateY(-5px); // Subtle lift on hover
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         }
 
-        p {
-            margin: 0.5rem 0;
-            color: #fdf7f0; // Light text color for readability
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+
+            .order-id,
+            .order-date {
+                font-size: 1rem;
+                font-weight: 500;
+                color: #718096;
+            }
         }
 
-        .order-id,
-        .order-date,
-        .order-status,
-        .order-total {
-            font-weight: bold;
-        }
+        .order-summary {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
 
-        .order-status {
-            color: #f0e68c; // Accent color for status
-        }
+            .total-amount {
+                font-size: 1.2rem;
+                font-weight: 600;
+                color: #2d3748;
+            }
 
-        .items {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            .status {
+                font-weight: bold;
+                padding: 0.25rem 0.75rem;
+                border-radius: 5px;
+                font-size: 0.9rem;
 
-            .item {
-                display: flex;
-                justify-content: space-between;
-                padding: 0.5rem 0;
-
-                .item-name {
-                    color: #fdf7f0; // Light text color for item names
+                &.status-pending {
+                    background-color: #ffe5b4;
+                    color: #b45309;
                 }
 
-                .item-price {
-                    color: #f0e68c; // Accent color for item price
-                    font-weight: bold;
+                &.status-completed {
+                    background-color: #c6f6d5;
+                    color: #2f855a;
+                }
+
+                &.status-delivered {
+                    background-color: #bee3f8;
+                    color: #3182ce;
+                }
+
+                &.status-successful {
+                    background-color: #c6f6d5;
+                    color: #2f855a;
+                }
+            }
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: flex-end;
+            font-size: 0.9rem;
+
+            .view-details {
+                color: #4a5568;
+                text-decoration: underline;
+                cursor: pointer;
+
+                &:hover {
+                    color: #2b6cb0;
                 }
             }
         }
@@ -63,6 +98,98 @@
     .no-orders {
         text-align: center;
         font-size: 1.2rem;
-        color: #2e1065; // Primary theme color
+        color: #2e1065;
+    }
+}
+
+.modal2-content {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 700px;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: scaleUp 0.3s ease-out forwards;
+
+    h3 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .order-details {
+        margin-top: 1rem;
+        gap: 1.2rem;
+    }
+
+    .order-item {
+        // padding: 1rem 0;
+        border-bottom: 1px solid #e2e8f0;
+
+        .item-info {
+            .item-name {
+                font-weight: bold;
+                font-size: 1.1rem;
+                color: #2d3748;
+            }
+
+            .item-quantity {
+                font-size: 0.95rem;
+                color: #718096;
+            }
+
+            .item-description {
+                font-size: 0.9rem;
+                color: #2d3748;
+            }
+        }
+
+        .item-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2f855a;
+        }
+    }
+
+    /* Distinctive styling for field names */
+    .modal-field-label {
+        font-weight: bold;
+        color: #1a202c; /* Darker shade for labels */
+        font-size: 1.1rem;
+        margin-right: 0.5rem;
+    }
+
+    .modal-field-content {
+        font-size: 1rem;
+        color: #4a5568; /* Slightly muted color for content */
+    }
+
+    /* Example structure for a field within the modal */
+    .modal-field {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .status-successful {
+        background-color: #c6f6d5;
+        color: #2f855a;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        text-align: center;
+        margin-top: 1rem;
+    }
+}
+
+/* Modal Animations */
+@keyframes scaleUp {
+    from {
+        transform: scale(0.95);
+    }
+    to {
+        transform: scale(1);
     }
 }

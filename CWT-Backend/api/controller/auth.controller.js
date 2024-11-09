@@ -8,6 +8,7 @@ import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 dotenv.config();
 
+// User Registration
 export const register = async (req, res) => {
   const {
     companyName,
@@ -28,10 +29,10 @@ export const register = async (req, res) => {
   } = req.body;
 
   try {
-    // Hashed Password:
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Creating a new User and Saving to database:
+    // Create a new user with isApproved set to false
     const newUser = await prisma.user.create({
       data: {
         companyName,
@@ -49,21 +50,55 @@ export const register = async (req, res) => {
         operationYear,
         annualPurchase,
         comments,
+        isApproved: false, // Requires admin approval
       },
     });
-    console.log(newUser);
-    res.status(201).json({ message: "User created successfully!" });
+
+    // Fetch admin user ID dynamically from the admin table
+    const adminUser = await prisma.admin.findFirst({
+      where: { role: "admin" },
+    });
+
+    // Check if an admin user exists
+    if (!adminUser) {
+      throw new Error("Admin user not found!");
+    }
+
+    // Send notification to the admin for approval
+    await prisma.notification.create({
+      data: {
+        user_id: adminUser.id,
+        type: "new_registration",
+        message: `New user registration pending approval: ${newUser.email}`,
+        status: "unread",
+      },
+    });
+
+    res.status(201).json({
+      message: "User created successfully! Waiting for admin approval.",
+    });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Failed to create User!" });
   }
 };
 
-// User Login:
+// Get All Users
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await prisma.user.findMany(); // Retrieves all users without filters
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users", error);
+    res.status(500).json({ message: "Failed to fetch users" });
+  }
+};
+
+// User Login with Approval Check
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
-  if(!email || !password) {
+  if (!email || !password) {
     return res.status(400).json({ message: "All fields are required!" });
   }
 
@@ -74,11 +109,21 @@ export const login = async (req, res) => {
      if (!user) 
       return res.status(404).json({ message: "Invalid EmailId!" });
 
-    // Checking if password is correct:
+    // Check if user exists
+    if (!user) return res.status(400).json({ message: "Invalid Email!" });
+
+    // Check if the account is approved by the admin
+    if (!user.isApproved) {
+      return res
+        .status(403)
+        .json({ message: "Your account is pending admin approval." });
+    }
+
+    // Verify password
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-      
-      if (!isPasswordCorrect)
-        return res.status(400).json({ message: "Invalid Password!" });
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: "Invalid Password!" });
+    }
 
       //Generate Cookie Token and Send to the User:
       
@@ -110,9 +155,10 @@ export const login = async (req, res) => {
     } 
 };
 
-// User Logout:
+// User Logout
 export const logout = (req, res) => {
-  res.clearCookie("token")
+  res
+    .clearCookie("token")
     .status(200)
     .json({ message: "User logged out successfully!" });
 };
@@ -224,10 +270,13 @@ export const resetPassword = async (req, res) => {
     // Hash new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Update password and clear reset token fields
     await prisma.user.update({
       where: { email },
-      data: { password: hashedPassword, resetToken: null, resetTokenExpiry: null },
+      data: {
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpiry: null,
+      },
     });
     // Send confirmation email
     /*const confirmationMailOptions = {
@@ -242,5 +291,36 @@ export const resetPassword = async (req, res) => {
     res.status(200).json({ message: "Password reset successful!" });
   } catch (error) {
     res.status(500).json({ message: "Error resetting password on serverside", error });
+  }
+};
+
+// Approve User
+export const approveUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { isApproved: true },
+    });
+    res.status(200).json({ message: "User approved successfully!" });
+  } catch (error) {
+    console.error("Error approving user", error);
+    res.status(500).json({ message: "Error approving user" });
+  }
+};
+
+// Decline User
+export const declineUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+    res.status(200).json({ message: "User request declined and deleted." });
+  } catch (error) {
+    console.error("Error declining user", error);
+    res.status(500).json({ message: "Error declining user" });
   }
 };
