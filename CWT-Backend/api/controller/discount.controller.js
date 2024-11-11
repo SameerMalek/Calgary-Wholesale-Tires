@@ -59,19 +59,9 @@ export const addDiscount = async (req, res) => {
     order_id,
   } = req.body;
 
+  console.log("Received discount data:", req.body);
+
   try {
-    // Check if the user is approved
-    const user = await prisma.user.findUnique({
-      where: { id: user_id },
-      select: { isApproved: true },
-    });
-
-    if (!user || !user.isApproved) {
-      return res
-        .status(403)
-        .json({ message: "User is not approved to receive discounts" });
-    }
-
     const discount = await prisma.discount.create({
       data: {
         user_id,
@@ -80,11 +70,12 @@ export const addDiscount = async (req, res) => {
         discount_value: parseFloat(discount_value),
         start_date: new Date(start_date),
         end_date: new Date(end_date),
-        order_id, // Assign to a specific order if provided
+        order_id,
       },
     });
     res.status(201).json({ message: "Discount added successfully", discount });
   } catch (err) {
+    console.error("Error adding discount:", err);
     res
       .status(500)
       .json({ message: "Error adding discount", error: err.message });
