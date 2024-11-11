@@ -4,7 +4,10 @@ import apiRequest from '../../lib/apiRequest.js';
 import { AuthContext } from '../../context/AuthContext';
 import { IoLogInSharp } from "react-icons/io5";
 import { MdOutlineAppRegistration } from "react-icons/md";
-import './login.scss';
+import './Login.scss';
+import { Link } from 'react-router-dom';
+
+
 
 export default function Login() {
   const [error, setError] = useState("");
@@ -34,13 +37,14 @@ export default function Login() {
         { email, password },
         { withCredentials: true }
       );
+      console.log("Response Data:", res.data); 
 
       // Check if the account is approved
       if (!res.data.isApproved) {
         setError("Your account is pending admin approval.");
       } else {
         // Update the user in context if approved and navigate to the home page
-        updateUser(res.data.userInfo); // Use userInfo to populate AuthContext
+        updateUser(res.data); // Use userInfo to populate AuthContext
         navigate("/");
       }
     } catch (err) {

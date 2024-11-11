@@ -130,23 +130,27 @@ export const login = async (req, res) => {
       const age = 24 * 60 * 60 * 1000; // 1 day 
       const token = jwt.sign(
         {
-          email: user.email,
-          userId: user.id,
+          // email: user.email,
+          // userId: user.id,
+          id: user.email,
           isAdmin: false,
         },
         process.env.JWT_SECRET_KEY,
         { expiresIn: age }
       ); 
+      const { password: _, ...info } = user;
 
       //Send JWT Token as Cookie
       res.cookie("token", token, { 
         httpOnly: true, 
         secure: process.env.NODE_ENV === "production",
-        maxAge: age });
+        maxAge: age })
+        .status(200)
+      .json(info);
 
-    // Remove password field from response
-    const { password: _, ...info } = user;
-    res.status(200).json(info);   
+    // // Remove password field from response
+    // const { password: _, ...info } = user;
+    // res.status(200).json(info);   
     } 
     catch (err) {
       //console.log(err);

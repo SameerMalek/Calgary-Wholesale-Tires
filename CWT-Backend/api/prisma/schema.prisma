@@ -44,6 +44,7 @@ model User {
   updatedAt        DateTime  @updatedAt
   resetToken       String? // Stores hashed OTP
   resetTokenExpiry DateTime? // Expiry time for OTP
+  isApproved       Boolean   @default(false) // New field for admin approval
 
   // Opposite Relations
   orders             Order[]             @relation("UserOrders")
