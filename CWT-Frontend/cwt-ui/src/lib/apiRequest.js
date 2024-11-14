@@ -8,8 +8,8 @@ const apiRequest = axios.create({
     },
 });
 
-// Add a response interceptor
-/*apiRequest.interceptors.response.use(
+//Add a response interceptor
+apiRequest.interceptors.response.use(
     (response) => {
         return response;
     },
@@ -17,6 +17,6 @@ const apiRequest = axios.create({
         console.error('API request error:', error);
         return Promise.reject(error);
     }
-);*/
+);
 
 export default apiRequest; 

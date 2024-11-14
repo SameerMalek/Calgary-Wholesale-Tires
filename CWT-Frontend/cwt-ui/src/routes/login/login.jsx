@@ -2,7 +2,12 @@ import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiRequest from '../../lib/apiRequest.js';
 import { AuthContext } from '../../context/AuthContext';
+import { IoLogInSharp } from "react-icons/io5";
+import { MdOutlineAppRegistration } from "react-icons/md";
 import './Login.scss';
+import { Link } from 'react-router-dom';
+
+
 
 export default function Login() {
   const [error, setError] = useState("");
@@ -32,13 +37,14 @@ export default function Login() {
         { email, password },
         { withCredentials: true }
       );
+      console.log("Response Data:", res.data); 
 
       // Check if the account is approved
       if (!res.data.isApproved) {
         setError("Your account is pending admin approval.");
       } else {
         // Update the user in context if approved and navigate to the home page
-        updateUser(res.data.userInfo); // Use userInfo to populate AuthContext
+        updateUser(res.data); // Use userInfo to populate AuthContext
         navigate("/");
       }
     } catch (err) {
@@ -74,48 +80,54 @@ export default function Login() {
       </div>
       <div className="login-content">
         <div className="existing-user">
+        <center><IoLogInSharp className='svg' />
           <h3>Welcome back</h3>
           <p>Enter your email and password to access your account.</p>
+          </center>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="email">Email:</label>
-              <input type="email" id="email" name="email" required />
+              <label htmlFor="email">Email *</label>
+              <input type="email" id="email" name='email'  required placeholder='enter your emailid' />
             </div>
             <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                required
-              />
+              <label htmlFor="password" >Password *</label>
+              <input type={showPassword ? "text" : "password"}
+            id="password"
+            name="password"
+            placeholder='enter your password'
+            required />
             </div>
-
-            <label>
-              <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={() => setShowPassword(!showPassword)}
-              />
-              Show Password
-            </label>
-            <div className="btn-container">
-              <button type="submit" className="btn-sign-in" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
-              </button>
-              {error && <p className="error-message">{error}</p>}
-              <span className="forgot-password" onClick={navigateToForgotPassword}>
-                Forgot password?
-              </span>
-            </div>
+            <div className=''>
+             <label>
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+            />
+            Show Password
+          </label>
+          </div>
+          <div className='btn-container'>
+            <button type="submit" className="btn-sign-in" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Login"}</button>
+            </div> 
+            <div style={{ marginTop: "10px", color: "grey", textAlign: "right", textDecoration: "underline" }}>
+                <Link to="/forgot-password">Forgot Password?</Link>
+          </div>   
+            {error && <p className="error-message">{error}</p>}
           </form>
+          
         </div>
         <div className="new-user">
+       <center> 
+        <MdOutlineAppRegistration />
+
           <h3>New User</h3>
           <p>Create an account to checkout faster, view order history, and more.</p>
-          <button
-            className="btn-create-account"
-            onClick={navigateToCreateAccount}
+          </center>
+          <button 
+            className="btn-create-account" 
+            onClick={navigateToCreateAccount} // Add onClick to navigate
           >
             Create Account
           </button>

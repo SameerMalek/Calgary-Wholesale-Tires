@@ -619,21 +619,28 @@ const Users = () => {
   const handleAssignDiscount = async () => {
     setAssigningDiscount(true);
     setDiscountError(null);
-
+  
+    console.log("Discount Details:", discountDetails);
+    console.log("Selected Order ID:", selectedOrder.id);
+  
     try {
-      await axios.post(`http://localhost:8800/api/orders/${selectedOrder.id}/apply-discount`, {
+      const response = await axios.post(`http://localhost:8800/api/orders/${selectedOrder.id}/apply-discount`, {
         discount_type: discountDetails.discount_type,
-        discount_value: discountDetails.discount_value
+        discount_value: Number(discountDetails.discount_value),
+        start_date: discountDetails.start_date,
+        end_date: discountDetails.end_date,
       });
       alert('Discount assigned successfully to order');
       closeDiscountModal();
     } catch (error) {
-      console.error("Error assigning discount", error);
-      setDiscountError('Failed to assign discount. Please check your inputs and try again.');
+      console.error("Error assigning discount:", error.response ? error.response.data : error.message);
+      setDiscountError(error.response?.data?.message || 'Failed to assign discount. Please check your inputs and try again.');
     } finally {
       setAssigningDiscount(false);
     }
   };
+  
+  
 
   // Filter users based on approval status
   const approvedUsers = users.filter(user => user.isApproved);

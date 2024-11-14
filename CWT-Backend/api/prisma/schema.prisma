@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Admin {
-  id        String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   firstName String
   lastName  String
   email     String   @unique
@@ -42,8 +42,8 @@ model User {
   createdAt        DateTime  @default(now())
   /// Date when category was last updated
   updatedAt        DateTime  @updatedAt
-  resetToken       String? // Token for password reset
-  resetTokenExpiry DateTime? // Expiry for the reset token
+  resetToken       String? // Stores hashed OTP
+  resetTokenExpiry DateTime? // Expiry time for OTP
   isApproved       Boolean   @default(false) // New field for admin approval
 
   // Opposite Relations
