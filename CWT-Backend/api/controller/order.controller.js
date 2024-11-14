@@ -14,6 +14,8 @@ export const createOrder = async (req, res) => {
   const { user_id, items, shipping_address, billing_address, total_amount } =
     req.body;
 
+  
+
   try {
     // Create a Stripe payment intent
     const paymentIntent = await stripe.paymentIntents.create({

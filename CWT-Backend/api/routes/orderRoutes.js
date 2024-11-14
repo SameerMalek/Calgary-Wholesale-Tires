@@ -9,6 +9,7 @@ import {
     getOrders,
     createOrder,
     applyDiscount
+     
 } from '../controller/order.controller.js';
 
 const router = express.Router();
@@ -23,4 +24,7 @@ router.get("/order/:orderId/invoice", generateInvoice);
 router.get("/orders/:userId", getOrders);
 router.post("/", createOrder);
 router.post("/orders/:orderId/apply-discount", applyDiscount);
+
+
+
 export default router; 

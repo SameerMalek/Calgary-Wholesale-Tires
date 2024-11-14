@@ -98,7 +98,6 @@ import searchRoute from "../api/routes/search.route.js";
 import stripeRoutes from "../api/routes/stripeRoutes.js";
 import uploadProductRoute from "../api/routes/uploadProduct.route.js";
 
-// Initialize app
 // Initialize the app
 const app = express();
 const PORT = process.env.PORT || 8800;
@@ -138,9 +137,10 @@ app.use("/api/notifications", notificationRoutes); // Notification routes
 app.use("/api/shipments", shipmentRoutes); // Shipment routes
 app.use("/api/inventory-tracking", inventoryTrackingRoutes); // Inventory tracking routes
 app.use("/api/sales-reports", salesReportRoutes); // Sales report routes
-app.use("/api/product-management", productManagementRoutes); // Product management routes
 app.use("/api/products", searchRoute); // Product search routes
+app.use("/api/search", searchRoute); // Product search routes
 app.use("/api/stripe", stripeRoutes); // Stripe payment routes
+app.use("/api/product-management", productManagementRoutes); // Product management routes
 app.use("/api/product", uploadProductRoute); // Product upload routes
 
 // Commented out redundant line
