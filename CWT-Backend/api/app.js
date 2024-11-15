@@ -102,11 +102,28 @@ import adminRoutes from "../api/routes/admin.routes.js";
 // Initialize app
 // Initialize the app
 const app = express();
-const PORT = process.env.PORT || 8800;
+const PORT = process.env.PORT || 8800 ;
 
+
+// Use CORS to allow requests from http://localhost:3000
+app.use(cors({
+  origin: 'http://localhost:3000',  // Your frontend's URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+
+//Check if the server is running
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+
+// Check if the server is online
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'Server is online' });
+});
+
 
 // Middleware
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -119,6 +136,18 @@ app.use((req, res, next) => {
   } else {
     express.json()(req, res, next); // Use express.json() for all other routes
   }
+});
+
+// Log incoming requests
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+
+// Handle errors
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ message: 'Internal server error' });
 });
 
 // Use routes

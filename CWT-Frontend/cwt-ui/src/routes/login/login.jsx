@@ -4,10 +4,14 @@ import apiRequest from '../../lib/apiRequest.js';
 import { AuthContext } from '../../context/AuthContext';
 import { IoLogInSharp } from "react-icons/io5";
 import { MdOutlineAppRegistration } from "react-icons/md";
+<<<<<<< Updated upstream
 import './Login.scss';
 import { Link } from 'react-router-dom';
 
 
+=======
+import "./Login.scss";
+>>>>>>> Stashed changes
 
 export default function Login() {
   const [error, setError] = useState("");
@@ -112,7 +116,8 @@ export default function Login() {
             {isLoading ? "Logging in..." : "Login"}</button>
             </div> 
             <div style={{ marginTop: "10px", color: "grey", textAlign: "right", textDecoration: "underline" }}>
-                <Link to="/forgot-password">Forgot Password?</Link>
+               {/*<Link to="/forgot-password">Forgot Password?</Link> */}
+               <a href="/forgot-password">Forgot Password?</a>
           </div>   
             {error && <p className="error-message">{error}</p>}
           </form>

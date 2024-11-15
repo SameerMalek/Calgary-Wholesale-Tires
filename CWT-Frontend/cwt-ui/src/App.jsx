@@ -27,6 +27,8 @@ import FilteredProductPage from "./routes/filtered-products/filterProductPage";
 import Delivery from "./AdminPanel/components/delivery/Delivery"; 
 import OrderHistory from './components/orderhistory/orderhistory';
 import User from "./AdminPanel/components/users/User";
+import AdminRegister from "./AdminPanel/pages/AdminRegister/AdminRegister";
+import AdminLogin from "./AdminPanel/pages/AdminLogin/AdminLogin";
 
 function App() {
   const router = createBrowserRouter([
@@ -126,8 +128,16 @@ function App() {
       ],
     },
     {
-      path: "/admin",
+      path: "/admin/dashboard",
       element: <AdminHome />,
+    },
+    {
+      path: "/admin/admin-register",
+      element: <AdminRegister />,
+    },
+    {
+      path: "/admin/admin-login",
+      element: <AdminLogin />,
     },
     {
       path: "/admin/orders",  

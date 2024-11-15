@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
+
 export const verifyAdmin = (req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+
     const token = req.cookies.adminToken;
   
     if (!token) {
