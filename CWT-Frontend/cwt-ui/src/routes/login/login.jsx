@@ -4,14 +4,9 @@ import apiRequest from '../../lib/apiRequest.js';
 import { AuthContext } from '../../context/AuthContext';
 import { IoLogInSharp } from "react-icons/io5";
 import { MdOutlineAppRegistration } from "react-icons/md";
-<<<<<<< Updated upstream
 import './Login.scss';
 import { Link } from 'react-router-dom';
-
-
-=======
 import "./Login.scss";
->>>>>>> Stashed changes
 
 export default function Login() {
   const [error, setError] = useState("");

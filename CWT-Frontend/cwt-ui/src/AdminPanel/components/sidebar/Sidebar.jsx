@@ -11,9 +11,23 @@ import {
   Menu,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const Sidebar = ({ setActivePanel }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const navigate = useNavigate();
+
+const handleLogout = () => {
+  // Clear user session or token if necessary
+  localStorage.removeItem("authToken"); // Example: Clear token from localStorage
+  sessionStorage.clear(); // Optional: Clear session storage if used
+
+  // Redirect to the homepage
+  navigate("/");
+};
+
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -63,10 +77,15 @@ const Sidebar = ({ setActivePanel }) => {
             <AccountCircleOutlined className="icon" />
             <span>Profile</span>
           </li>
-          <li onClick={() => setActivePanel("logout")}>
+          {/* <li onClick={() => setActivePanel("logout")}>
             <ExitToApp className="icon" />
             <span>Logout</span>
-          </li>
+          </li> */}
+          <li onClick={handleLogout}>
+  <ExitToApp className="icon" />
+  <span>Logout</span>
+</li>
+
         </ul>
       </div>
     </div>

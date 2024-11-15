@@ -103,11 +103,10 @@ export const login = async (req, res) => {
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: {email} });
-    
+    const user = await prisma.user.findUnique({ where: { email } });
+
     // Checking if user exists:
-     if (!user) 
-      return res.status(404).json({ message: "Invalid EmailId!" });
+    if (!user) return res.status(404).json({ message: "Invalid EmailId!" });
 
     // Check if user exists
     if (!user) return res.status(400).json({ message: "Invalid Email!" });
@@ -125,38 +124,39 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid Password!" });
     }
 
-      //Generate Cookie Token and Send to the User:
-      
-      const age = 24 * 60 * 60 * 1000; // 1 day 
-      const token = jwt.sign(
-        {
-          // email: user.email,
-          // userId: user.id,
-          id: user.email,
-          isAdmin: false,
-        },
-        process.env.JWT_SECRET_KEY,
-        { expiresIn: age }
-      ); 
-      const { password: _, ...info } = user;
+    //Generate Cookie Token and Send to the User:
 
-      //Send JWT Token as Cookie
-      res.cookie("token", token, { 
-        httpOnly: true, 
+    const age = 24 * 60 * 60 * 1000; // 1 day
+    const token = jwt.sign(
+      {
+        // email: user.email,
+        // userId: user.id,
+        id: user.email,
+        isAdmin: false,
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: age }
+    );
+    const { password: _, ...info } = user;
+
+    //Send JWT Token as Cookie
+    res
+      .cookie("token", token, {
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        maxAge: age })
-        .status(200)
+        maxAge: age,
+      })
+      .status(200)
       .json(info);
 
     // // Remove password field from response
     // const { password: _, ...info } = user;
-    // res.status(200).json(info);   
-    } 
-    catch (err) {
-      //console.log(err);
-      console.error("Failed to login!", err);
-      res.status(500).json({ message: "Failed to login!" });  
-    } 
+    // res.status(200).json(info);
+  } catch (err) {
+    //console.log(err);
+    console.error("Failed to login!", err);
+    res.status(500).json({ message: "Failed to login!" });
+  }
 };
 
 // User Logout
@@ -168,22 +168,22 @@ export const logout = (req, res) => {
 };
 
 //User Forgot Password:
-
 // Send email with reset link
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
+  host: "smtp.gmail.com",
+  port: 465,
   auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASS
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
   },
-  secure: false
+  secure: true,
 });
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return res.status(404).json({ message: "Email not registered!" });
+    if (!user)
+      return res.status(404).json({ message: "Email not registered!" });
 
     // Generate OTP and hash it
     /*const resetToken = crypto.randomBytes(32).toString("hex");
@@ -194,20 +194,19 @@ export const forgotPassword = async (req, res) => {
     const otpHash = await bcrypt.hash(otp, 10);
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-
     // Update user with OTP and expiry
     await prisma.user.update({
       where: { email },
       data: { resetToken: otpHash, resetTokenExpiry: otpExpiry },
     });
-  
+
     //const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}&email=${email}`;
-    
+
     //Send OTP via email
     const mailOptions = {
       from: {
         name: "CWT",
-        address: process.env.GMAIL_USER
+        address: process.env.GMAIL_USER,
       },
       to: email,
       subject: "Password Reset OTP",
@@ -226,25 +225,24 @@ export const forgotPassword = async (req, res) => {
     res.status(200).json({ message: "OTP sent!" });
   } catch (error) {
     console.error("Error sending OTP", error);
-   /* if (error instanceof PrismaClientValidationError) {
+    /* if (error instanceof PrismaClientValidationError) {
       console.error("Validation Error", error);
     }*/
-    res.status(500).json({ 
-      message: "Error sending reset email", 
-      error: process.env.NODE_ENV === "development" ? error.message : undefined});
-
-  };
+    res.status(500).json({
+      message: "Error sending reset email",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
 };
 
 // Verify OTP
 export const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
 
-  console.log("email on server is:",email);
-  console.log("otp on server is:",otp);
+  console.log("email on server is:", email);
+  console.log("otp on server is:", otp);
 
-  if(!email || !otp) {
-    
+  if (!email || !otp) {
     return res.status(400).json({ message: "Email and OTP are required!" });
   }
   try {
@@ -266,9 +264,11 @@ export const verifyOtp = async (req, res) => {
 // User Password Reset:
 export const resetPassword = async (req, res) => {
   const { email, newPassword } = req.body;
-  
-  if(!email || !newPassword) {
-    return res.status(400).json({ message: "Email and new password are required!" });
+
+  if (!email || !newPassword) {
+    return res
+      .status(400)
+      .json({ message: "Email and new password are required!" });
   }
   try {
     // Hash new password
@@ -291,10 +291,11 @@ export const resetPassword = async (req, res) => {
     };
     await transporter.sendMail(confirmationMailOptions);*/
 
-
     res.status(200).json({ message: "Password reset successful!" });
   } catch (error) {
-    res.status(500).json({ message: "Error resetting password on serverside", error });
+    res
+      .status(500)
+      .json({ message: "Error resetting password on serverside", error });
   }
 };
 
