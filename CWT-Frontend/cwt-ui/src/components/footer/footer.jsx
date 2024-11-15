@@ -39,7 +39,7 @@ const Footer = () => {
             <li>
               <a href="/">Privacy</a>
             </li>
-            <li><a href="/admin">Admin Dashboard</a></li>          </ul>
+            <li><a href="/admin/admin-login">Admin Dashboard</a></li>          </ul>
         </div>
         <div className="footer-socials">
           <h3>SOCIALS</h3>

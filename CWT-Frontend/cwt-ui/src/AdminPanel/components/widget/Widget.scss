@@ -1,54 +1,300 @@
+// .widget {
+//   display: flex;
+//   justify-content: space-between;
+//   flex: 1;
+//   padding: 20px;
+//   box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+//   border-radius: 10px;
+//   height: 120px;
+//   transition: transform 0.3s ease;
+
+//   &:hover {
+//     transform: scale(1.05);
+//     box-shadow: 2px 6px 15px rgba(0, 0, 0, 0.15);
+//   }
+
+//   .left,
+//   .right {
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: space-between;
+
+//     .title {
+//       font-weight: bold;
+//       font-size: 14px;
+//       color: gray;
+//     }
+
+//     .counter {
+//       font-size: 28px;
+//       font-weight: 300;
+//       color: black;
+//     }
+
+//     .link {
+//       font-size: 12px;
+//       text-decoration: none;
+//       color: blue;
+//       border-bottom: 1px solid lightblue;
+//       width: max-content;
+
+//       &:hover {
+//         color: darkblue;
+//       }
+//     }
+
+//     .percentage {
+//       display: flex;
+//       align-items: center;
+//       font-size: 14px;
+
+//       &.positive {
+//         color: green;
+//       }
+//       &.negative {
+//         color: red;
+//       }
+//     }
+
+//     .icon {
+//       font-size: 40px;
+//       padding: 10px;
+//       border-radius: 50%;
+//       align-self: flex-end;
+//     }
+//   }
+// }
+
+// // Responsive design
+// @media (max-width: 768px) {
+//   .widget {
+//     flex-direction: column;
+//     align-items: center;
+//     height: auto;
+
+//     .left,
+//     .right {
+//       align-items: center;
+//     }
+//   }
+// }
+
+// Variables for consistent spacing and breakpoints
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1200px;
+
+// Container for all widgets
+.widgets-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); // Default: 4 columns for large screens
+  gap: 20px;
+  padding: 15px;
+  width: 100%;
+  max-width: $breakpoint-xl;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  // Responsive grid adjustments
+  @media screen and (max-width: $breakpoint-lg) {
+    grid-template-columns: repeat(2, 1fr); // 2 columns for medium screens
+    gap: 15px;
+  }
+
+  @media screen and (max-width: $breakpoint-md) {
+    grid-template-columns: repeat(2, 1fr); // 2 columns for tablet
+    gap: 10px;
+    padding: 10px;
+  }
+
+  @media screen and (max-width: $breakpoint-sm) {
+    grid-template-columns: 1fr; // 1 column for mobile
+    gap: 10px;
+    padding: 10px;
+  }
+}
+
+// Individual widget styling
 .widget {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+  min-height: 140px;
+  box-sizing: border-box;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  // Left side content
+  .left {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     flex: 1;
-    padding: 10px;
-    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-    border-radius: 10px;
-    height: 100px;
-  
-    .left,
-    .right {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-  
-      .title {
-        font-weight: bold;
-        font-size: 14px;
-        color: rgb(160, 160, 160);
-      }
-  
-      .counter {
-        font-size: 28px;
-        font-weight: 300;
-      }
-  
-      .link {
-        width: max-content;
-        font-size: 12px;
-        border-bottom: 1px solid gray;
-      }
-  
-      .percentage {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-  
-        &.positive {
-          color: green;
-        }
-        &.negative {
-          color: red;
-        }
-      }
-  
-      .icon {
-        font-size: 18px;
-        padding: 5px;
-        border-radius: 5px;
-        align-self: flex-end;
+    padding-right: 15px;
+
+    .title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .counter {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c2c2c;
+      margin: 8px 0;
+    }
+
+    .link {
+      font-size: 12px;
+      color: #0066cc;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      text-decoration: none;
+      margin-top: auto;
+
+      &:hover {
+        color: #004499;
+        text-decoration: underline;
       }
     }
   }
+
+  // Right side content
+  .right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .percentage {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      
+      &.positive {
+        color: #4caf50;
+      }
+      
+      &.negative {
+        color: #f44336;
+      }
+    }
+
+    .icon {
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  // Responsive styles for widget
+  @media screen and (max-width: $breakpoint-lg) {
+    min-height: 130px;
+    padding: 15px;
+
+    .left {
+      .title {
+        font-size: 13px;
+      }
+
+      .counter {
+        font-size: 22px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $breakpoint-md) {
+    min-height: 120px;
+    padding: 15px;
+
+    .left {
+      .title {
+        font-size: 12px;
+      }
+
+      .counter {
+        font-size: 20px;
+      }
+
+      .link {
+        font-size: 11px;
+      }
+    }
+
+    .right {
+      .icon {
+        padding: 6px;
+        
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $breakpoint-sm) {
+    min-height: 100px;
+    padding: 12px;
+
+    .left {
+      .title {
+        font-size: 11px;
+        margin-bottom: 4px;
+      }
+
+      .counter {
+        font-size: 18px;
+        margin: 4px 0;
+      }
+
+      .link {
+        font-size: 10px;
+      }
+    }
+
+    .right {
+      .icon {
+        padding: 5px;
+        
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .widget {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}

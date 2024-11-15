@@ -49,3 +49,4 @@ export const removeItemFromWishlist = async (req, res) => {
     res.status(500).json({ message: 'Error removing item from wishlist', error: err.message });
   }
 };
+

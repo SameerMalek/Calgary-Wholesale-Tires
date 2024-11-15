@@ -22,13 +22,12 @@ const AdminHome = () => {
       case "dashboard":
         return (
           <>
-            <div className="widgets">
+            <div className="widgets-container">
               <Widget type="user" />
               <Widget type="order" />
               <Widget type="earning" />
-              <Widget type="balance" />
             </div>
-            <div className="featured">
+            <div className="charts">
               <Featured />
             </div>
             <div className="listContainer">
@@ -52,8 +51,9 @@ const AdminHome = () => {
         return <Delivery />;
       default:
         return (
-          <div>
+          <div className="welcomePanel">
             <h2>Welcome to the Admin Dashboard</h2>
+            <p>Select a menu item to get started.</p>
           </div>
         );
     }
