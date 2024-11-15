@@ -197,33 +197,199 @@
 // export default OrderManagement;
 
 
+// import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import './OrderManagement.scss';
+
+// const OrderManagement = () => {
+//   const [orders, setOrders] = useState([]);
+//   const [error, setError] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [selectedOrder, setSelectedOrder] = useState(null);
+//   const [discountModalVisible, setDiscountModalVisible] = useState(false);
+//   const [discountDetails, setDiscountDetails] = useState({
+//     discount_type: '',
+//     discount_value: '',
+//     start_date: '',
+//     end_date: ''
+//   });
+//   const [assigningDiscount, setAssigningDiscount] = useState(false);
+//   const [discountError, setDiscountError] = useState(null);
+
+//   // Fetch orders on component mount
+//   useEffect(() => {
+//     const fetchOrders = async () => {
+//       try {
+//         const response = await axios.get('http://localhost:8800/api/orders/all');
+//         setOrders(response.data.orders);
+//       } catch (error) {
+//         console.error("Error fetching orders", error);
+//         setError("Failed to load orders.");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     fetchOrders();
+//   }, []);
+
+//   // Open discount modal for a specific order
+//   const openDiscountModal = (order) => {
+//     setSelectedOrder(order);
+//     setDiscountModalVisible(true);
+//   };
+
+//   const closeDiscountModal = () => {
+//     setDiscountDetails({
+//       discount_type: '',
+//       discount_value: '',
+//       start_date: '',
+//       end_date: ''
+//     });
+//     setDiscountModalVisible(false);
+//     setDiscountError(null);
+//   };
+
+//   // Handle discount assignment to a specific order
+//   const handleAssignDiscount = async () => {
+//     setAssigningDiscount(true);
+//     setDiscountError(null);
+
+//     try {
+//       await axios.post(`http://localhost:8800/api/orders/${selectedOrder._id}/apply-discount`, {
+//         discount_type: discountDetails.discount_type,
+//         discount_value: Number(discountDetails.discount_value),
+//         start_date: discountDetails.start_date,
+//         end_date: discountDetails.end_date,
+//       });
+//       alert('Discount assigned successfully to order');
+//       closeDiscountModal();
+//     } catch (error) {
+//       console.error("Error assigning discount:", error.response ? error.response.data : error.message);
+//       setDiscountError(error.response?.data?.message || 'Failed to assign discount. Please check your inputs and try again.');
+//     } finally {
+//       setAssigningDiscount(false);
+//     }
+//   };
+
+//   return (
+//     <div className="orders-container">
+//       <h2>Orders</h2>
+//       {loading ? (
+//         <p>Loading orders...</p>
+//       ) : error ? (
+//         <p className="error-message">{error}</p>
+//       ) : (
+//         <div>
+//           <section className="order-section">
+//             <h3>All Orders</h3>
+//             <table>
+//               <thead>
+//                 <tr>
+//                   <th>Order ID</th>
+//                   <th>Customer Name</th>
+//                   <th>User Email</th>
+//                   <th>Order Date</th>
+//                   <th>Total Amount</th>
+//                   <th>Status</th>
+//                   <th>Actions</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {orders.map((order) => (
+//                   <tr key={order._id}>
+//                     <td>{order._id}</td>
+//                     <td>{order.customerName}</td>
+//                     <td>{order.user?.email}</td> {/* Assuming `user.email` is provided */}
+//                     <td>{new Date(order.order_date).toLocaleDateString()}</td>
+//                     <td>${order.total_amount.toFixed(2)}</td>
+//                     <td>{order.status}</td>
+//                     <td>
+//                       <button onClick={() => openDiscountModal(order)}>Assign Discount</button>
+//                     </td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//           </section>
+
+//           {/* Discount assignment modal */}
+//           {discountModalVisible && (
+//             <div className="modal3">
+//               <div className="modal3-content">
+//                 <h3>Assign Discount to Order {selectedOrder && selectedOrder._id}</h3>
+//                 <label>
+//                   Discount Type:
+//                   <select
+//                     value={discountDetails.discount_type}
+//                     onChange={(e) => setDiscountDetails({ ...discountDetails, discount_type: e.target.value })}
+//                   >
+//                     <option value="percentage">Percentage</option>
+//                     <option value="fixed">Fixed Amount</option>
+//                   </select>
+//                 </label>
+//                 <label>
+//                   Discount Value:
+//                   <input
+//                     type="number"
+//                     value={discountDetails.discount_value}
+//                     onChange={(e) => setDiscountDetails({ ...discountDetails, discount_value: e.target.value })}
+//                   />
+//                 </label>
+//                 <label>
+//                   Start Date:
+//                   <input
+//                     type="date"
+//                     value={discountDetails.start_date}
+//                     onChange={(e) => setDiscountDetails({ ...discountDetails, start_date: e.target.value })}
+//                   />
+//                 </label>
+//                 <label>
+//                   End Date:
+//                   <input
+//                     type="date"
+//                     value={discountDetails.end_date}
+//                     onChange={(e) => setDiscountDetails({ ...discountDetails, end_date: e.target.value })}
+//                   />
+//                 </label>
+//                 {discountError && <p className="error-message">{discountError}</p>}
+//                 <button onClick={handleAssignDiscount} disabled={assigningDiscount}>
+//                   {assigningDiscount ? 'Assigning...' : 'Assign Discount'}
+//                 </button>
+//                 <button onClick={closeDiscountModal}>Cancel</button>
+//               </div>
+//             </div>
+//           )}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default OrderManagement;
+
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './OrderManagement.scss';
 
 const OrderManagement = () => {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState({
+    newOrders: [],
+    preparing: [],
+    readyForDelivery: [],
+  });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [discountModalVisible, setDiscountModalVisible] = useState(false);
-  const [discountDetails, setDiscountDetails] = useState({
-    discount_type: '',
-    discount_value: '',
-    start_date: '',
-    end_date: ''
-  });
-  const [assigningDiscount, setAssigningDiscount] = useState(false);
-  const [discountError, setDiscountError] = useState(null);
+  const navigate = useNavigate();
 
-  // Fetch orders on component mount
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get('http://localhost:8800/api/orders/all');
-        setOrders(response.data.orders);
-      } catch (error) {
-        console.error("Error fetching orders", error);
+        setOrders(response.data || {});
+      } catch (err) {
+        console.error("Error fetching orders:", err);
         setError("Failed to load orders.");
       } finally {
         setLoading(false);
@@ -232,138 +398,120 @@ const OrderManagement = () => {
     fetchOrders();
   }, []);
 
-  // Open discount modal for a specific order
-  const openDiscountModal = (order) => {
-    setSelectedOrder(order);
-    setDiscountModalVisible(true);
-  };
+  if (loading) return <p>Loading orders...</p>;
+  if (error) return <p className="error-message">{error}</p>;
 
-  const closeDiscountModal = () => {
-    setDiscountDetails({
-      discount_type: '',
-      discount_value: '',
-      start_date: '',
-      end_date: ''
-    });
-    setDiscountModalVisible(false);
-    setDiscountError(null);
-  };
-
-  // Handle discount assignment to a specific order
-  const handleAssignDiscount = async () => {
-    setAssigningDiscount(true);
-    setDiscountError(null);
-
+  const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await axios.post(`http://localhost:8800/api/orders/${selectedOrder._id}/apply-discount`, {
-        discount_type: discountDetails.discount_type,
-        discount_value: Number(discountDetails.discount_value),
-        start_date: discountDetails.start_date,
-        end_date: discountDetails.end_date,
+      await axios.put(`http://localhost:8800/api/orders/${orderId}`, { status: newStatus });
+
+      setOrders(prevOrders => {
+        const updatedOrders = { ...prevOrders };
+        Object.keys(updatedOrders).forEach(statusKey => {
+          updatedOrders[statusKey] = updatedOrders[statusKey].filter(order => order.id !== orderId);
+        });
+        const newStatusKey = getOrderGroupByStatus(newStatus);
+        updatedOrders[newStatusKey].push({
+          ...prevOrders[newStatusKey].find(order => order.id === orderId),
+          status: newStatus,
+        });
+        return updatedOrders;
       });
-      alert('Discount assigned successfully to order');
-      closeDiscountModal();
+
+      if (newStatus === "Completed") {
+        navigate('/admin/delivery');
+      }
     } catch (error) {
-      console.error("Error assigning discount:", error.response ? error.response.data : error.message);
-      setDiscountError(error.response?.data?.message || 'Failed to assign discount. Please check your inputs and try again.');
-    } finally {
-      setAssigningDiscount(false);
+      console.error("Error updating order status:", error);
+      alert("Failed to update order status.");
+    }
+  };
+
+  const handleCancel = async (orderId) => {
+    try {
+      await axios.delete(`http://localhost:8800/api/orders/${orderId}`);
+      alert("Order canceled successfully.");
+      setOrders(prevOrders => {
+        const updatedOrders = { ...prevOrders };
+        Object.keys(updatedOrders).forEach(statusKey => {
+          updatedOrders[statusKey] = updatedOrders[statusKey].filter(order => order.id !== orderId);
+        });
+        return updatedOrders;
+      });
+    } catch (error) {
+      console.error("Error canceling order:", error);
+      alert("Failed to cancel order.");
+    }
+  };
+
+  const getOrderGroupByStatus = (status) => {
+    switch (status) {
+      case 'Pending':
+        return 'newOrders';
+      case 'Preparing':
+        return 'preparing';
+      case 'Ready for Delivery':
+        return 'readyForDelivery';
+      default:
+        return 'newOrders';
     }
   };
 
   return (
-    <div className="orders-container">
-      <h2>Orders</h2>
-      {loading ? (
-        <p>Loading orders...</p>
-      ) : error ? (
-        <p className="error-message">{error}</p>
-      ) : (
-        <div>
-          <section className="order-section">
-            <h3>All Orders</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Customer Name</th>
-                  <th>User Email</th>
-                  <th>Order Date</th>
-                  <th>Total Amount</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order) => (
-                  <tr key={order._id}>
-                    <td>{order._id}</td>
-                    <td>{order.customerName}</td>
-                    <td>{order.user?.email}</td> {/* Assuming `user.email` is provided */}
-                    <td>{new Date(order.order_date).toLocaleDateString()}</td>
-                    <td>${order.total_amount.toFixed(2)}</td>
-                    <td>{order.status}</td>
-                    <td>
-                      <button onClick={() => openDiscountModal(order)}>Assign Discount</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
+    <div className="order-management-container">
+      <h2>Order Management</h2>
+      <button className="refresh-button" onClick={() => window.location.reload()}>Refresh Orders</button>
 
-          {/* Discount assignment modal */}
-          {discountModalVisible && (
-            <div className="modal3">
-              <div className="modal3-content">
-                <h3>Assign Discount to Order {selectedOrder && selectedOrder._id}</h3>
-                <label>
-                  Discount Type:
-                  <select
-                    value={discountDetails.discount_type}
-                    onChange={(e) => setDiscountDetails({ ...discountDetails, discount_type: e.target.value })}
-                  >
-                    <option value="percentage">Percentage</option>
-                    <option value="fixed">Fixed Amount</option>
-                  </select>
-                </label>
-                <label>
-                  Discount Value:
-                  <input
-                    type="number"
-                    value={discountDetails.discount_value}
-                    onChange={(e) => setDiscountDetails({ ...discountDetails, discount_value: e.target.value })}
-                  />
-                </label>
-                <label>
-                  Start Date:
-                  <input
-                    type="date"
-                    value={discountDetails.start_date}
-                    onChange={(e) => setDiscountDetails({ ...discountDetails, start_date: e.target.value })}
-                  />
-                </label>
-                <label>
-                  End Date:
-                  <input
-                    type="date"
-                    value={discountDetails.end_date}
-                    onChange={(e) => setDiscountDetails({ ...discountDetails, end_date: e.target.value })}
-                  />
-                </label>
-                {discountError && <p className="error-message">{discountError}</p>}
-                <button onClick={handleAssignDiscount} disabled={assigningDiscount}>
-                  {assigningDiscount ? 'Assigning...' : 'Assign Discount'}
-                </button>
-                <button onClick={closeDiscountModal}>Cancel</button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+      <OrderSection title="New Orders" orders={orders.newOrders} onStatusChange={handleStatusChange} onCancel={handleCancel} />
+      <OrderSection title="Preparing" orders={orders.preparing} onStatusChange={handleStatusChange} onCancel={handleCancel} />
+      <OrderSection title="Ready for Delivery" orders={orders.readyForDelivery} onStatusChange={handleStatusChange} onCancel={handleCancel} />
+    </div>
+  );
+};
+
+const OrderSection = ({ title, orders, onStatusChange, onCancel }) => (
+  <section className="order-section">
+    <h3 className="section-title">{title}</h3>
+    <div className="order-table">
+      <div className="order-table-header">
+        <span>Bill No.</span>
+        <span>Ordered By</span>
+        <span>Date</span>
+        <span>Total</span>
+        <span>Status</span>
+        <span>Actions</span>
+      </div>
+      {orders.map(order => (
+        <OrderRow key={order.id} order={order} onStatusChange={onStatusChange} onCancel={onCancel} />
+      ))}
+    </div>
+  </section>
+);
+
+const OrderRow = ({ order, onStatusChange, onCancel }) => {
+  const handleStatusChange = (event) => {
+    onStatusChange(order.id, event.target.value);
+  };
+
+  return (
+    <div className="order-row">
+      <span>{order.id}</span>
+      <span>{order.user ? `${order.user.firstName} ${order.user.lastName}, ${order.shipping_address}` : 'Unknown User'}</span>
+      <span>{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}</span>
+      <span>${order.total_amount.toFixed(2)}</span>
+      <span>
+        <select value={order.status} onChange={handleStatusChange} className="status-dropdown">
+          <option value="Pending">Pending</option>
+          <option value="Preparing">Preparing</option>
+          <option value="Ready for Delivery">Ready for Delivery</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </span>
+      <span className="action-buttons">
+        <button className="cancel-button" onClick={() => onCancel(order.id)}>Cancel/Refund</button>
+      </span>
     </div>
   );
 };
 
 export default OrderManagement;
-

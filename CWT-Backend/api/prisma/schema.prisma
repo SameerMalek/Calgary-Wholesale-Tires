@@ -299,6 +299,23 @@ model ProductTag {
   product Product @relation(fields: [productId], references: [id])
 }
 
+// model Order {
+//   id               String   @id @default(auto()) @map("_id") @db.ObjectId
+//   user_id          String?  @db.ObjectId
+//   status           String   @default("pending") // Can be pending, processing, shipped, delivered, cancelled
+//   total_amount     Float
+//   shipping_address String
+//   billing_address  String
+//   payment_status   String   @default("pending") // Can be pending, paid, failed
+//   tracking_number  String?
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   // Relations
+//   user       User?        @relation(fields: [user_id], references: [id], name: "UserOrders") // Make user nullable
+//   orderItems OrderItem[]
+//   shipments  Shipment[]
+// }
 model Order {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   user_id          String?  @db.ObjectId
@@ -317,6 +334,18 @@ model Order {
   shipments  Shipment[]
 }
 
+// model OrderItem {
+//   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+//   product_id  String?  @db.ObjectId // Make product_id nullable
+//   quantity    Int
+//   price       Float
+//   total_price Float
+//   order       Order    @relation(fields: [order_id], references: [id])
+//   order_id    String   @db.ObjectId
+
+//   // Relations
+//   product     Product? @relation(fields: [product_id], references: [id]) // Make product nullable
+// }
 model OrderItem {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   product_id  String?  @db.ObjectId // Make product_id nullable
