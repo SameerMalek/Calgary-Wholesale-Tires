@@ -14,8 +14,6 @@ export const createOrder = async (req, res) => {
   const { user_id, items, shipping_address, billing_address, total_amount } =
     req.body;
 
-  
-
   try {
     // Create a Stripe payment intent
     const paymentIntent = await stripe.paymentIntents.create({
@@ -79,7 +77,7 @@ export const addOrder = async (req, res) => {
         user_id,
         total_amount: parseFloat(total_amount),
         shipping_address,
-        billing_address:billingAddressString,
+        billing_address: billingAddressString,
         status: status || "pending",
         payment_status: payment_status || "pending",
       },
@@ -88,6 +86,31 @@ export const addOrder = async (req, res) => {
     return newOrder;
   } catch (err) {
     throw new Error(`Error creating order: ${err.message}`);
+  }
+};
+
+// Fetch all orders
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = await prisma.order.findMany({
+      include: {
+        orderItems: {
+          include: {
+            product: true,
+          },
+        },
+        user: true, // Now optional, Prisma will handle null values gracefully
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    res.status(200).json({ orders });
+  } catch (err) {
+    console.error("Error fetching all orders:", err.message);
+    res
+      .status(500)
+      .json({ message: "Error fetching all orders", error: err.message });
   }
 };
 
