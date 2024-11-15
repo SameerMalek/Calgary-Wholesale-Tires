@@ -7,6 +7,7 @@ import {
   getOrdersByUser,
   generateInvoice,
   getOrders,
+  getAllOrders,
   createOrder,
   applyDiscount,
 } from "../controller/order.controller.js";
@@ -22,5 +23,7 @@ router.get("/user/:userId/orders", getOrdersByUser); // For getting orders
 router.get("/order/:orderId/invoice", generateInvoice);
 router.get("/orders/:userId", getOrders);
 router.post("/", createOrder);
-router.post("/:orderId/apply-discount", applyDiscount);
+router.post("/orders/:orderId/apply-discount", applyDiscount); // Removed duplicate
+router.get("/all", getAllOrders); // Cleaned up conflicting route
+
 export default router;
