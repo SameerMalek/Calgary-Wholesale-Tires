@@ -6,11 +6,7 @@ import { IoLogInSharp } from "react-icons/io5";
 import { MdOutlineAppRegistration } from "react-icons/md";
 import './Login.scss';
 import { Link } from 'react-router-dom';
-<<<<<<< Updated upstream
 import "./Login.scss";
-=======
-
->>>>>>> Stashed changes
 
 export default function Login() {
   const [error, setError] = useState("");
