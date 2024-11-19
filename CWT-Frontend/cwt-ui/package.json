@@ -20,6 +20,7 @@
     "emailjs": "^4.0.3",
     "emailjs-com": "^3.2.0",
     "joi": "^17.13.3",
+    "jwt-decode": "^4.0.0",
     "nodemailer": "^6.9.16",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",

@@ -386,7 +386,8 @@ const OrderManagement = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:8800/api/orders/all');
+        setLoading(true);
+        const response = await axios.get("http://localhost:8800/api/orders/all");
         setOrders(response.data || {});
       } catch (err) {
         console.error("Error fetching orders:", err);
@@ -395,6 +396,7 @@ const OrderManagement = () => {
         setLoading(false);
       }
     };
+    
     fetchOrders();
   }, []);
 
@@ -403,38 +405,45 @@ const OrderManagement = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await axios.put(`http://localhost:8800/api/orders/${orderId}`, { status: newStatus });
-
-      setOrders(prevOrders => {
+      console.log("Updating order status:", { orderId, newStatus });
+      const response = await axios.put(`http://localhost:8800/api/order/${orderId}`, { status: newStatus });
+      console.log("API Response:", response.data);
+  
+      setOrders((prevOrders) => {
         const updatedOrders = { ...prevOrders };
-        Object.keys(updatedOrders).forEach(statusKey => {
-          updatedOrders[statusKey] = updatedOrders[statusKey].filter(order => order.id !== orderId);
+        Object.keys(updatedOrders).forEach((statusKey) => {
+          updatedOrders[statusKey] = updatedOrders[statusKey].filter((order) => order.id !== orderId);
         });
-        const newStatusKey = getOrderGroupByStatus(newStatus);
-        updatedOrders[newStatusKey].push({
-          ...prevOrders[newStatusKey].find(order => order.id === orderId),
+  
+        const updatedOrder = {
+          ...prevOrders.newOrders.find((order) => order.id === orderId) ||
+          prevOrders.preparing.find((order) => order.id === orderId) ||
+          prevOrders.readyForDelivery.find((order) => order.id === orderId),
           status: newStatus,
-        });
+        };
+  
+        const newGroup = getOrderGroupByStatus(newStatus);
+        updatedOrders[newGroup].push(updatedOrder);
+  
         return updatedOrders;
       });
-
-      if (newStatus === "Completed") {
-        navigate('/admin/delivery');
-      }
     } catch (error) {
-      console.error("Error updating order status:", error);
+      console.error("Failed to update order status:", error.response?.data || error.message);
       alert("Failed to update order status.");
     }
-  };
+  };      
 
   const handleCancel = async (orderId) => {
     try {
-      await axios.delete(`http://localhost:8800/api/orders/${orderId}`);
+      // Delete the order via API
+      await axios.delete(`http://localhost:8800/api/order/${orderId}`);
       alert("Order canceled successfully.");
-      setOrders(prevOrders => {
+  
+      // Remove the canceled order from state
+      setOrders((prevOrders) => {
         const updatedOrders = { ...prevOrders };
-        Object.keys(updatedOrders).forEach(statusKey => {
-          updatedOrders[statusKey] = updatedOrders[statusKey].filter(order => order.id !== orderId);
+        Object.keys(updatedOrders).forEach((statusKey) => {
+          updatedOrders[statusKey] = updatedOrders[statusKey].filter((order) => order.id !== orderId);
         });
         return updatedOrders;
       });
@@ -443,19 +452,21 @@ const OrderManagement = () => {
       alert("Failed to cancel order.");
     }
   };
+  
 
   const getOrderGroupByStatus = (status) => {
     switch (status) {
-      case 'Pending':
-        return 'newOrders';
-      case 'Preparing':
-        return 'preparing';
-      case 'Ready for Delivery':
-        return 'readyForDelivery';
+      case "Pending":
+        return "newOrders";
+      case "Preparing":
+        return "preparing";
+      case "Ready for Delivery":
+        return "readyForDelivery";
       default:
-        return 'newOrders';
+        return "newOrders";
     }
   };
+  
 
   return (
     <div className="order-management-container">
@@ -474,8 +485,8 @@ const OrderSection = ({ title, orders, onStatusChange, onCancel }) => (
     <h3 className="section-title">{title}</h3>
     <div className="order-table">
       <div className="order-table-header">
-        <span>Bill No.</span>
-        <span>Ordered By</span>
+        <span>Order ID</span>
+        <span>Customer Name</span>
         <span>Date</span>
         <span>Total</span>
         <span>Status</span>
@@ -496,7 +507,7 @@ const OrderRow = ({ order, onStatusChange, onCancel }) => {
   return (
     <div className="order-row">
       <span>{order.id}</span>
-      <span>{order.user ? `${order.user.firstName} ${order.user.lastName}, ${order.shipping_address}` : 'Unknown User'}</span>
+      <span>{order.user ? `${order.user.firstName} ${order.user.lastName}` : 'Unknown User'}</span>
       <span>{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}</span>
       <span>${order.total_amount.toFixed(2)}</span>
       <span>

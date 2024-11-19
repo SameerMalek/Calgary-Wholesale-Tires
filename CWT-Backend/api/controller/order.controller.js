@@ -408,7 +408,6 @@
 //   }
 // };
 
-
 import prisma from "../lib/prisma.js";
 import easyinvoice from "easyinvoice";
 import fs from "fs";
@@ -422,7 +421,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Create Order Controller
 export const createOrder = async (req, res) => {
-  const { user_id, items, shipping_address, billing_address, total_amount } = req.body;
+  const { user_id, items, shipping_address, billing_address, total_amount } =
+    req.body;
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
@@ -457,13 +457,22 @@ export const createOrder = async (req, res) => {
     });
   } catch (err) {
     console.error("Error creating order:", err);
-    res.status(500).json({ message: "Error creating order", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error creating order", error: err.message });
   }
 };
 
 // Add a new order
 export const addOrder = async (req, res) => {
-  const { user_id, total_amount, shipping_address, billing_address, status, payment_status } = req.body;
+  const {
+    user_id,
+    total_amount,
+    shipping_address,
+    billing_address,
+    status,
+    payment_status,
+  } = req.body;
 
   try {
     const newOrder = await prisma.order.create({
@@ -500,16 +509,26 @@ export const getAllOrders = async (req, res) => {
     });
 
     const groupedOrders = {
-      newOrders: ordersWithRelations.filter(order => order.status.toLowerCase() === "pending"),
-      preparing: ordersWithRelations.filter(order => order.status.toLowerCase() === "preparing"),
-      readyForDelivery: ordersWithRelations.filter(order => order.status.toLowerCase() === "ready for delivery"),
-      completed: ordersWithRelations.filter(order => order.status.toLowerCase() === "completed"),
+      newOrders: ordersWithRelations.filter(
+        (order) => order.status.toLowerCase() === "pending"
+      ),
+      preparing: ordersWithRelations.filter(
+        (order) => order.status.toLowerCase() === "preparing"
+      ),
+      readyForDelivery: ordersWithRelations.filter(
+        (order) => order.status.toLowerCase() === "ready for delivery"
+      ),
+      completed: ordersWithRelations.filter(
+        (order) => order.status.toLowerCase() === "completed"
+      ),
     };
 
     res.status(200).json(groupedOrders);
   } catch (err) {
     console.error("Error fetching all orders:", err.message);
-    res.status(500).json({ message: "Error fetching all orders", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching all orders", error: err.message });
   }
 };
 
@@ -539,7 +558,9 @@ export const getOrders = async (req, res) => {
     res.status(200).json(orders);
   } catch (err) {
     console.error("Error fetching orders:", err.message);
-    res.status(500).json({ message: "Error fetching orders", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching orders", error: err.message });
   }
 };
 
@@ -562,9 +583,9 @@ export const getOrdersByUser = async (req, res) => {
       },
     });
 
-    const ordersWithNullableFieldsHandled = orders.map(order => ({
+    const ordersWithNullableFieldsHandled = orders.map((order) => ({
       ...order,
-      orderItems: order.orderItems.map(item => ({
+      orderItems: order.orderItems.map((item) => ({
         ...item,
         product: item.product || "Product no longer available",
       })),
@@ -573,7 +594,9 @@ export const getOrdersByUser = async (req, res) => {
     res.status(200).json({ orders: ordersWithNullableFieldsHandled });
   } catch (err) {
     console.error("Error fetching orders for user:", err.message);
-    res.status(500).json({ message: "Error fetching orders", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching orders", error: err.message });
   }
 };
 
@@ -592,36 +615,50 @@ export const getOrderById = async (req, res) => {
     }
     res.status(200).json({ order });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching order", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching order", error: err.message });
   }
 };
 
 // Update an order by ID
 export const updateOrder = async (req, res) => {
   const { orderId } = req.params;
-  const { status, total_amount, shipping_address, billing_address, payment_status } = req.body;
+  const { status } = req.body;
+
+  console.log("PUT Request Received");
+  console.log("Order ID:", orderId);
+  console.log("Status:", status);
 
   try {
-    // Define update data, only including fields that are actually passed in the request
-    const updateData = {
-      ...(status && { status }),
-      ...(total_amount !== undefined && { total_amount: parseFloat(total_amount) }),
-      ...(shipping_address && { shipping_address }),
-      ...(billing_address && { billing_address }),
-      ...(payment_status && { payment_status }),
-    };
+    if (!status) {
+      return res.status(400).json({ message: "Status is required." });
+    }
+
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+    });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found." });
+    }
 
     const updatedOrder = await prisma.order.update({
       where: { id: orderId },
-      data: updateData,
+      data: { status },
     });
 
-    res.status(200).json({ message: "Order updated successfully", order: updatedOrder });
+    res
+      .status(200)
+      .json({ message: "Order updated successfully.", order: updatedOrder });
   } catch (err) {
     console.error("Error updating order:", err.message);
-    res.status(500).json({ message: "Error updating order", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Internal server error.", error: err.message });
   }
 };
+
 // export const updateOrder = async (req, res) => {
 //   const { orderId } = req.params;
 //   const { status, shipping_address, billing_address } = req.body;
@@ -664,9 +701,13 @@ export const deleteOrder = async (req, res) => {
     const deletedOrder = await prisma.order.delete({
       where: { id: orderId },
     });
-    res.status(200).json({ message: "Order deleted successfully", order: deletedOrder });
+    res
+      .status(200)
+      .json({ message: "Order deleted successfully", order: deletedOrder });
   } catch (err) {
-    res.status(500).json({ message: "Error deleting order", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error deleting order", error: err.message });
   }
 };
 
@@ -693,7 +734,9 @@ export const applyDiscount = async (req, res) => {
       data: { total_amount: discountedAmount },
     });
 
-    res.status(200).json({ message: "Discount applied successfully", order: updatedOrder });
+    res
+      .status(200)
+      .json({ message: "Discount applied successfully", order: updatedOrder });
   } catch (error) {
     console.error("Error applying discount:", error.message);
     res.status(500).json({ message: "Failed to apply discount" });
@@ -745,7 +788,9 @@ export const generateInvoice = async (req, res) => {
       products: [
         ...order.orderItems.map((item) => ({
           quantity: item.quantity,
-          description: item.product_id ? `Product ID: ${item.product_id}` : "Product no longer available",
+          description: item.product_id
+            ? `Product ID: ${item.product_id}`
+            : "Product no longer available",
           "tax-rate": 5,
           price: item.price,
         })),
@@ -760,7 +805,10 @@ export const generateInvoice = async (req, res) => {
     };
 
     const result = await easyinvoice.createInvoice(invoiceData);
-    const filePath = path.join(__dirname, `../../invoices/invoice_${order.id}.pdf`);
+    const filePath = path.join(
+      __dirname,
+      `../../invoices/invoice_${order.id}.pdf`
+    );
 
     if (!fs.existsSync(path.dirname(filePath))) {
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -770,7 +818,8 @@ export const generateInvoice = async (req, res) => {
     res.download(filePath, `invoice_${order.id}.pdf`);
   } catch (err) {
     console.error("Error generating invoice:", err.message);
-    res.status(500).json({ message: "Error generating invoice", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error generating invoice", error: err.message });
   }
 };
-
