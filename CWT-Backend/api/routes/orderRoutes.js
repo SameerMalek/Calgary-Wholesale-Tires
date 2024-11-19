@@ -23,7 +23,7 @@ router.get("/user/:userId/orders", getOrdersByUser); // For getting orders
 router.get("/order/:orderId/invoice", generateInvoice);
 router.get("/orders/:userId", getOrders);
 router.post("/", createOrder);
-router.post("/orders/:orderId/apply-discount", applyDiscount); // Removed duplicate
+router.post("/:orderId/apply-discount", applyDiscount); // Removed duplicate
 router.get("/all", getAllOrders); // Cleaned up conflicting route
 
 export default router;
@@ -50,7 +50,7 @@ export default router;
 // router.post("/", createOrder);  // This is the main endpoint to create orders
 
 // // Additional endpoint to add an order, if it differs from the main createOrder function
-// router.post("/order", addOrder);  
+// router.post("/order", addOrder);
 
 // // Fetch specific order by ID
 // router.get("/order/:orderId", getOrderById);
@@ -77,5 +77,3 @@ export default router;
 // router.get("/all", getAllOrders);
 
 // export default router;
-
-

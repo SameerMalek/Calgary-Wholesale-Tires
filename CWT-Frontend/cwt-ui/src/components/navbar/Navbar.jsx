@@ -97,34 +97,33 @@ const Navbar = () => {
         </div>
       
         <div className="right">
-        {currentUser ? (
-          <div className="user">
-            <span>Welcome, {currentUser.firstName}</span>
-           <>
-           <div className="right">
-            {/* <a className="wishlist" href="/wishlist" onClick={handleWishlistClick}>
-              <IoIosHeart className="heartIcon" /> Wishlist
-              <span className="wishlistText"></span> 
-            </a> */}
-            <a className="cart" href="/cart">
-              <img src="/assets/cart.png" alt="cart"  className="hertIcon"/>
-              <span>Cart</span>
-            </a>
-            </div>
-            </>
-          </div>
-        ) : (
-          /*<Link to="/login" className="signIn">
-            <img src="/assets/user.png" alt="user" />
-            <span>Sign In</span></Link>*/
-          <a className="signIn" href="/login">
-            <img src="/assets/user.png" alt="user" />
-            <span>Sign In</span>
-          </a>
-        
-        )}
-          
-        </div>
+  {currentUser ? (
+    <div className="user-options">
+      {/* Cart Section */}
+      <a className="cart" href="/cart">
+        <img src="/assets/cart.png" alt="cart" className="cartIcon" />
+        <span>Cart</span>
+      </a>
+      
+      {/* Profile Section */}
+      <a
+        className="profile"
+        onClick={() => navigate("/profilePage")} // Use navigate to route
+        style={{ cursor: "pointer" }}
+      >
+        <img src="/assets/user.png" alt="user" />
+        <span>{currentUser.firstName}</span>
+      </a>
+    </div>
+  ) : (
+    <a className="signIn" href="/login">
+      <img src="/assets/user.png" alt="user" />
+      <span>Sign In</span>
+    </a>
+  )}
+</div>
+
+
         <div className="menuIcon">
           <img
             src="/assets/menuIcon.png"

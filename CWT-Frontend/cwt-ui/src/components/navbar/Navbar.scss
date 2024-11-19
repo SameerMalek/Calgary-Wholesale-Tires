@@ -7,12 +7,11 @@ nav {
   width: 100%;
   margin: auto;
   position: fixed; // Keeps the navbar fixed at the top
-  top: 0; // Positions it at the top of the page
-  left: 0; // Ensures it starts from the left edge
-  z-index: 1000; // Keeps it above other content
-  background-color: white; // Ensure it has a background so content doesn’t overlap
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: white;
 
-  // Global styles for all links
   a {
     transition: all 0.4s ease;
 
@@ -20,7 +19,6 @@ nav {
       scale: 1.05;
     }
 
-    // Hiding links on small and medium screens
     @include sm {
       display: none;
     }
@@ -30,7 +28,6 @@ nav {
     }
   }
 
-  // Top section of the navbar
   .top {
     background: #e5e9ea;
     width: 100%;
@@ -53,7 +50,6 @@ nav {
     }
   }
 
-  // Center section containing logo, search, etc.
   .center {
     display: flex;
     justify-content: space-between;
@@ -89,7 +85,6 @@ nav {
       }
     }
 
-    // Logo section
     .logo {
       font-weight: bold;
       display: flex;
@@ -104,12 +99,11 @@ nav {
 
         @include sm {
           width: 120px;
-          height: 25px; // Adjust size for smaller screens
+          height: 25px;
         }
       }
     }
 
-    // Divider hidden on small and medium screens
     .divider {
       font-weight: bold;
       margin-left: 0.5rem;
@@ -137,7 +131,6 @@ nav {
       }
     }
 
-    // Search bar
     .search {
       display: flex;
       padding: 0.5rem;
@@ -147,11 +140,11 @@ nav {
       height: 50px;
 
       @include sm {
-        display: none; // Hide on small screens
+        display: none;
       }
 
       @include md {
-        //  display: none;
+        display: none;
       }
 
       .input {
@@ -180,7 +173,7 @@ nav {
         border: none;
         background: none;
 
-        .svg{
+        .svg {
           width: 21px;
           height: 18px;
         }
@@ -194,26 +187,81 @@ nav {
       }
     }
 
-    
-    // Right section with sign-in and cart
     .right {
       display: flex;
       align-items: center;
-      gap: 10px;
-      //padding-right: 20px;
+      gap: 30px;
+      padding-right: 20px;
 
-      
       @include sm {
-        display: none; // Hide on small screens
+        display: none;
       }
 
       @include md {
-        display: none; // Hide on medium screens
+        display: none;
       }
 
-      // Menu icon for small screens (hamburger menu)
+      .user-options {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      
+        .profile,
+        .order-history,
+        .cart {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 16px;
+          color: inherit;
+          text-decoration: none;
+      
+          img {
+            width: 25px;
+            height: 25px;
+          }
+      
+          span {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+          }
+      
+          &:hover {
+            color: #007bff;
+            cursor: pointer;
+          }
+        }
+      }
+      
+
+        .cart {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 16px;
+          text-decoration: none;
+          color: inherit;
+
+          .cartIcon {
+            width: 25px;
+            height: 25px;
+          }
+
+          span {
+            font-size: 16px;
+            font-weight: bold;
+          }
+
+          &:hover {
+            color: #007bff;
+            cursor: pointer;
+          }
+        }
+      }
 
       .signIn,
+      .wishlist,
       .cart {
         display: flex;
         align-items: center;
@@ -279,7 +327,8 @@ nav {
       }
     }
   }
-}
+
+
 .right {
   display: flex;
   align-items: center;
@@ -287,11 +336,11 @@ nav {
   padding-right: 20px;
 
   @include sm {
-    display: none; // Hide on small screens
+    display: none;
   }
 
   @include md {
-    display: none; // Hide on medium screens
+    display: none;
   }
 
   .signIn,
@@ -301,51 +350,49 @@ nav {
     align-items: center;
     gap: 10px;
     font-size: 16px;
-    color: inherit; // Inherit color from the parent (navbar)
+    color: inherit;
 
     img {
       width: 25px;
     }
 
-    // Heart icon (filled black)
     .heartIcon {
-      width: 25px; // Same size as the other icons
+      width: 25px;
       height: 25px;
-      color: black; // Filled black heart icon
-      border: none; // Ensure no border around the icon
-      background: none; // Ensure no background color
-      outline: none; // Remove outline
+      color: black;
+      border: none;
+      background: none;
+      outline: none;
     }
 
-    // Wishlist button styling
     .wishlist {
       display: flex;
       align-items: center;
-      background: none; // Remove any background
-      border: none; // Remove any border
-      outline: none; // Remove outline on focus
-      padding: 0; // Remove all padding
-      text-decoration: none; // Remove any text underline
-      color: inherit; // Inherit text color
+      background: none;
+      border: none;
+      outline: none;
+      padding: 0;
+      text-decoration: none;
+      color: inherit;
       cursor: pointer;
 
       span {
-        padding: 0; // No padding around text
-        color: inherit; // Inherit text color from parent
+        padding: 0;
+        color: inherit;
       }
 
       &:hover .heartIcon {
-        color: black; // Keep the heart icon black on hover
+        color: black;
       }
 
       &:hover {
-        color: inherit; // Ensure consistent hover color for text
+        color: inherit;
       }
 
       &:focus,
       &:active {
-        border: none; // Ensure no border on focus or active state
-        outline: none; // Remove any focus outline
+        border: none;
+        outline: none;
       }
     }
   }

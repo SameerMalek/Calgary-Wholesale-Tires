@@ -147,6 +147,14 @@ function App() {
       path: "/admin/delivery",  
       element: <Delivery />,
     },
+    {
+      path: "/admin/products",  
+      element: <AdProduct />,
+    },
+    {
+      path: "/admin/users",  
+      element: <User />,
+    },
   ]);
 
   return (

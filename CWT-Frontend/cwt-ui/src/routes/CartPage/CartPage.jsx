@@ -242,26 +242,31 @@ const CartPage = () => {
 
           {/* Payment Method Selection */}
           <div className="payment-method">
-            <label>
-              <input
-                type="radio"
-                name="payment-method"
-                value="stripe"
-                checked={paymentMethod === "stripe"}
-                onChange={() => setPaymentMethod("stripe")}
-              />
-              Pay with Credit Card
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="payment-method"
-                value="cod"
-                checked={paymentMethod === "cod"}
-                onChange={() => setPaymentMethod("cod")}
-              />
-              Cash on Delivery (COD)
-            </label>
+          <label
+  className={paymentMethod === "stripe" ? "selected" : ""}
+>
+  <input
+    type="radio"
+    name="payment-method"
+    value="stripe"
+    checked={paymentMethod === "stripe"}
+    onChange={() => setPaymentMethod("stripe")}
+  />
+  Pay with Credit Card
+</label>
+<label
+  className={paymentMethod === "cod" ? "selected" : ""}
+>
+  <input
+    type="radio"
+    name="payment-method"
+    value="cod"
+    checked={paymentMethod === "cod"}
+    onChange={() => setPaymentMethod("cod")}
+  />
+  Cash on Delivery (COD)
+</label>
+
           </div>
 
           {/* Terms and Conditions Checkbox */}
