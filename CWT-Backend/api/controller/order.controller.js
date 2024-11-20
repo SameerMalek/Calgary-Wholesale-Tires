@@ -481,7 +481,7 @@ export const addOrder = async (req, res) => {
         total_amount: parseFloat(total_amount),
         shipping_address,
         billing_address: JSON.stringify(billing_address),
-        status: status || "pending",
+        status:"pending",
         payment_status: payment_status || "pending",
       },
     });
@@ -623,39 +623,40 @@ export const getOrderById = async (req, res) => {
 
 // Update an order by ID
 export const updateOrder = async (req, res) => {
-  const { orderId } = req.params;
-  const { status } = req.body;
-
-  console.log("PUT Request Received");
-  console.log("Order ID:", orderId);
-  console.log("Status:", status);
+  const { orderId } = req.params; // Extract order ID from route params
+  const { status } = req.body; // Extract the new status from the request body
 
   try {
+    // Validate the status
     if (!status) {
       return res.status(400).json({ message: "Status is required." });
     }
 
-    const order = await prisma.order.findUnique({
+    // Check if the order exists
+    const existingOrder = await prisma.order.findUnique({
       where: { id: orderId },
     });
 
-    if (!order) {
+    if (!existingOrder) {
       return res.status(404).json({ message: "Order not found." });
     }
 
+    // Update the order's status
     const updatedOrder = await prisma.order.update({
       where: { id: orderId },
       data: { status },
     });
 
-    res
+    // Respond with the updated order details
+    return res
       .status(200)
       .json({ message: "Order updated successfully.", order: updatedOrder });
   } catch (err) {
     console.error("Error updating order:", err.message);
-    res
-      .status(500)
-      .json({ message: "Internal server error.", error: err.message });
+    return res.status(500).json({
+      message: "Failed to update order status.",
+      error: err.message,
+    });
   }
 };
 
@@ -695,21 +696,74 @@ export const updateOrder = async (req, res) => {
 
 // Delete an order by ID
 export const deleteOrder = async (req, res) => {
-  const { orderId } = req.params;
+  const { orderId } = req.params; // Extract orderId from the route params
 
   try {
-    const deletedOrder = await prisma.order.delete({
-      where: { id: orderId },
+    console.log("Received Order ID to delete:", orderId);
+
+    // Fetch the order details
+    const order = await prisma.order.findUnique({
+      where: { id: orderId }, // Corrected field name
+      include: { orderItems: true }, // Include related items
     });
-    res
-      .status(200)
-      .json({ message: "Order deleted successfully", order: deletedOrder });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    console.log("Fetched Order Details:", order);
+
+    // Handle refund if payment was completed
+    if (order.payment_status === "completed" && !order.stripePaymentId) {
+      if (!order.stripePaymentId) {
+        return res.status(400).json({
+          message: "Cannot process refund. Stripe Payment ID is missing.",
+        });
+      }
+
+      try {
+        // Refund the payment using Stripe
+        const refund = await stripe.refunds.create({
+          payment_intent: order.stripePaymentId,
+        });
+        console.log("Refund Response:", refund);
+        console.log(`Refund successful for Order ID: ${orderId}`);
+      } catch (refundError) {
+        console.error("Refund Error:", {
+          message: refundError.message,
+          stack: refundError.stack,
+          raw: refundError,
+        });
+        return res.status(500).json({
+          message: "Failed to process payment refund.",
+          error: refundError.message,
+        });
+      }
+    }
+
+    // Delete associated order items
+    await prisma.orderItem.deleteMany({
+      where: { order_id: orderId }, // Ensure this matches the foreign key in your schema
+    });
+
+    // Delete the order itself
+    const deletedOrder = await prisma.order.delete({
+      where: { id: orderId }, // Correct field for primary key
+    });
+
+    res.status(200).json({
+      message: "Order deleted successfully",
+      order: deletedOrder,
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error deleting order", error: err.message });
+    console.error("Error deleting order:", err.message || err);
+    res.status(500).json({
+      message: "Error deleting order",
+      error: err.message || "Internal Server Error",
+    });
   }
 };
+
 
 // Apply Discount to an order
 export const applyDiscount = async (req, res) => {
@@ -748,14 +802,35 @@ export const generateInvoice = async (req, res) => {
   const { orderId } = req.params;
 
   try {
+    // Fetch order with detailed product data
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: { orderItems: true },
+      include: {
+        orderItems: {
+          include: {
+            product: true, // Assuming your database has a relation to fetch product details
+          },
+        },
+      },
     });
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
+
+    const products = order.orderItems.map((item) => ({
+      quantity: item.quantity,
+      description: item.product?.name || "Product no longer available",
+      "tax-rate": 5, // Adjust tax rate based on your logic
+      price: item.price,
+    }));
+
+    const shippingFee = {
+      quantity: 1,
+      description: "Shipping Fees",
+      "tax-rate": 5,
+      price: 25.0, // Replace with dynamic value if available
+    };
 
     const invoiceData = {
       documentTitle: "Invoice",
@@ -776,7 +851,7 @@ export const generateInvoice = async (req, res) => {
         company: "PRINCE TIRES LTD",
         address: order.shipping_address || "N/A",
         zip: "T2G 0A4",
-        city: "CALGARY",
+        city: "Calgary",
         country: "Canada",
         phone: "(403) 606-5459",
       },
@@ -785,27 +860,23 @@ export const generateInvoice = async (req, res) => {
         date: new Date(order.createdAt).toLocaleDateString(),
         "due-date": new Date(order.updatedAt).toLocaleDateString(),
       },
-      products: [
-        ...order.orderItems.map((item) => ({
-          quantity: item.quantity,
-          description: item.product_id
-            ? `Product ID: ${item.product_id}`
-            : "Product no longer available",
-          "tax-rate": 5,
-          price: item.price,
-        })),
-        {
-          quantity: 1,
-          description: "Shipping Fees",
-          "tax-rate": 5,
-          price: 200.0,
-        },
-      ],
+      products: [...products, shippingFee],
       "bottom-notice": "Thank you for your business!",
+      settings: {
+        layout: {
+          lineHeight: 1.5, // Adjust line height for better readability
+        },
+      },
+      translate: {
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "tax": "Tax",
+        "total": "Total",
+      },
     };
 
     const result = await easyinvoice.createInvoice(invoiceData);
-    const filePath = path.join(
+    const filePath = path.resolve(
       __dirname,
       `../../invoices/invoice_${order.id}.pdf`
     );

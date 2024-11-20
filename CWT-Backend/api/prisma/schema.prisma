@@ -325,6 +325,7 @@ model Order {
   billing_address  String
   payment_status   String   @default("pending") // Can be pending, paid, failed
   tracking_number  String?
+  stripePaymentId  String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

@@ -406,7 +406,7 @@ const OrderManagement = () => {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       console.log("Updating order status:", { orderId, newStatus });
-      const response = await axios.put(`http://localhost:8800/api/order/${orderId}`, { status: newStatus });
+      const response = await axios.put(`http://localhost:8800/api/orders/order/${orderId}`, { status: newStatus });
       console.log("API Response:", response.data);
   
       setOrders((prevOrders) => {
@@ -425,19 +425,35 @@ const OrderManagement = () => {
         const newGroup = getOrderGroupByStatus(newStatus);
         updatedOrders[newGroup].push(updatedOrder);
   
+        // If the order is completed, move it to the Delivery page (store in localStorage)
+        if (newStatus === "Completed") {
+          const deliveredOrders = JSON.parse(localStorage.getItem("deliveredOrders")) || [];
+          deliveredOrders.push(updatedOrder);
+          localStorage.setItem("deliveredOrders", JSON.stringify(deliveredOrders));
+        }
+  
         return updatedOrders;
       });
     } catch (error) {
       console.error("Failed to update order status:", error.response?.data || error.message);
       alert("Failed to update order status.");
     }
-  };      
+  };   
 
   const handleCancel = async (orderId) => {
     try {
-      // Delete the order via API
-      await axios.delete(`http://localhost:8800/api/order/${orderId}`);
-      alert("Order canceled successfully.");
+      // Cancel the order and get the response
+      const response = await axios.delete(`http://localhost:8800/api/orders/order/${orderId}`);
+      const { message, refund } = response.data;
+  
+      // Notify the user
+      alert(message || "Order canceled successfully.");
+  
+      // Optionally display refund details
+      if (refund) {
+        console.log("Refund Details:", refund);
+        alert(`Refund issued successfully. Refund ID: ${refund.id}`);
+      }
   
       // Remove the canceled order from state
       setOrders((prevOrders) => {
@@ -471,7 +487,7 @@ const OrderManagement = () => {
   return (
     <div className="order-management-container">
       <h2>Order Management</h2>
-      <button className="refresh-button" onClick={() => window.location.reload()}>Refresh Orders</button>
+      {/* <button className="refresh-button" onClick={() => window.location.reload()}>Refresh Orders</button> */}
 
       <OrderSection title="New Orders" orders={orders.newOrders} onStatusChange={handleStatusChange} onCancel={handleCancel} />
       <OrderSection title="Preparing" orders={orders.preparing} onStatusChange={handleStatusChange} onCancel={handleCancel} />
@@ -489,6 +505,7 @@ const OrderSection = ({ title, orders, onStatusChange, onCancel }) => (
         <span>Customer Name</span>
         <span>Date</span>
         <span>Total</span>
+        <span>Payment Status</span> 
         <span>Status</span>
         <span>Actions</span>
       </div>
@@ -504,12 +521,15 @@ const OrderRow = ({ order, onStatusChange, onCancel }) => {
     onStatusChange(order.id, event.target.value);
   };
 
+  const paymentStatusClass = order.payment_status === 'completed' ? 'payment-completed' : 'payment-pending';
+
   return (
     <div className="order-row">
       <span>{order.id}</span>
       <span>{order.user ? `${order.user.firstName} ${order.user.lastName}` : 'Unknown User'}</span>
       <span>{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}</span>
       <span>${order.total_amount.toFixed(2)}</span>
+      <span className={paymentStatusClass}>{order.payment_status || 'Unknown'}</span> {/* Dynamic class for payment status */}
       <span>
         <select value={order.status} onChange={handleStatusChange} className="status-dropdown">
           <option value="Pending">Pending</option>
@@ -520,6 +540,7 @@ const OrderRow = ({ order, onStatusChange, onCancel }) => {
       </span>
       <span className="action-buttons">
         <button className="cancel-button" onClick={() => onCancel(order.id)}>Cancel/Refund</button>
+        {order.refund && <p className="refund-info">Refund Issued: {order.refund.id}</p>}
       </span>
     </div>
   );

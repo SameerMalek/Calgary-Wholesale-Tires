@@ -68,6 +68,14 @@
             margin-bottom: 15px;
             font-size: 16px;
           }
+          .orderItems{
+            .products{
+              list-style: none;
+              background-color: #eee579;
+              padding: 5px;
+              border-radius: 50px;
+            }
+          }
 
           .trackingInput {
             width: 100%;

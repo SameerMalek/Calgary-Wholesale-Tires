@@ -109,7 +109,6 @@
 
 // // export default Users;
 
-
 // // import React, { useEffect, useState } from 'react';
 // // import axios from 'axios';
 // // import './user.scss';
@@ -307,7 +306,6 @@
 // // };
 
 // // export default Users;
-
 
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';
@@ -518,10 +516,9 @@
 
 // export default Users;
 
-
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './User.scss';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./User.scss";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -530,10 +527,10 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [discountModalVisible, setDiscountModalVisible] = useState(false);
   const [discountDetails, setDiscountDetails] = useState({
-    discount_type: '',
-    discount_value: '',
-    start_date: '',
-    end_date: ''
+    discount_type: "",
+    discount_value: "",
+    start_date: "",
+    end_date: "",
   });
   const [assigningDiscount, setAssigningDiscount] = useState(false);
   const [discountError, setDiscountError] = useState(null);
@@ -545,7 +542,7 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:8800/api/users');
+        const response = await axios.get("http://localhost:8800/api/users");
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users", error);
@@ -561,7 +558,11 @@ const Users = () => {
   const handleApprove = async (userId) => {
     try {
       await axios.put(`http://localhost:8800/api/auth/users/${userId}/approve`);
-      setUsers(users.map(user => user.id === userId ? { ...user, isApproved: true } : user));
+      setUsers(
+        users.map((user) =>
+          user.id === userId ? { ...user, isApproved: true } : user
+        )
+      );
     } catch (error) {
       console.error("Error approving user", error);
     }
@@ -571,8 +572,10 @@ const Users = () => {
   const handleDecline = async (userId) => {
     if (!window.confirm("Are you sure you want to decline this user?")) return;
     try {
-      await axios.delete(`http://localhost:8800/api/auth/decline-user/${userId}`);
-      setUsers(users.filter(user => user.id !== userId));
+      await axios.delete(
+        `http://localhost:8800/api/auth/decline-user/${userId}`
+      );
+      setUsers(users.filter((user) => user.id !== userId));
     } catch (error) {
       console.error("Error declining user", error);
     }
@@ -581,7 +584,9 @@ const Users = () => {
   // Fetch orders for a selected user
   const handleViewOrders = async (user) => {
     try {
-      const response = await axios.get(`http://localhost:8800/api/orders/user/${user.id}/orders`);
+      const response = await axios.get(
+        `http://localhost:8800/api/orders/user/${user.id}/orders`
+      );
       console.log(response.data);
       setUserOrders(response.data.orders);
       setSelectedUser(user);
@@ -590,7 +595,7 @@ const Users = () => {
       console.error("Error fetching user orders", error);
     }
   };
-    
+
   // Close orders view
   const closeOrderView = () => {
     setViewingOrders(false);
@@ -606,10 +611,10 @@ const Users = () => {
 
   const closeDiscountModal = () => {
     setDiscountDetails({
-      discount_type: '',
-      discount_value: '',
-      start_date: '',
-      end_date: ''
+      discount_type: "",
+      discount_value: "",
+      start_date: "",
+      end_date: "",
     });
     setDiscountModalVisible(false);
     setDiscountError(null);
@@ -619,32 +624,39 @@ const Users = () => {
   const handleAssignDiscount = async () => {
     setAssigningDiscount(true);
     setDiscountError(null);
-  
+
     console.log("Discount Details:", discountDetails);
     console.log("Selected Order ID:", selectedOrder.id);
-  
+
     try {
-      const response = await axios.post(`http://localhost:8800/api/orders/${selectedOrder.id}/apply-discount`, {
-        discount_type: discountDetails.discount_type,
-        discount_value: Number(discountDetails.discount_value),
-        start_date: discountDetails.start_date,
-        end_date: discountDetails.end_date,
-      });
-      alert('Discount assigned successfully to order');
+      const response = await axios.post(
+        `http://localhost:8800/api/orders/${selectedOrder.id}/apply-discount`,
+        {
+          discount_type: discountDetails.discount_type,
+          discount_value: Number(discountDetails.discount_value),
+          start_date: discountDetails.start_date,
+          end_date: discountDetails.end_date,
+        }
+      );
+      alert("Discount assigned successfully to order");
       closeDiscountModal();
     } catch (error) {
-      console.error("Error assigning discount:", error.response ? error.response.data : error.message);
-      setDiscountError(error.response?.data?.message || 'Failed to assign discount. Please check your inputs and try again.');
+      console.error(
+        "Error assigning discount:",
+        error.response ? error.response.data : error.message
+      );
+      setDiscountError(
+        error.response?.data?.message ||
+          "Failed to assign discount. Please check your inputs and try again."
+      );
     } finally {
       setAssigningDiscount(false);
     }
   };
-  
-  
 
   // Filter users based on approval status
-  const approvedUsers = users.filter(user => user.isApproved);
-  const pendingUsers = users.filter(user => !user.isApproved);
+  const approvedUsers = users.filter((user) => user.isApproved);
+  const pendingUsers = users.filter((user) => !user.isApproved);
 
   return (
     <div className="users-container">
@@ -655,6 +667,37 @@ const Users = () => {
         <p className="error-message">{error}</p>
       ) : (
         <div>
+           <section className="user-section">
+            <h3>Pending Users</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingUsers.map((user) => (
+                  <tr key={user.id}>
+                    <td>
+                      {user.firstName} {user.lastName}
+                    </td>
+                    <td>{user.email}</td>
+                    <td>
+                      <button onClick={() => handleApprove(user.id)}>
+                        Approve
+                      </button>
+                      <button onClick={() => handleDecline(user.id)}>
+                        Decline
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+
           <section className="user-section">
             <h3>Approved Users</h3>
             <table>
@@ -666,38 +709,19 @@ const Users = () => {
                 </tr>
               </thead>
               <tbody>
-                {approvedUsers.map(user => (
+                {approvedUsers.map((user) => (
                   <tr key={user.id}>
-                    <td>{user.firstName} {user.lastName}</td>
-                    <td>{user.email}</td>
                     <td>
-                      <button onClick={() => handleViewOrders(user)}>View Orders</button>
-                      <button onClick={() => openDiscountModal(user)}>Assign Discount</button>
+                      {user.firstName} {user.lastName}
                     </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-
-          <section className="user-section">
-            <h3>Pending Users</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pendingUsers.map(user => (
-                  <tr key={user.id}>
-                    <td>{user.firstName} {user.lastName}</td>
                     <td>{user.email}</td>
                     <td>
-                      <button onClick={() => handleApprove(user.id)}>Approve</button>
-                      <button onClick={() => handleDecline(user.id)}>Decline</button>
+                      <button onClick={() => handleViewOrders(user)}>
+                        View Orders
+                      </button>
+                      <button onClick={() => openDiscountModal(user)}>
+                        Assign Discount
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -707,45 +731,55 @@ const Users = () => {
 
           {/* Order view modal */}
           {viewingOrders && (
-  <div className="modal3">
-    <div className="modal3-content">
-      <h3>Orders for {selectedUser.firstName} {selectedUser.lastName}</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Total Amount</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userOrders.map(order => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.total_amount}</td>
-              <td>
-                <button onClick={() => openDiscountModal(order)}>Adjust Discount</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <button onClick={closeOrderView}>Close</button>
-    </div>
-  </div>
-)}
-
+            <div className="modal3">
+              <div className="modal3-content">
+                <h3>
+                  Orders for {selectedUser.firstName} {selectedUser.lastName}
+                </h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Total Amount</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userOrders.map((order) => (
+                      <tr key={order.id}>
+                        <td>{order.id}</td>
+                        <td>{order.total_amount}</td>
+                        <td>
+                          <button onClick={() => openDiscountModal(order)}>
+                            Adjust Discount
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <button onClick={closeOrderView}>Close</button>
+              </div>
+            </div>
+          )}
 
           {/* Discount assignment modal */}
           {discountModalVisible && (
             <div className="modal3">
               <div className="modal3-content">
-                <h3>Assign Discount to Order {selectedOrder && selectedOrder.id}</h3>
+                <h3>
+                  Assign Discount to Order {selectedOrder && selectedOrder.id}
+                </h3>
                 <label>
                   Discount Type:
                   <select
                     value={discountDetails.discount_type}
-                    onChange={(e) => setDiscountDetails({ ...discountDetails, discount_type: e.target.value })}
+                    onChange={(e) =>
+                      setDiscountDetails({
+                        ...discountDetails,
+                        discount_type: e.target.value,
+                      })
+                    }
                   >
                     <option value="percentage">Percentage</option>
                     <option value="fixed">Fixed Amount</option>
@@ -756,7 +790,12 @@ const Users = () => {
                   <input
                     type="number"
                     value={discountDetails.discount_value}
-                    onChange={(e) => setDiscountDetails({ ...discountDetails, discount_value: e.target.value })}
+                    onChange={(e) =>
+                      setDiscountDetails({
+                        ...discountDetails,
+                        discount_value: e.target.value,
+                      })
+                    }
                   />
                 </label>
                 <label>
@@ -764,7 +803,12 @@ const Users = () => {
                   <input
                     type="date"
                     value={discountDetails.start_date}
-                    onChange={(e) => setDiscountDetails({ ...discountDetails, start_date: e.target.value })}
+                    onChange={(e) =>
+                      setDiscountDetails({
+                        ...discountDetails,
+                        start_date: e.target.value,
+                      })
+                    }
                   />
                 </label>
                 <label>
@@ -772,12 +816,22 @@ const Users = () => {
                   <input
                     type="date"
                     value={discountDetails.end_date}
-                    onChange={(e) => setDiscountDetails({ ...discountDetails, end_date: e.target.value })}
+                    onChange={(e) =>
+                      setDiscountDetails({
+                        ...discountDetails,
+                        end_date: e.target.value,
+                      })
+                    }
                   />
                 </label>
-                {discountError && <p className="error-message">{discountError}</p>}
-                <button onClick={handleAssignDiscount} disabled={assigningDiscount}>
-                  {assigningDiscount ? 'Assigning...' : 'Assign Discount'}
+                {discountError && (
+                  <p className="error-message">{discountError}</p>
+                )}
+                <button
+                  onClick={handleAssignDiscount}
+                  disabled={assigningDiscount}
+                >
+                  {assigningDiscount ? "Assigning..." : "Assign Discount"}
                 </button>
                 <button onClick={closeDiscountModal}>Cancel</button>
               </div>

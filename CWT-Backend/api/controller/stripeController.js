@@ -57,6 +57,8 @@ export const handleStripeWebhook = async (req, res) => {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
+      const paymentIntentId = session.payment_intent;
+      console.log("Payment Intent ID from session:", paymentIntentId);
       console.log("Stripe session object:", session);
 
       // Extract metadata and create order
@@ -69,8 +71,9 @@ export const handleStripeWebhook = async (req, res) => {
         total_amount,
         shipping_address: session.shipping ? session.shipping.address : "N/A",
         billing_address: session.customer_details.address,
-        status: 'completed',
+        status: 'pending',
         payment_status: 'completed',
+        stripePaymentId: session.payment_intent, 
         items: items.map((item) => ({
           product_id: item.productId,
           quantity: item.quantity,
