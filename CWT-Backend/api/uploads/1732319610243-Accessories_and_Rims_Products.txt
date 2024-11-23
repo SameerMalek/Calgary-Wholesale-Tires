@@ -1,0 +1,40 @@
+Category: Accessories
+Name: Car Cover ProShield-1
+Description: Weather-resistant car cover designed to protect your vehicle from the elements.
+Handle: car-cover-proshield
+SKU: CAR-COVER-PROSHIELD
+Price: 59.99
+Compare At Price: 79.99
+Stock Quantity: 100
+Min Stock Threshold: 10
+Brand: CoverAll
+Tire Width: 
+Aspect Ratio: 
+Rim Size: 
+Product Type: Car Cover
+Availability: In Stock
+Weight: 2.5
+Dimensions: 
+Featured Image: https://content.jdmagicbox.com/comp/def_content_category/car-cover-wholesalers/car-cover-waterproof-3-car-cover-wholesalers-1-t0am3.jpg
+Is Active: True
+
+Category: Rims
+Name: Enkei RPF
+Description: Lightweight performance rim with a sleek design, suitable for sports cars.
+Handle: enkei-rpf-1730489367943
+SKU: ENKRPF11118
+Price: 150
+Compare At Price: 
+Stock Quantity: 0
+Min Stock Threshold: 1
+Brand: Enkei
+Tire Width: 
+Aspect Ratio: 
+Rim Size: 
+Product Type: 
+Availability: in-stock
+Weight: 0
+Dimensions: 18,9.5,35
+Featured Image: https://m.media-amazon.com/images/I/61c7mfwrObL.jpg
+Is Active: True
+

@@ -1,79 +1,63 @@
 .featured {
-    flex: 2;
-    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-    padding: 10px;
-  
-    .top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: gray;
-  
-      .title {
-        font-size: 16px;
-        font-weight: 500;
-      }
+  flex: 2;
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      font-size: 18px;
+      font-weight: 600;
     }
-  
-    .bottom {
-      padding: 20px;
+  }
+
+  .chartContainer {
+    height: 300px; // Adjust height as needed
+  }
+
+  .bottom {
+    .stats {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-  
-      .featuredChart {
-        width: 100px;
-        height: 100px;
-      }
-  
-      .title {
-        font-weight: 500;
-        color: gray;
-      }
-  
-      .amount {
-        font-size: 30px;
-      }
-  
-      .desc {
-        font-weight: 300;
-        font-size: 12px;
-        color: gray;
-        text-align: center;
-      }
-  
-      .summary {
-        width: 100%;
+      justify-content: space-between;
+
+      .statItem {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
-  
-        .item {
-          text-align: center;
-  
-          .itemTitle {
-            font-size: 14px;
-            color: gray;
+        gap: 5px;
+
+        .statTitle {
+          font-size: 14px;
+          color: gray;
+          font-weight: 500;
+        }
+
+        .statValue {
+          font-size: 20px;
+          font-weight: 600;
+
+          &.positive {
+            color: green;
           }
-  
-          .itemResult {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-            font-size: 14px;
-  
-            &.positive {
-              color: green;
-            }
-  
-            &.negative {
-              color: red;
-            }
+
+          &.negative {
+            color: red;
+          }
+
+          display: flex;
+          align-items: center;
+
+          svg {
+            margin-right: 5px;
           }
         }
       }
     }
   }
+}
