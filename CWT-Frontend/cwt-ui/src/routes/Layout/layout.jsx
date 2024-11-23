@@ -3,29 +3,35 @@ import "./layout.scss";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/footer";
 import { AuthContext } from "../../context/AuthContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { LoadingContext } from "../../context/loadingContext";
 
- function Layout() {
-
-  const {currentUser} = useContext(AuthContext);
+function Layout() {
+  const { currentUser } = useContext(AuthContext);
+  const { startLoading, stopLoading } = useContext(LoadingContext);
   // console.log(currentUser)
   const location = useLocation();
   const isProductPage = location.pathname === "/products";
-  return (
-     <div className={`layout ${isProductPage ? 'product-page' : ''}`}>
-    <div className="navbar">
-    <Navbar/>
-    </div>
-    <div className="content">
-     <Outlet/>
-    </div>
-    <div className="footer">
-     <Footer />
-    </div>
-  </div>
-  )
-}
+  useEffect(() => {
+    startLoading();
+    const timer = setTimeout(() => stopLoading(), 500); // Simulate loading time
+    return () => clearTimeout(timer); // Clean up on unmount
+  }, [location, startLoading, stopLoading]);
 
+  return (
+    <div className={`layout ${isProductPage ? "product-page" : ""}`}>
+      <div className="navbar">
+        <Navbar />
+      </div>
+      <div className="content">
+        <Outlet />
+      </div>
+      <div className="footer">
+        <Footer />
+      </div>
+    </div>
+  );
+}
 
 //  function RequireAuth() {
 //   const {currentUser} = useContext(AuthContext);
@@ -46,6 +52,6 @@ import { useContext } from "react";
 // }
 
 export {
-  Layout
-//   RequireAuth,
-}
+  Layout,
+  //   RequireAuth,
+};

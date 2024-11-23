@@ -1,8 +1,8 @@
-import React, { useContext,useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Navbar.scss";
 import Filter from "../filter/filter";
 import { IoIosSearch, IoIosHeart } from "react-icons/io"; // Use filled heart icon
-import { useNavigate,createSearchParams, Link } from "react-router-dom"; // Add useNavigate for navigation
+import { useNavigate, createSearchParams, Link } from "react-router-dom"; // Add useNavigate for navigation
 import axios from "axios"; // You might use Axios or fetch API for the backend call
 import { AuthContext } from "../../context/AuthContext";
 
@@ -10,7 +10,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // Track search input
   const navigate = useNavigate(); // Use navigate for routing
-  const {currentUser} = useContext(AuthContext); // Access current user from Context
+  const { currentUser } = useContext(AuthContext); // Access current user from Context
 
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
@@ -19,9 +19,12 @@ const Navbar = () => {
     try {
       console.log("Searching for:", searchQuery);
       // Make API call to fetch products based on search query
-      const response = await axios.get(`http://localhost:8800/api/products/search`, {
-        params: { query: searchQuery },
-      });
+      const response = await axios.get(
+        `http://localhost:8800/api/products/search`,
+        {
+          params: { query: searchQuery },
+        }
+      );
       console.log("Search response:", response.data);
       const { filteredProducts, allProducts } = response.data;
 
@@ -66,9 +69,9 @@ const Navbar = () => {
           Search Products:
         </label>
         {/* Search Bar */}
-        <div className="search">
+        <div className={`search ${currentUser ? "signed-in" : ""}`}>
           <form onSubmit={handleSearchSubmit}>
-          <input
+            <input
               type="text"
               name="search"
               value={searchQuery}
@@ -81,39 +84,37 @@ const Navbar = () => {
             </button>
           </form>
         </div>
-        <a
-        href="http://localhost:3000/orderHistory"
-        className="my-account-link"
-        >
-        My Orders
-        </a>
-        <div className="right">
-  {currentUser ? (
-    <div className="user-options">
-      {/* Cart Section */}
-      <a className="cart" href="/cart">
-        <img src="/assets/cart.png" alt="cart" className="cartIcon" />
-        <span>Cart</span>
-      </a>
-      
-      {/* Profile Section */}
-      <a
-        className="profile"
-        onClick={() => navigate("/profilePage")} // Use navigate to route
-        style={{ cursor: "pointer" }}
-      >
-        <img src="/assets/user.png" alt="user" />
-        <span>{currentUser.firstName}</span>
-      </a>
-    </div>
-  ) : (
-    <a className="signIn" href="/login">
-      <img src="/assets/user.png" alt="user" />
-      <span>Sign In</span>
-    </a>
-  )}
-</div>
 
+        <div className="right">
+          {currentUser ? (
+            <div className="user-options">
+              {/* Cart Section */}
+              <a href="/orderHistory" className="my-account-link">
+              <img src="/assets/booking.png" alt="orders" className="bookingIcon" />
+                My Orders
+              </a>
+              <a className="cart" href="/cart">
+                <img src="/assets/cart.png" alt="cart" className="cartIcon" />
+                <span>Cart</span>
+              </a>
+
+              {/* Profile Section */}
+              <a
+                className="profile"
+                href="/profilePage"
+                style={{ cursor: "pointer" }}
+              >
+                <img src="/assets/user.png" alt="user" />
+                <span>{currentUser.firstName}</span>
+              </a>
+            </div>
+          ) : (
+            <a className="signIn" href="/login">
+              <img src="/assets/user.png" alt="user" />
+              <span>Sign In</span>
+            </a>
+          )}
+        </div>
 
         <div className="menuIcon">
           <img
@@ -132,7 +133,7 @@ const Navbar = () => {
           <a href="/">My Account</a>
         </div>
       </div>
-      
+
       {/* Bottom Filter */}
       <Filter />
     </nav>

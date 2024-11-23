@@ -29,6 +29,8 @@ import OrderHistory from './components/orderhistory/orderhistory';
 import User from "./AdminPanel/components/users/User";
 import AdminRegister from "./AdminPanel/pages/AdminRegister/AdminRegister";
 import AdminLogin from "./AdminPanel/pages/AdminLogin/AdminLogin";
+import ScrollToTop from "./scrollToTop";
+import LoadingProvider from "./context/loadingContext";
 
 function App() {
   const router = createBrowserRouter([
@@ -98,7 +100,7 @@ function App() {
         },
         {
           path: "/product",  
-          element: <AdminProduct />,
+          element: <Home />,
         },
         {
           path: "/inventory",  
@@ -110,7 +112,7 @@ function App() {
         },
         {
           path: "/products",
-          element: <AdminProfile />,
+          element: <Home />,
         },
         {
           path: "/orderHistory",
@@ -158,9 +160,13 @@ function App() {
   ]);
 
   return (
+    <LoadingProvider>
     <CartProvider>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}>
+        <ScrollToTop />
+      </RouterProvider>
     </CartProvider>
+  </LoadingProvider>
   );
 }
 

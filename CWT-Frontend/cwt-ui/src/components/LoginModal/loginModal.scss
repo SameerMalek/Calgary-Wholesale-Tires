@@ -1,0 +1,116 @@
+// Base variables
+$modal-bg-color: rgba(0, 0, 0, 0.6); // Overlay background
+$modal-content-bg: #ffffff;
+$primary-color: #eb2318; // Dark blue for primary buttons
+$button-hover-color: #ba3723; // Slightly lighter blue on hover
+$text-color: #333333;
+$border-radius: 8px;
+$transition-duration: 0.3s;
+
+// Modal overlay styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $modal-bg-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px); // Adds a slight blur for a modern effect
+}
+
+// Modal content styles
+.modal-content {
+  background-color: $modal-content-bg;
+  padding: 2rem;
+  width: 90%;
+  width: 440px;
+  border-radius: $border-radius;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeIn $transition-duration ease-in-out;
+
+  h2 {
+    color: $text-color;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  p {
+    color: darken($text-color, 20%);
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    text-align: center;
+  }
+}
+
+// Modal actions (buttons)
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+
+  button {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: $border-radius;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color $transition-duration ease;
+
+    // Login button style
+    &.login-button {
+      background-color: $primary-color;
+      color: white;
+
+      &:hover {
+        background-color: $button-hover-color;
+      }
+    }
+
+    // Close button style
+    &.close-button {
+      background-color: lighten($primary-color, 40%);
+      color: $primary-color;
+
+      &:hover {
+        background-color: lighten($primary-color, 45%);
+      }
+    }
+  }
+}
+
+// Fade-in animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive behavior
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1.5rem;
+    h2 {
+      font-size: 1.25rem;
+    }
+    p {
+      font-size: 0.9rem;
+    }
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+}

@@ -6,6 +6,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import TermsAndConditionsModal from "../../components/termsandconditionmodal/TermsAndConditionsModal";
 import "./CartPage.scss";
 import OrderHistory from "../../components/orderhistory/orderhistory.jsx";
+import NoCart from "../../components/noCart/noCart.jsx";
 
 const stripePromise = loadStripe(
   "pk_test_51QCPgyI59y4OZCeY8ClSbS7YB3M1Crp6nRDbEcR9T9eoAW312Gy8uqXNWE4Ob5bI3MnN84SPxFUnKYftkoqP3Avw00Pp2oHaCc"
@@ -25,7 +26,7 @@ const CartPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("stripe");
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   console.log("Cart items:", cartItems);
-  
+
   // Load cart items from localStorage on initial render
   useEffect(() => {
     const savedCartItems = JSON.parse(localStorage.getItem("cartItems"));
@@ -148,25 +149,24 @@ const CartPage = () => {
           "Content-Type": "application/json",
         },
       });
-  
+
       if (response.ok) {
         // Check if the item was removed from the backend
         console.log("Item removed from backend successfully");
-  
+
         // Directly update the cartItems state to remove the item
         setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  
+
         // Update CartContext by calling removeFromCart (if necessary)
         removeFromCart(id);
-        window.location.reload(); 
+        window.location.reload();
       } else {
         console.error("Failed to remove item from cart in the database");
       }
     } catch (error) {
       console.error("Error removing item from cart:", error);
     }
-  };  
-  
+  };
 
   return (
     <div className="cart-page">
@@ -174,7 +174,7 @@ const CartPage = () => {
         <h2>Your Cart</h2>
         <div className="cart-items">
           {cartItems.length === 0 ? (
-            <p>Your cart is empty</p>
+            <NoCart />
           ) : (
             cartItems
               .filter((item) => item && item.product.id)
@@ -234,66 +234,63 @@ const CartPage = () => {
           )}
         </div>
 
-        <div className="cart-summary">
-          <p className="cart-total">
-            CART TOTAL:{" "}
-            <span className="total-amount">${totalAmount.toFixed(2)}</span>
-          </p>
+        {cartItems.length > 0 && ( // Render this section only if there are items in the cart
+          <div className="cart-summary">
+            <p className="cart-total">
+              CART TOTAL:{" "}
+              <span className="total-amount">${totalAmount.toFixed(2)}</span>
+            </p>
 
-          {/* Payment Method Selection */}
-          <div className="payment-method">
-          <label
-  className={paymentMethod === "stripe" ? "selected" : ""}
->
-  <input
-    type="radio"
-    name="payment-method"
-    value="stripe"
-    checked={paymentMethod === "stripe"}
-    onChange={() => setPaymentMethod("stripe")}
-  />
-  Pay with Credit Card
-</label>
-<label
-  className={paymentMethod === "cod" ? "selected" : ""}
->
-  <input
-    type="radio"
-    name="payment-method"
-    value="cod"
-    checked={paymentMethod === "cod"}
-    onChange={() => setPaymentMethod("cod")}
-  />
-  Cash on Delivery (COD)
-</label>
+            {/* Payment Method Selection */}
+            <div className="payment-method">
+              <label className={paymentMethod === "stripe" ? "selected" : ""}>
+                <input
+                  type="radio"
+                  name="payment-method"
+                  value="stripe"
+                  checked={paymentMethod === "stripe"}
+                  onChange={() => setPaymentMethod("stripe")}
+                />
+                Pay with Credit Card
+              </label>
+              <label className={paymentMethod === "cod" ? "selected" : ""}>
+                <input
+                  type="radio"
+                  name="payment-method"
+                  value="cod"
+                  checked={paymentMethod === "cod"}
+                  onChange={() => setPaymentMethod("cod")}
+                />
+                Cash on Delivery (COD)
+              </label>
+            </div>
 
+            {/* Terms and Conditions Checkbox */}
+            <div className="terms">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={isTermsAccepted}
+                onChange={() => setIsTermsAccepted(!isTermsAccepted)}
+              />
+              <label htmlFor="terms">
+                <b>*TERMS AND CONDITIONS</b>
+              </label>
+              <span className="terms-link" onClick={() => setIsModalOpen(true)}>
+                (Read Terms and Conditions)
+              </span>
+            </div>
+
+            <div className="cart-options">
+              <button className="back-button" onClick={() => navigate(-1)}>
+                BACK
+              </button>
+              <button className="checkout-button" onClick={handleCheckout}>
+                PROCEED TO CHECKOUT
+              </button>
+            </div>
           </div>
-
-          {/* Terms and Conditions Checkbox */}
-          <div className="terms">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={isTermsAccepted}
-              onChange={() => setIsTermsAccepted(!isTermsAccepted)}
-            />
-            <label htmlFor="terms">
-              <b>*TERMS AND CONDITIONS</b>
-            </label>
-            <span className="terms-link" onClick={() => setIsModalOpen(true)}>
-              (Read Terms and Conditions)
-            </span>
-          </div>
-
-          <div className="cart-options">
-            <button className="back-button" onClick={() => navigate(-1)}>
-              BACK
-            </button>
-            <button className="checkout-button" onClick={handleCheckout}>
-              PROCEED TO CHECKOUT
-            </button>
-          </div>
-        </div>
+        )}
       </div>
       <TermsAndConditionsModal
         isOpen={isModalOpen}

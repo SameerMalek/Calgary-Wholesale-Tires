@@ -205,7 +205,7 @@
 //         display: flex;
 //         align-items: center;
 //         gap: 20px;
-      
+
 //         .profile,
 //         .order-history,
 //         .cart {
@@ -215,25 +215,24 @@
 //           font-size: 16px;
 //           color: inherit;
 //           text-decoration: none;
-      
+
 //           img {
 //             width: 25px;
-//             height: 25px; 
+//             height: 25px;
 //           }
-      
+
 //           span {
 //             font-size: 16px;
 //             font-weight: 600;
 //             color: #333;
 //           }
-      
+
 //           &:hover {
 //             color: #007bff;
 //             cursor: pointer;
 //           }
 //         }
 //       }
-      
 
 //         .cart {
 //           display: flex;
@@ -327,7 +326,6 @@
 //       }
 //     }
 //   }
-
 
 // .right {
 //   display: flex;
@@ -538,6 +536,11 @@ nav {
       border-radius: 9999px;
       background-color: #e5e7eb;
       height: 50px;
+      margin-left: -260px; // Default for not signed in
+
+      &.signed-in {
+        margin-left: -123px; // Adjusted margin for signed-in users
+      }
 
       @include sm {
         display: none;
@@ -589,11 +592,35 @@ nav {
 
     // Updated My Account Styling
     .my-account-link {
-      display: inline-block;
+      display: flex;
+      text-align: center;
+      align-items: center;
       font-size: 16px;
       font-weight: bold;
       text-transform: capitalize; /* Ensure consistent text case */
       color: black; /* Primary blue color */
+      // padding: 0.5rem;
+
+      .bookingIcon {
+        color: #6b7280;
+        width: 25px;
+        height: 34px;
+        border: none;
+        background: none;
+        margin-right: 7px;
+
+        .svg {
+          width: 21px;
+          height: 18px;
+        }
+
+        &:hover {
+          transition: all 0.4s ease;
+          color: black;
+          cursor: pointer;
+          scale: 1.05;
+        }
+      }
     }
 
     .right {
@@ -613,7 +640,7 @@ nav {
       .user-options {
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 27px;
 
         .profile,
         .order-history,

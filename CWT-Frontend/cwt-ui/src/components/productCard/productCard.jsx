@@ -16,6 +16,7 @@ const ProductCard = ({ name,id, image }) => {
 
 ProductCard.propTypes = {
   name: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
 };
 

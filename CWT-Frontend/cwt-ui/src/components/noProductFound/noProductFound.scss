@@ -1,0 +1,36 @@
+.no-products-found {
+    text-align: center;
+    padding: 20px;
+    width: 889px
+  }
+  
+  .no-products-image {
+    width: 534px;
+    height: auto;
+    margin-bottom: -41px;
+  }
+  
+  .no-products-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .no-products-message {
+    font-size: 16px;
+    color: #959190;
+    margin-bottom: 20px;
+  }
+  
+  .clear-filters-button {
+    background-color: #ed3926;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .clear-filters-button:hover {
+    background-color: #d93737;
+  }
+  

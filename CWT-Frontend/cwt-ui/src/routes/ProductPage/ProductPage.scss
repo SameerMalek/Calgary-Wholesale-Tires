@@ -40,6 +40,7 @@
     .disclosure-button {
       display: flex;
       border: none;
+      border-radius: 10px;
       width: 100%;
       justify-content: space-between;
       align-items: center;
@@ -51,8 +52,8 @@
       transition: background-color 0.3s ease, color 0.3s ease;
 
       &:hover {
-        background-color: rgba(29, 78, 216, 0.1); // Subtle background on hover
-        color: #1d4ed8; // Change text color on hover
+        background-color: rgba(211, 29, 29, 0.164);
+        color:#ed3926 ;
       }
 
       .toggle-icon {
@@ -101,9 +102,8 @@
       border: 1px solid #d1d5db;
       margin-right: 10px;
       cursor: pointer; // Change cursor for checkboxes
-
       &:checked {
-        background-color: #1d4ed8; // Highlight when checked
+        background-color:#ed3926; // Highlight when checked
       }
     }
 
@@ -113,7 +113,7 @@
       cursor: pointer; // Change cursor for labels
 
       &:hover {
-        color: #1d4ed8; // Change label color on hover
+        color:#e27564; // Change label color on hover
       }
     }
   }
@@ -176,4 +176,5 @@
       }
     }
   }
+  
 }

@@ -39,7 +39,10 @@ const Footer = () => {
             <li>
               <a href="/">Privacy</a>
             </li>
-            <li><a href="/admin/admin-login">Admin Dashboard</a></li>          </ul>
+            <li>
+              <a href="/admin/admin-login">Admin Dashboard</a>
+            </li>
+          </ul>
         </div>
         <div className="footer-socials">
           <h3>SOCIALS</h3>
@@ -48,11 +51,11 @@ const Footer = () => {
               <i className="fab fa-instagram"></i>
             </a>
             <a href="https://facebook.com" target="_blank" rel="noreferrer">
-            <i className="fab fa-facebook-f"></i>
+              <i className="fab fa-facebook-f"></i>
             </a>
             <a href="https://twitter.com" target="_blank" rel="noreferrer">
-            <i className="fab fa-twitter"></i>
-            </a>  
+              <i className="fab fa-twitter"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -70,6 +73,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-
-

@@ -1,5 +1,5 @@
-import { Link, useParams } from "react-router-dom";
-import React, { useEffect, useState, useCallback } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import {
   Disclosure,
   DisclosureButton,
@@ -8,6 +8,9 @@ import {
 import { PlusIcon, MinusIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import "./ProductPage.scss";
+import { AuthContext } from "./../../context/AuthContext";
+import LoginModal from './../../components/LoginModal/loginModal';
+import NoProductsFound from "../../components/noProductFound/noProductFound";
 
 const filters = {
   tires: [
@@ -131,8 +134,19 @@ const filters = {
   ],
 };
 
+const useScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to the top of the page
+  }, [pathname]);
+};
+
 const ProductPage = () => {
   const { categoryId } = useParams();
+  const { currentUser } = useContext(AuthContext);
+  const [isModalOpen, setModalOpen] = useState(false);
+  useScrollToTop();
   // console.log(categoryId);
   const [selectedFilters, setSelectedFilters] = useState({
     width: [],
@@ -153,6 +167,17 @@ const ProductPage = () => {
         ? prevFilters[filterId].filter((item) => item !== value)
         : [...prevFilters[filterId], value],
     }));
+  };
+
+  const handleClearFilters = () => {
+    setSelectedFilters({
+      width: [],
+      aspectRatio: [],
+      rimSize: [],
+      productType: [],
+      brand: [],
+      availability: [],
+    });
   };
 
   const getFiltersForCategory = () => {
@@ -184,7 +209,9 @@ const ProductPage = () => {
         selectedFilters.rimSize.includes(product.rimSize?.toString() || "");
       const productTypeMatch =
         selectedFilters.productType.length === 0 ||
-        selectedFilters.productType.includes(product.productType?.toLowerCase() || "");
+        selectedFilters.productType.includes(
+          product.productType?.toLowerCase() || ""
+        );
       const brandMatch =
         selectedFilters.brand.length === 0 ||
         selectedFilters.brand.includes(product.brand?.toLowerCase() || "");
@@ -232,6 +259,7 @@ const ProductPage = () => {
 
   return (
     <div className="product-page">
+      <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
       <div className="container">
         {/* Sidebar Filters */}
         <aside className="filter-section">
@@ -288,7 +316,15 @@ const ProductPage = () => {
           {filteredProducts && filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <div key={product.id} className="product-item">
-                <Link to={`/product/${product.id}`}>
+                <Link
+                  to={currentUser ? `/product/${product.id}` : "#"}
+                  onClick={(e) => {
+                    if (!currentUser) {
+                      e.preventDefault(); // Prevents navigation
+                      setModalOpen(true);
+                    }
+                  }}
+                >
                   <img
                     src={product.featuredImage}
                     alt={product.name}
@@ -298,18 +334,20 @@ const ProductPage = () => {
                     <h3 className="product-name">{product.name}</h3>
                     <p className="product-description-title">DESCRIPTION</p>
                     <p className="product-description">{product.description}</p>
-                    <p>
-                      <strong>Price:</strong> $
-                      {product.price ? product.price.toFixed(2) : "N/A"}
-                    </p>
+                    {/* Conditional Price Display */}
+                    {currentUser ? (
+                      <p>
+                        <strong>Price:</strong> $
+                        {product.price ? product.price.toFixed(2) : "N/A"}
+                      </p>
+                    ) : (
+                      ""
+                    )}
                     <p>
                       <strong>Availability:</strong>{" "}
                       {product.availability || "N/A"}
                     </p>
-                    <p>
-                      <strong>Stock Quantity:</strong>{" "}
-                      {product.stockQuantity || "N/A"}
-                    </p>
+
                     <p>
                       <strong>Width:</strong> {product.tireWidth || "N/A"}
                     </p>
@@ -328,7 +366,7 @@ const ProductPage = () => {
               </div>
             ))
           ) : (
-            <p>No products found with selected filters.</p>
+            <NoProductsFound onClearFilters={handleClearFilters} />
           )}
         </div>
       </div>

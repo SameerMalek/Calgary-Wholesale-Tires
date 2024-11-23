@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../filtered-products/filterProductPage.scss";
+import { AuthContext } from "../../context/AuthContext";
+import LoginModal from "../../components/LoginModal/loginModal";
 
 const FilteredProductPage = () => {
+  const { currentUser } = useContext(AuthContext);
+  const [isModalOpen, setModalOpen] = useState(false);
   const location = useLocation();
   console.log("Location state:", location.state);
   const navigate = useNavigate();
@@ -20,6 +24,7 @@ const FilteredProductPage = () => {
 
   return (
     <div className="filteredproduct-page">
+      <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
       <div className="container">
         {/* Filtered Products Section */}
         <section className="filtered-section">
@@ -30,7 +35,10 @@ const FilteredProductPage = () => {
                 <div
                   key={product.id}
                   className="product-item"
-                  onClick={() => handleProductClick(product.id)}
+                  onClick={(e) => {if(currentUser) {handleProductClick(product.id)} else{
+                    e.preventDefault(); // Prevents navigation
+                    setModalOpen(true);
+                  }}}
                   style={{ cursor: "pointer" }}
                 >
                   <img
@@ -62,7 +70,10 @@ const FilteredProductPage = () => {
                 <div
                   key={product.id}
                   className="product-item"
-                  onClick={() => handleProductClick(product.id)}
+                  onClick={(e) => {if(currentUser) {handleProductClick(product.id)} else{
+                    e.preventDefault(); // Prevents navigation
+                    setModalOpen(true);
+                  }}}
                   style={{ cursor: "pointer" }}
                 >
                   <img
