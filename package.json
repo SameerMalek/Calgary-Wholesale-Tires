@@ -11,7 +11,8 @@
     "start": "nodemon CWT-Backend/api/app.js",
     "dev": "nodemon CWT-Backend/api/app.js",
     "build": "npm install && npm install --prefix CWT-Frontend/cwt-ui && npm run build --prefix CWT-Frontend/cwt-ui",
-    "seed": "node CWT-Backend/api/prisma/seed.js"
+    "seed": "node CWT-Backend/api/prisma/seed.js",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "node CWT-Backend/api/prisma/seed.js"
