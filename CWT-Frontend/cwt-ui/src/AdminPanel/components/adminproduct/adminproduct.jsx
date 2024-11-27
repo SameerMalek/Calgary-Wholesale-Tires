@@ -36,7 +36,7 @@ const AdminProductPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:8800/api/category");
+        const response = await fetch("https://calgary-wholesale-tires.onrender.com/api/category");
         const data = await response.json();
         setCategories(data.categories || []);
       } catch (error) {
@@ -138,10 +138,10 @@ const AdminProductPage = () => {
       })), // Map images to new structure
     };
 
-    console.log("Submitting product:", productToSubmit);
+    // console.log("Submitting product:", productToSubmit);
 
     try {
-      const response = await fetch("http://localhost:8800/api/product", {
+      const response = await fetch("https://calgary-wholesale-tires.onrender.com/api/product", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -150,10 +150,10 @@ const AdminProductPage = () => {
       });
 
       const result = await response.json();
-      console.log(result);
+      // console.log(result);
 
       if (response.ok) {
-        console.log("Product successfully added");
+        // console.log("Product successfully added");
 
         setProduct({
           name: "",

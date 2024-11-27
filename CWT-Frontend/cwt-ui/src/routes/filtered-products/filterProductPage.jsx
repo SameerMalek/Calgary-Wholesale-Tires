@@ -8,7 +8,7 @@ const FilteredProductPage = () => {
   const { currentUser } = useContext(AuthContext);
   const [isModalOpen, setModalOpen] = useState(false);
   const location = useLocation();
-  console.log("Location state:", location.state);
+  // console.log("Location state:", location.state);
   const navigate = useNavigate();
   const { filteredProducts = [], allProducts = [] } = location.state || {};
 

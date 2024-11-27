@@ -21,8 +21,6 @@ const CartProvider = ({ children }) => {
   useEffect(() => {
     try {
       const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-      console.log('Retrieved cartItems from localStorage on initial load:', storedCartItems); // Debug log
-
       if (Array.isArray(storedCartItems)) {
         setCartItems(storedCartItems);
         calculateTotal(storedCartItems);
@@ -38,7 +36,7 @@ const CartProvider = ({ children }) => {
     const fetchCartItems = async () => {
       if (currentUser) {
         try {
-          const response = await fetch(`http://localhost:8800/api/user/${currentUser.id}/cart`);
+          const response = await fetch(`https://calgary-wholesale-tires.onrender.com/api/user/${currentUser.id}/cart`);
           console.log(response);
           const data = await response.json();
           setCartItems(data.cartItems);
@@ -47,6 +45,7 @@ const CartProvider = ({ children }) => {
         }
       }
     };
+    console.log(cartItems);
     fetchCartItems();
   }, [currentUser]);
 
@@ -67,7 +66,7 @@ const CartProvider = ({ children }) => {
   
     if (currentUser) {
       try {
-        await fetch('http://localhost:8800/api/cart', {
+        await fetch('https://calgary-wholesale-tires.onrender.com/api/cart', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

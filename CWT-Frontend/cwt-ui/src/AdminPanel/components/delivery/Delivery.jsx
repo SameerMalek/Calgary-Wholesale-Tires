@@ -73,7 +73,7 @@ const Delivery = () => {
       }
 
       const response = await fetch(
-        `http://localhost:8800/api/orders/order/${orderId}/invoice`,
+        `https://calgary-wholesale-tires.onrender.com/api/orders/order/${orderId}/invoice`,
         { method: "GET" }
       );
 

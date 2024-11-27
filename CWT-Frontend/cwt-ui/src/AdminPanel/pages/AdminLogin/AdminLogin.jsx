@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AdminLogin.scss";
 
-const API_BASE_URL = "http://localhost:8800";
+const API_BASE_URL = "https://calgary-wholesale-tires.onrender.com";
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({

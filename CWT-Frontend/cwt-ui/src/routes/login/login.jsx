@@ -36,7 +36,7 @@ export default function Login() {
         { email, password },
         { withCredentials: true }
       );
-      console.log("Response Data:", res.data); 
+      // console.log("Response Data:", res.data); 
 
       // Check if the account is approved
       if (!res.data.isApproved) {

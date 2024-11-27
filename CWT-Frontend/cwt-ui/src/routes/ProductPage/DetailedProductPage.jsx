@@ -19,7 +19,7 @@ const DetailedProductPage = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8800/api/product/${id}`
+          `https://calgary-wholesale-tires.onrender.com/api/product/${id}`
         );
         setProduct(response.data.product);
         setSelectedVariant(response.data.product?.variants?.[0] || null);
@@ -45,6 +45,53 @@ const DetailedProductPage = () => {
     navigate("/cart");
   };
 
+<<<<<<< HEAD
+=======
+
+  const handleAddToWishlist = async () => {
+    try {
+        // Function to get the token from cookies
+        const getTokenFromCookies = () => {
+            // console.log("All cookies:", document.cookie); // Log all cookies for debugging
+            const cookies = document.cookie.split("; ");
+            const tokenCookie = cookies.find(row => row.startsWith("token="));
+            return tokenCookie ? tokenCookie.split("=")[1] : null;
+        };
+
+        const token = getTokenFromCookies();
+        
+        if (!token) {
+            console.error("Token is missing or invalid.");
+            alert("You need to log in to add items to your wishlist.");
+            return;
+        }
+
+        const response = await axios.post(
+          "https://calgary-wholesale-tires.onrender.com/api/wishlist",
+          { product_id: product.id },
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+              withCredentials: true // Enable cookies for cross-origin requests
+          }
+      );
+        alert("Item added to wishlist!");
+    } catch (error) {
+        console.error("Error adding item to wishlist:", error.response || error);
+
+        if (error.response?.status === 403) {
+            alert("Session expired or invalid token. Please log in again.");
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // Clear token cookie
+        } else {
+            alert("Failed to add item to wishlist. Please try again.");
+        }
+    }
+};
+
+
+
+>>>>>>> 55cfa206783cfa8b802eb7948e66687dc4fe064a
   const handleVariantClick = (variant) => {
     setSelectedVariant(variant);
   };

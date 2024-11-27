@@ -117,7 +117,7 @@ export const AuthContextProvider = ({ children }) => {
   const login = async (credentials) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:8800/api/auth/login", credentials); // Replace with your actual API endpoint
+      const response = await axios.post("https://calgary-wholesale-tires.onrender.com/api/auth/login", credentials); // Replace with your actual API endpoint
       updateUser(response.data); // Assuming the API returns user data
       setError(null);
     } catch (err) {

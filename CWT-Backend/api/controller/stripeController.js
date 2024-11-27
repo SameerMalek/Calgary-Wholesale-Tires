@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { addOrder } from "../controller/order.controller.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const YOUR_DOMAIN = "http://localhost:3000";
+const YOUR_DOMAIN = "https://calgary-wholesale-tires.onrender.com";
 
 export const createCheckoutSession = async (req, res) => {
   try {
@@ -10,7 +10,7 @@ export const createCheckoutSession = async (req, res) => {
       req.body;
 
     // Validate input data (log them)
-    console.log("Received data:", req.body);
+    // console.log("Received data:", req.body);
 
     // Create a checkout session with Stripe
     const session = await stripe.checkout.sessions.create({

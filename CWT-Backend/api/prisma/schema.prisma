@@ -348,12 +348,22 @@ model Order {
 //   product     Product? @relation(fields: [product_id], references: [id]) // Make product nullable
 // }
 model OrderItem {
+<<<<<<< HEAD
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   orderId   String   @db.ObjectId
   productId String   @db.ObjectId
   quantity  Int?     // Nullable
   price     Float
   createdAt DateTime @default(now())
+=======
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  product_id  String?  @db.ObjectId // Make product_id nullable
+  quantity    Int?
+  price       Float
+  total_price Float?
+  order       Order    @relation(fields: [order_id], references: [id])
+  order_id    String   @db.ObjectId
+>>>>>>> 55cfa206783cfa8b802eb7948e66687dc4fe064a
 
   // Relations
   order   Order   @relation(fields: [orderId], references: [id])
