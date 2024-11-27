@@ -60,16 +60,14 @@ const CartPage = () => {
     const billingAddress = address;
 
     // Sanitize cart items
-    const sanitizedItems = cartItems.map((item) => {
-      // const quantity = item.quantity || 1; // Default to 1 if undefined
-      return {
-        productId: item.product.id,
-        quantity: item.quantity,
-        price: item.product.price,
-        total_price: item.product.price * item.quantity,
-      };
-    });
-    console.log("Sanitized Items:",sanitizedItems);
+    const sanitizedItems = cartItems.map((item) => ({
+      productId: item.product.id,
+      quantity: item.quantity,
+      price: item.product.price,
+      total_price: item.product.price * item.quantity,
+    }));
+    
+    console.log("Sanitized Items:", sanitizedItems);
     console.log("Shipping Address:", shippingAddress);
     console.log("Billing Address:", billingAddress);
 
@@ -119,24 +117,27 @@ const CartPage = () => {
     } else if (paymentMethod === "cod") {
       // Create the order on backend even for COD
       try {
-        const response = await fetch("https://calgary-wholesale-tires.onrender.com/api/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_id: userId,
-            total_amount: totalAmount,
-            shipping_address: shippingAddress,
-            billing_address: billingAddress,
-            orderItems: sanitizedItems.map((item) => ({
-              product_id: item.productId || item.product_id,
-              quantity: item.quantity,
-              price: item.price,
-              total_price: item.total_price,
-            })),
-          }),
-        });
+        const response = await fetch(
+          "https://calgary-wholesale-tires.onrender.com/api/orders",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user_id: userId,
+              total_amount: totalAmount,
+              shipping_address: shippingAddress,
+              billing_address: billingAddress,
+              orderItems: sanitizedItems.map((item) => ({
+                product_id: item.productId || item.product_id,
+                quantity: item.quantity,
+                price: item.price,
+                total_price: item.total_price,
+              })),
+            }),
+          }
+        );
 
         const order = await response.json();
         console.log("Order created:", order); // Debugging: Log the created order response
@@ -150,12 +151,15 @@ const CartPage = () => {
   const handleRemoveFromCart = async (id) => {
     console.log("Removing item with cartId:", id);
     try {
-      const response = await fetch(`https://calgary-wholesale-tires.onrender.com/api/cart/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://calgary-wholesale-tires.onrender.com/api/cart/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         // Check if the item was removed from the backend
