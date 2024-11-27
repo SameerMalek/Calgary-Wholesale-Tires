@@ -82,7 +82,7 @@ export const addOrder = async (req, res) => {
         total_amount: parseFloat(total_amount),
         shipping_address,
         billing_address: JSON.stringify(billing_address),
-        status: "pending",
+        status: status|| "pending",
         payment_status: payment_status || "pending",
       },
     });

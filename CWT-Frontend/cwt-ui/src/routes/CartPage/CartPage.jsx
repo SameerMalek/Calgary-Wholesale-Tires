@@ -129,6 +129,8 @@ const CartPage = () => {
               total_amount: totalAmount,
               shipping_address: shippingAddress,
               billing_address: billingAddress,
+              status: 'pending',
+              payment_status: 'pending', 
               orderItems: sanitizedItems.map((item) => ({
                 product_id: item.productId || item.product_id,
                 quantity: item.quantity,
