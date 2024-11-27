@@ -11,6 +11,23 @@ export const createCheckoutSession = async (req, res) => {
 
     // Validate input data (log them)
     // console.log("Received data:", req.body);
+    if (!items || items.length === 0) {
+      return res.status(400).json({ error: "No items provided for checkout." });
+    }
+
+    const hasInvalidItems = items.some(
+      (item) => !item.name || !item.price || item.price <= 0 || !item.quantity || item.quantity <= 0
+    );
+
+    if (hasInvalidItems) {
+      return res.status(400).json({ error: "Invalid items in the request." });
+    }
+
+    // Validate total amount
+    const calculatedTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    if (total_amount !== calculatedTotal) {
+      return res.status(400).json({ error: "Total amount mismatch." });
+    }
 
     // Create a checkout session with Stripe
     const session = await stripe.checkout.sessions.create({
@@ -21,7 +38,7 @@ export const createCheckoutSession = async (req, res) => {
           product_data: {
             name: item.name,
           },
-          unit_amount: item.price * 100, // Convert to cents
+          unit_amount: Math.round(item.price * 100), // Convert to cents
         },
         quantity: item.quantity,
       })),
@@ -34,7 +51,7 @@ export const createCheckoutSession = async (req, res) => {
         items: JSON.stringify(items), // Serialize items for order creation
       },
     });
-    console.log("Stripe session created:", session);
+    // console.log("Stripe session created:", session);
 
     // Send the session ID back to the frontend
     res.json({ id: session.id });
