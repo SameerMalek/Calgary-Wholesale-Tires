@@ -3,7 +3,7 @@ import easyinvoice from "easyinvoice";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import Stripe from "stripe"; 
+import Stripe from "stripe";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +13,18 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const createOrder = async (req, res) => {
   const { user_id, items, shipping_address, billing_address, total_amount } =
     req.body;
+
+  console.log("Items received:", items);
+  console.log("Items type:", typeof items);
+  console.log("Is items an array?", Array.isArray(items));
+
+  // Add validation checks
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({
+      message: "Invalid or empty order items",
+      receivedItems: items,
+    });
+  }
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(total_amount * 100), // amount in cents
@@ -30,7 +42,7 @@ export const createOrder = async (req, res) => {
         payment_status: "pending",
         orderItems: {
           create: items.map((item) => ({
-            product_id: item.productId,
+            product_id: item.productId || item.product_id,
             quantity: item.quantity,
             price: item.price,
             total_price: item.price * item.quantity,

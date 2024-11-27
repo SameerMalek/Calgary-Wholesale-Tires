@@ -10,7 +10,7 @@ export const createCheckoutSession = async (req, res) => {
       req.body;
 
     // Validate input data (log them)
-    // console.log("Received data:", req.body);
+    console.log("Received data:", req.body);
     if (!items || items.length === 0) {
       return res.status(400).json({ error: "No items provided for checkout." });
     }

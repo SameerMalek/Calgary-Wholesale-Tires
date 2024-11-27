@@ -130,7 +130,7 @@ const CartPage = () => {
             shipping_address: shippingAddress,
             billing_address: billingAddress,
             orderItems: sanitizedItems.map((item) => ({
-              product_id: item.productId,
+              product_id: item.productId || item.product_id,
               quantity: item.quantity,
               price: item.price,
               total_price: item.total_price,
