@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./AdminRegister.scss";
 
-const API_BASE_URL = "http://localhost:8800";
+const API_BASE_URL = "https://calgary-wholesale-tires.onrender.com";
 
 const AdminRegister = () => {
   const [formData, setFormData] = useState({

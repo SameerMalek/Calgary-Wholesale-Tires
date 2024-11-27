@@ -20,7 +20,7 @@ const Navbar = () => {
       // console.log("Searching for:", searchQuery);
       // Make API call to fetch products based on search query
       const response = await axios.get(
-        `http://localhost:8800/api/products/search`,
+        `https://calgary-wholesale-tires.onrender.com/api/products/search`,
         {
           params: { query: searchQuery },
         }

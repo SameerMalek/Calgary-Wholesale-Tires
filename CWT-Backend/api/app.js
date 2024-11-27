@@ -40,7 +40,7 @@ const _dirname = path.resolve();
 // Use CORS to allow requests from http://localhost:3000
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://calgary-wholesale-tires.onrender.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

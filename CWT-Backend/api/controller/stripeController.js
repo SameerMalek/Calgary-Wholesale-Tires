@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { addOrder } from "../controller/order.controller.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const YOUR_DOMAIN = "http://localhost:8800";
+const YOUR_DOMAIN = "https://calgary-wholesale-tires.onrender.com";
 
 export const createCheckoutSession = async (req, res) => {
   try {

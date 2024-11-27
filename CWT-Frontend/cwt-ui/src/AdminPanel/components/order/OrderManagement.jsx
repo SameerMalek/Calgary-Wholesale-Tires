@@ -387,7 +387,7 @@ const OrderManagement = () => {
     const fetchOrders = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:8800/api/orders/all");
+        const response = await axios.get("https://calgary-wholesale-tires.onrender.com/api/orders/all");
         setOrders(response.data || {});
       } catch (err) {
         console.error("Error fetching orders:", err);
@@ -406,7 +406,7 @@ const OrderManagement = () => {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       console.log("Updating order status:", { orderId, newStatus });
-      const response = await axios.put(`http://localhost:8800/api/orders/order/${orderId}`, { status: newStatus });
+      const response = await axios.put(`https://calgary-wholesale-tires.onrender.com/api/orders/order/${orderId}`, { status: newStatus });
       console.log("API Response:", response.data);
   
       setOrders((prevOrders) => {
@@ -443,7 +443,7 @@ const OrderManagement = () => {
   const handleCancel = async (orderId) => {
     try {
       // Cancel the order and get the response
-      const response = await axios.delete(`http://localhost:8800/api/orders/order/${orderId}`);
+      const response = await axios.delete(`https://calgary-wholesale-tires.onrender.com/api/orders/order/${orderId}`);
       const { message, refund } = response.data;
   
       // Notify the user

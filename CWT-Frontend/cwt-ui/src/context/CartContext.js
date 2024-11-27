@@ -36,7 +36,7 @@ const CartProvider = ({ children }) => {
     const fetchCartItems = async () => {
       if (currentUser) {
         try {
-          const response = await fetch(`http://localhost:8800/api/user/${currentUser.id}/cart`);
+          const response = await fetch(`https://calgary-wholesale-tires.onrender.com/api/user/${currentUser.id}/cart`);
           console.log(response);
           const data = await response.json();
           setCartItems(data.cartItems);
@@ -66,7 +66,7 @@ const CartProvider = ({ children }) => {
   
     if (currentUser) {
       try {
-        await fetch('http://localhost:8800/api/cart', {
+        await fetch('https://calgary-wholesale-tires.onrender.com/api/cart', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

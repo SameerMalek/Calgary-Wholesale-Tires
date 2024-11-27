@@ -402,7 +402,7 @@ const AdProduct = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:8800/api/product");
+        const response = await axios.get("https://calgary-wholesale-tires.onrender.com/api/product");
         setProducts(response.data.products || []);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -427,7 +427,7 @@ const AdProduct = () => {
   const handleSave = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8800/api/product/${editingProduct.id}`,
+        `https://calgary-wholesale-tires.onrender.com/api/product/${editingProduct.id}`,
         editingProduct
       );
       if (response.status === 200) {
@@ -446,7 +446,7 @@ const AdProduct = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:8800/api/product/${id}`);
+      const response = await axios.delete(`https://calgary-wholesale-tires.onrender.com/api/product/${id}`);
       if (response.status === 200) {
         const updatedProducts = products.filter((product) => product.id !== id);
         setProducts(updatedProducts);

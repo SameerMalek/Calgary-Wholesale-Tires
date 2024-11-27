@@ -78,7 +78,7 @@ const CartPage = () => {
       try {
         console.log("Sending data to backend for Stripe Checkout...");
         const response = await fetch(
-          "http://localhost:8800/api/stripe/create-checkout-session",
+          "https://calgary-wholesale-tires.onrender.com/api/stripe/create-checkout-session",
           {
             method: "POST",
             headers: {
@@ -119,7 +119,7 @@ const CartPage = () => {
     } else if (paymentMethod === "cod") {
       // Create the order on backend even for COD
       try {
-        const response = await fetch("http://localhost:8800/api/orders", {
+        const response = await fetch("https://calgary-wholesale-tires.onrender.com/api/orders", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -150,7 +150,7 @@ const CartPage = () => {
   const handleRemoveFromCart = async (id) => {
     console.log("Removing item with cartId:", id);
     try {
-      const response = await fetch(`http://localhost:8800/api/cart/${id}`, {
+      const response = await fetch(`https://calgary-wholesale-tires.onrender.com/api/cart/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

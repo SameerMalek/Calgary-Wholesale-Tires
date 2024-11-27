@@ -19,7 +19,7 @@ const DetailedProductPage = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8800/api/product/${id}`
+          `https://calgary-wholesale-tires.onrender.com/api/product/${id}`
         );
         setProduct(response.data.product);
         setSelectedVariant(response.data.product?.variants?.[0] || null);
@@ -65,7 +65,7 @@ const DetailedProductPage = () => {
         }
 
         const response = await axios.post(
-          "http://localhost:8800/api/wishlist",
+          "https://calgary-wholesale-tires.onrender.com/api/wishlist",
           { product_id: product.id },
           {
               headers: {

@@ -36,7 +36,7 @@ const AdminProductPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:8800/api/category");
+        const response = await fetch("https://calgary-wholesale-tires.onrender.com/api/category");
         const data = await response.json();
         setCategories(data.categories || []);
       } catch (error) {
@@ -141,7 +141,7 @@ const AdminProductPage = () => {
     // console.log("Submitting product:", productToSubmit);
 
     try {
-      const response = await fetch("http://localhost:8800/api/product", {
+      const response = await fetch("https://calgary-wholesale-tires.onrender.com/api/product", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

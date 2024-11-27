@@ -238,7 +238,7 @@ const ProductPage = () => {
   const fetchProducts = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8800/api/category/${categoryId}/products`
+        `https://calgary-wholesale-tires.onrender.com/api/category/${categoryId}/products`
       );
       setAllProducts(response.data.products || []);
       setFilteredProducts(response.data.products || []);

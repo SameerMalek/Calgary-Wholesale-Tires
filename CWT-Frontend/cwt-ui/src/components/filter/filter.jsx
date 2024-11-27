@@ -80,7 +80,7 @@ const Filter = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:8800/api/filter");
+        const response = await axios.get("https://calgary-wholesale-tires.onrender.com/api/filter");
         // console.log("API Response:", response.data);
   
         // Check if the data is an array or contains products in a 'products' key
@@ -116,7 +116,7 @@ const Filter = () => {
   
     try {
       // Fetch products from the API
-      const response = await axios.get("http://localhost:8800/api/filter");
+      const response = await axios.get("https://calgary-wholesale-tires.onrender.com/api/filter");
       
       // Ensure you're handling the response properly
       const data = response.data; // Assign the response data
