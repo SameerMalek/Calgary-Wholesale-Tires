@@ -45,73 +45,6 @@ const DetailedProductPage = () => {
     navigate("/cart");
   };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> parent of 33b8e541 (UI changes)
-
-  const handleAddToWishlist = async () => {
-    try {
-        // Function to get the token from cookies
-        const getTokenFromCookies = () => {
-<<<<<<< HEAD
-            // console.log("All cookies:", document.cookie); // Log all cookies for debugging
-=======
-            console.log("All cookies:", document.cookie); // Log all cookies for debugging
->>>>>>> parent of 33b8e541 (UI changes)
-            const cookies = document.cookie.split("; ");
-            const tokenCookie = cookies.find(row => row.startsWith("token="));
-            return tokenCookie ? tokenCookie.split("=")[1] : null;
-        };
-
-        const token = getTokenFromCookies();
-        
-        if (!token) {
-            console.error("Token is missing or invalid.");
-            alert("You need to log in to add items to your wishlist.");
-            return;
-        }
-
-        const response = await axios.post(
-<<<<<<< HEAD
-          "https://calgary-wholesale-tires.onrender.com/api/wishlist",
-=======
-          "http://localhost:8800/api/wishlist",
->>>>>>> parent of 33b8e541 (UI changes)
-          { product_id: product.id },
-          {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-              },
-              withCredentials: true // Enable cookies for cross-origin requests
-          }
-      );
-<<<<<<< HEAD
-=======
-      
-
-        console.log("Item added to wishlist:", response.data);
->>>>>>> parent of 33b8e541 (UI changes)
-        alert("Item added to wishlist!");
-    } catch (error) {
-        console.error("Error adding item to wishlist:", error.response || error);
-
-        if (error.response?.status === 403) {
-            alert("Session expired or invalid token. Please log in again.");
-            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // Clear token cookie
-        } else {
-            alert("Failed to add item to wishlist. Please try again.");
-        }
-    }
-};
-
-
-
-<<<<<<< HEAD
->>>>>>> 55cfa206783cfa8b802eb7948e66687dc4fe064a
-=======
->>>>>>> parent of 33b8e541 (UI changes)
   const handleVariantClick = (variant) => {
     setSelectedVariant(variant);
   };
@@ -124,29 +57,97 @@ const DetailedProductPage = () => {
     <div className="detailed-product-page">
       <div className="container">
         <div className="product-detail">
+          {/* Product Image */}
           <img
-            src={selectedVariant?.image || product?.featuredImage || "default-image.jpg"}
+            src={
+              selectedVariant?.image ||
+              product?.featuredImage ||
+              "default-image.jpg"
+            }
             alt={selectedVariant?.title || product?.name || "Product Image"}
             className="product-image"
           />
-          <div className="product-info">
-            <h2 className="product-name">{product?.name || selectedVariant?.title}</h2>
-            <p className="product-description-title">DESCRIPTION</p>
-            <p className="product-description">{product?.description || "No description available"}</p>
-            <p><strong>Brand:</strong> {product?.brand || "N/A"}</p>
-            <p><strong>SKU:</strong> {selectedVariant?.sku || product?.sku || "N/A"}</p>
-            <p><strong>Price:</strong> ${selectedVariant?.price || product?.price}</p>
-            {product?.compareAtPrice && (
-              <p><strong>Was:</strong> ${selectedVariant?.compareAtPrice || product.compareAtPrice}</p>
-            )}
-            <p><strong>Availability:</strong> {selectedVariant?.availability || product?.availability || "Unknown"}</p>
 
-            <h3>Specifications</h3>
-            <p><strong>Tire Width:</strong> {product?.tireWidth || "N/A"} mm</p>
-            <p><strong>Aspect Ratio:</strong> {product?.aspectRatio || "N/A"}</p>
-            <p><strong>Rim Size:</strong> {product?.rimSize || "N/A"} inches</p>
-            <p><strong>Weight:</strong> {product?.weight || "N/A"} kg</p>
-            <p><strong>Dimensions:</strong> {product?.dimensions?.length || "N/A"} x {product?.dimensions?.width || "N/A"} x {product?.dimensions?.height || "N/A"} inches</p>
+          {/* Product Info */}
+          <div className="product-info">
+            <h2 className="product-name">
+              {product?.name || selectedVariant?.title}
+            </h2>
+
+            {/* Product Price */}
+            <div className="product-price">
+              <h3>Price: ${selectedVariant?.price || product?.price}</h3>
+              {product?.compareAtPrice && (
+                <p className="compare-price">
+                  Was:{" "}
+                  <span>
+                    $
+                    {selectedVariant?.compareAtPrice || product?.compareAtPrice}
+                  </span>
+                </p>
+              )}
+            </div>
+
+            {/* Description and Specifications */}
+            <div className="description-specifications">
+              {/* Description Section */}
+              <div className="section description">
+                <h3>Description</h3>
+                <p>
+                  {product?.description ||
+                    "No description available for this product."}
+                </p>
+              </div>
+
+              {/* Specifications Section */}
+              <div className="section specifications">
+                <h3>Specifications</h3>
+                <div className="specifications">
+                  <div className="spec">
+                    <span>Brand:</span>
+                    <p>{product?.brand || "N/A"}</p>
+                  </div>
+                  <div className="spec">
+                    <span>SKU:</span>
+                    <p>{selectedVariant?.sku || product?.sku || "N/A"}</p>
+                  </div>
+                  <div className="spec">
+                    <span>Tire Width:</span>
+                    <p>{product?.tireWidth || "N/A"} mm</p>
+                  </div>
+                  <div className="spec">
+                    <span>Aspect Ratio:</span>
+                    <p>{product?.aspectRatio || "N/A"}</p>
+                  </div>
+                  <div className="spec">
+                    <span>Rim Size:</span>
+                    <p>{product?.rimSize || "N/A"} inches</p>
+                  </div>
+                  <div className="spec">
+                    <span>Weight:</span>
+                    <p>{product?.weight || "N/A"} kg</p>
+                  </div>
+                  <div className="spec">
+                    <span>Dimensions:</span>
+                    <p>
+                      {product?.dimensions?.length || "N/A"} x{" "}
+                      {product?.dimensions?.width || "N/A"} x{" "}
+                      {product?.dimensions?.height || "N/A"} inches
+                    </p>
+                  </div>
+                  <div className="spec">
+                    <span>Availability:</span>
+                    <p>
+                      {selectedVariant?.availability ||
+                        product?.availability ||
+                        "Unknown"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Product Variants */}
             <div className="product-variants">
               <h3>Available Variants</h3>
               <ul>
@@ -154,12 +155,12 @@ const DetailedProductPage = () => {
                   product.variants.map((variant) => (
                     <li
                       key={variant.id}
-                      className={variant.id === selectedVariant?.id ? "active-variant" : ""}
+                      className={
+                        variant.id === selectedVariant?.id
+                          ? "active-variant"
+                          : ""
+                      }
                       onClick={() => handleVariantClick(variant)}
-                      style={{
-                        cursor: "pointer",
-                        fontWeight: variant.id === selectedVariant?.id ? "bold" : "normal",
-                      }}
                     >
                       {variant.title} - ${variant.price}
                     </li>
@@ -168,18 +169,10 @@ const DetailedProductPage = () => {
                   <li>No variants available</li>
                 )}
               </ul>
-
+              {/* Add to Cart Button */}
               <button className="add-to-cart-button" onClick={handleAddToCart}>
                 Add to Cart
               </button>
-
-              {/* <button
-                className="add-to-wishlist-button"
-                onClick={handleAddToWishlist}
-                style={{ marginLeft: "10px" }}
-              >
-                Add to Wishlist
-              </button> */}
             </div>
           </div>
         </div>
