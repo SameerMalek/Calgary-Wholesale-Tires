@@ -10,9 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon CWT-Backend/api/app.js",
     "dev": "nodemon CWT-Backend/api/app.js",
-    "build": "npm install && npm install --prefix CWT-Frontend/cwt-ui && npm run build --prefix CWT-Frontend/cwt-ui",
-    "seed": "node CWT-Backend/api/prisma/seed.js",
-    "postinstall": "prisma generate"
+    "build": "npm install && npm install --prefix CWT-Frontend/cwt-ui && prisma generate --schema=CWT-Backend/api/prisma/schema.prisma && npm run build --prefix CWT-Frontend/cwt-ui",
+    "seed": "node CWT-Backend/api/prisma/seed.js"
   },
   "prisma": {
     "seed": "node CWT-Backend/api/prisma/seed.js"
