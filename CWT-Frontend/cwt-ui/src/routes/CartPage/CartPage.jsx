@@ -59,8 +59,19 @@ const CartPage = () => {
     const shippingAddress = address;
     const billingAddress = address;
 
-    console.log("Shipping Address:", shippingAddress); // Debugging: Log shipping address
-    console.log("Billing Address:", billingAddress); // Debugging: Log billing address
+    // Sanitize cart items
+    const sanitizedItems = cartItems.map((item) => {
+      // const quantity = item.quantity || 1; // Default to 1 if undefined
+      return {
+        productId: item.product.id,
+        quantity: item.quantity,
+        price: item.product.price,
+        total_price: item.product.price * item.quantity,
+      };
+    });
+    console.log("Sanitized Items:",sanitizedItems);
+    console.log("Shipping Address:", shippingAddress);
+    console.log("Billing Address:", billingAddress);
 
     if (paymentMethod === "stripe") {
       const stripe = await stripePromise;
@@ -74,12 +85,7 @@ const CartPage = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              items: cartItems.map((item) => ({
-                productId: item.product.id,
-                name: item.product.name,
-                price: item.product.price,
-                quantity: item.quantity,
-              })),
+              items: sanitizedItems,
               user_id: userId,
               shipping_address: shippingAddress,
               billing_address: billingAddress,
@@ -119,15 +125,16 @@ const CartPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            items: cartItems.map((item) => ({
-              productId: item.product.id,
-              quantity: item.product.quantity,
-              price: item.product.price,
-            })),
-            total_amount: totalAmount,
             user_id: userId,
+            total_amount: totalAmount,
             shipping_address: shippingAddress,
             billing_address: billingAddress,
+            orderItems: sanitizedItems.map((item) => ({
+              product_id: item.productId,
+              quantity: item.quantity,
+              price: item.price,
+              total_price: item.total_price,
+            })),
           }),
         });
 
@@ -201,7 +208,7 @@ const CartPage = () => {
                             updateQuantity(
                               item.product.id,
                               item.product.selectedVariant?.id,
-                              item.quantity - 1
+                              Math.max(item.quantity - 1, 1)
                             )
                           }
                         >
@@ -233,64 +240,61 @@ const CartPage = () => {
               ))
           )}
         </div>
+        <div className="cart-summary">
+          <p className="cart-total">
+            CART TOTAL:{" "}
+            <span className="total-amount">${totalAmount.toFixed(2)}</span>
+          </p>
 
-        {cartItems.length > 0 && ( // Render this section only if there are items in the cart
-          <div className="cart-summary">
-            <p className="cart-total">
-              CART TOTAL:{" "}
-              <span className="total-amount">${totalAmount.toFixed(2)}</span>
-            </p>
-
-            {/* Payment Method Selection */}
-            <div className="payment-method">
-              <label className={paymentMethod === "stripe" ? "selected" : ""}>
-                <input
-                  type="radio"
-                  name="payment-method"
-                  value="stripe"
-                  checked={paymentMethod === "stripe"}
-                  onChange={() => setPaymentMethod("stripe")}
-                />
-                Pay with Credit Card
-              </label>
-              <label className={paymentMethod === "cod" ? "selected" : ""}>
-                <input
-                  type="radio"
-                  name="payment-method"
-                  value="cod"
-                  checked={paymentMethod === "cod"}
-                  onChange={() => setPaymentMethod("cod")}
-                />
-                Cash on Delivery (COD)
-              </label>
-            </div>
-
-            {/* Terms and Conditions Checkbox */}
-            <div className="terms">
+          {/* Payment Method Selection */}
+          <div className="payment-method">
+            <label className={paymentMethod === "stripe" ? "selected" : ""}>
               <input
-                type="checkbox"
-                id="terms"
-                checked={isTermsAccepted}
-                onChange={() => setIsTermsAccepted(!isTermsAccepted)}
+                type="radio"
+                name="payment-method"
+                value="stripe"
+                checked={paymentMethod === "stripe"}
+                onChange={() => setPaymentMethod("stripe")}
               />
-              <label htmlFor="terms">
-                <b>*TERMS AND CONDITIONS</b>
-              </label>
-              <span className="terms-link" onClick={() => setIsModalOpen(true)}>
-                (Read Terms and Conditions)
-              </span>
-            </div>
-
-            <div className="cart-options">
-              <button className="back-button" onClick={() => navigate(-1)}>
-                BACK
-              </button>
-              <button className="checkout-button" onClick={handleCheckout}>
-                PROCEED TO CHECKOUT
-              </button>
-            </div>
+              Pay with Credit Card
+            </label>
+            <label className={paymentMethod === "cod" ? "selected" : ""}>
+              <input
+                type="radio"
+                name="payment-method"
+                value="cod"
+                checked={paymentMethod === "cod"}
+                onChange={() => setPaymentMethod("cod")}
+              />
+              Cash on Delivery (COD)
+            </label>
           </div>
-        )}
+
+          {/* Terms and Conditions Checkbox */}
+          <div className="terms">
+            <input
+              type="checkbox"
+              id="terms"
+              checked={isTermsAccepted}
+              onChange={() => setIsTermsAccepted(!isTermsAccepted)}
+            />
+            <label htmlFor="terms">
+              <b>*TERMS AND CONDITIONS</b>
+            </label>
+            <span className="terms-link" onClick={() => setIsModalOpen(true)}>
+              (Read Terms and Conditions)
+            </span>
+          </div>
+
+          <div className="cart-options">
+            <button className="back-button" onClick={() => navigate(-1)}>
+              BACK
+            </button>
+            <button className="checkout-button" onClick={handleCheckout}>
+              PROCEED TO CHECKOUT
+            </button>
+          </div>
+        </div>
       </div>
       <TermsAndConditionsModal
         isOpen={isModalOpen}

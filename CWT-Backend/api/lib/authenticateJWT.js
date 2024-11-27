@@ -29,7 +29,6 @@ export const authenticateJWT = async (req, res, next) => {
 
     // Attach user details to request object for further processing
     req.user = { id: user.id, email: user.email };
-    console.log("Authenticated user ID:", req.user.id); // Log for debugging
 
     next(); // Proceed to the next middleware or route handler
   } catch (err) {

@@ -625,9 +625,6 @@ const Users = () => {
     setAssigningDiscount(true);
     setDiscountError(null);
 
-    console.log("Discount Details:", discountDetails);
-    console.log("Selected Order ID:", selectedOrder.id);
-
     try {
       const response = await axios.post(
         `http://localhost:8800/api/orders/${selectedOrder.id}/apply-discount`,

@@ -135,7 +135,6 @@ const Filter = () => {
         );
       });
   
-      console.log("Filtered Products:", filteredProducts); // Log filtered products
   
       // Navigate to the results page with the filtered products
       navigate(`/filter-products`, {

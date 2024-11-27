@@ -138,7 +138,7 @@ const AdminProductPage = () => {
       })), // Map images to new structure
     };
 
-    console.log("Submitting product:", productToSubmit);
+    // console.log("Submitting product:", productToSubmit);
 
     try {
       const response = await fetch("http://localhost:8800/api/product", {
@@ -150,10 +150,10 @@ const AdminProductPage = () => {
       });
 
       const result = await response.json();
-      console.log(result);
+      // console.log(result);
 
       if (response.ok) {
-        console.log("Product successfully added");
+        // console.log("Product successfully added");
 
         setProduct({
           name: "",

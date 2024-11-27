@@ -147,7 +147,7 @@ const ProductPage = () => {
   const { currentUser } = useContext(AuthContext);
   const [isModalOpen, setModalOpen] = useState(false);
   useScrollToTop();
-  // console.log(categoryId);
+  console.log(categoryId);
   const [selectedFilters, setSelectedFilters] = useState({
     width: [],
     aspectRatio: [],

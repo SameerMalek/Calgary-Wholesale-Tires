@@ -12,7 +12,7 @@ const ProductGrid = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get("http://localhost:8800/api/category");
-        // console.log(response.data);
+        console.log(response.data);
         if (response.data && response.data.categories) {
           // Defensive check for categories data
           setCategories(response.data.categories); // Assuming API returns { categories: [...] }

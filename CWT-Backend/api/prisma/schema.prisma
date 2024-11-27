@@ -350,9 +350,9 @@ model Order {
 model OrderItem {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   product_id  String?  @db.ObjectId // Make product_id nullable
-  quantity    Int
+  quantity    Int?
   price       Float
-  total_price Float
+  total_price Float?
   order       Order    @relation(fields: [order_id], references: [id])
   order_id    String   @db.ObjectId
 

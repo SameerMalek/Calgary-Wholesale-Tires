@@ -15,7 +15,7 @@ function ForgotPassword() {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     setEmail(inputEmail);
-    console.log(inputEmail);
+    // console.log(inputEmail);
     //setLoading(true);
     //setMessage('');
     try {

@@ -117,7 +117,7 @@ const AdminRegister = () => {
     setIsLoading(true);
 
     console.log("Starting registration process...");
-    console.log("Form data to be submitted:", formData);
+    // console.log("Form data to be submitted:", formData);
 
     try {
       const isServerOnline = await checkServerStatus();

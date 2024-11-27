@@ -50,7 +50,7 @@ const DetailedProductPage = () => {
     try {
         // Function to get the token from cookies
         const getTokenFromCookies = () => {
-            console.log("All cookies:", document.cookie); // Log all cookies for debugging
+            // console.log("All cookies:", document.cookie); // Log all cookies for debugging
             const cookies = document.cookie.split("; ");
             const tokenCookie = cookies.find(row => row.startsWith("token="));
             return tokenCookie ? tokenCookie.split("=")[1] : null;
@@ -74,9 +74,6 @@ const DetailedProductPage = () => {
               withCredentials: true // Enable cookies for cross-origin requests
           }
       );
-      
-
-        console.log("Item added to wishlist:", response.data);
         alert("Item added to wishlist!");
     } catch (error) {
         console.error("Error adding item to wishlist:", error.response || error);

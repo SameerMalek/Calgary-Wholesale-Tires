@@ -21,8 +21,6 @@ const CartProvider = ({ children }) => {
   useEffect(() => {
     try {
       const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-      console.log('Retrieved cartItems from localStorage on initial load:', storedCartItems); // Debug log
-
       if (Array.isArray(storedCartItems)) {
         setCartItems(storedCartItems);
         calculateTotal(storedCartItems);
@@ -47,6 +45,7 @@ const CartProvider = ({ children }) => {
         }
       }
     };
+    console.log(cartItems);
     fetchCartItems();
   }, [currentUser]);
 

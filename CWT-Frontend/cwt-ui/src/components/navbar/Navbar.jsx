@@ -17,7 +17,7 @@ const Navbar = () => {
     if (searchQuery.trim() === "") return;
 
     try {
-      console.log("Searching for:", searchQuery);
+      // console.log("Searching for:", searchQuery);
       // Make API call to fetch products based on search query
       const response = await axios.get(
         `http://localhost:8800/api/products/search`,
@@ -25,7 +25,7 @@ const Navbar = () => {
           params: { query: searchQuery },
         }
       );
-      console.log("Search response:", response.data);
+      // console.log("Search response:", response.data);
       const { filteredProducts, allProducts } = response.data;
 
       // Navigate to the FilteredProductPage and pass the results
@@ -41,7 +41,7 @@ const Navbar = () => {
   };
 
   const handleWishlistClick = () => {
-    console.log("Wishlist clicked!"); // Add any logic you need here
+    // console.log("Wishlist clicked!"); // Add any logic you need here
   };
 
   return (
