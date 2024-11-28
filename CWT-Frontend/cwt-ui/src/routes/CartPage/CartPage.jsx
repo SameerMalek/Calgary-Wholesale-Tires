@@ -131,12 +131,7 @@ const CartPage = () => {
               billing_address: billingAddress,
               status: 'pending',
               payment_status: 'pending', 
-              orderItems: sanitizedItems.map((item) => ({
-                product_id: item.productId || item.product_id,
-                quantity: item.quantity,
-                price: item.price,
-                total_price: item.total_price,
-              })),
+              items: sanitizedItems,
             }),
           }
         );
@@ -162,17 +157,16 @@ const CartPage = () => {
           },
         }
       );
-
+  
       if (response.ok) {
         // Check if the item was removed from the backend
         console.log("Item removed from backend successfully");
-
+  
         // Directly update the cartItems state to remove the item
         setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-
-        // Update CartContext by calling removeFromCart (if necessary)
+  
+        // Update CartContext by calling removeFromCart
         removeFromCart(id);
-        window.location.reload();
       } else {
         console.error("Failed to remove item from cart in the database");
       }
