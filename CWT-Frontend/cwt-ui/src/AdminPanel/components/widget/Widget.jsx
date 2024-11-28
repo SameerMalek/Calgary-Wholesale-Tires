@@ -14,13 +14,13 @@ const Widget = ({ type }) => {
       try {
         let response;
         if (type === "user") {
-          response = await axios.get("http://localhost:8800/api/users");
+          response = await axios.get("https://calgary-wholesale-tires.onrender.com/api/users");
           setDataCount(response.data.length);
         } else if (type === "earning") {
-          response = await axios.get("http://localhost:8800/api/product");
+          response = await axios.get("https://calgary-wholesale-tires.onrender.com/api/product");
           setDataCount(response.data.products.length);
         } else if (type === "order") {
-          response = await axios.get("http://localhost:8800/api/orders/all");
+          response = await axios.get("https://calgary-wholesale-tires.onrender.com/api/orders/all");
           setDataCount(response.data.length);
           const totalOrders =
           (response.data.newOrders?.length || 0) +

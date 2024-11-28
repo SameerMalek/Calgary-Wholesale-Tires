@@ -542,7 +542,7 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:8800/api/users");
+        const response = await axios.get("https://calgary-wholesale-tires.onrender.com/api/users");
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users", error);
@@ -557,7 +557,7 @@ const Users = () => {
   // Approve user
   const handleApprove = async (userId) => {
     try {
-      await axios.put(`http://localhost:8800/api/auth/users/${userId}/approve`);
+      await axios.put(`https://calgary-wholesale-tires.onrender.com/api/auth/users/${userId}/approve`);
       setUsers(
         users.map((user) =>
           user.id === userId ? { ...user, isApproved: true } : user
@@ -573,7 +573,7 @@ const Users = () => {
     if (!window.confirm("Are you sure you want to decline this user?")) return;
     try {
       await axios.delete(
-        `http://localhost:8800/api/auth/decline-user/${userId}`
+        `https://calgary-wholesale-tires.onrender.com/api/auth/decline-user/${userId}`
       );
       setUsers(users.filter((user) => user.id !== userId));
     } catch (error) {
@@ -585,7 +585,7 @@ const Users = () => {
   const handleViewOrders = async (user) => {
     try {
       const response = await axios.get(
-        `http://localhost:8800/api/orders/user/${user.id}/orders`
+        `https://calgary-wholesale-tires.onrender.com/api/orders/user/${user.id}/orders`
       );
       console.log(response.data);
       setUserOrders(response.data.orders);
@@ -625,12 +625,9 @@ const Users = () => {
     setAssigningDiscount(true);
     setDiscountError(null);
 
-    console.log("Discount Details:", discountDetails);
-    console.log("Selected Order ID:", selectedOrder.id);
-
     try {
       const response = await axios.post(
-        `http://localhost:8800/api/orders/${selectedOrder.id}/apply-discount`,
+        `https://calgary-wholesale-tires.onrender.com/api/orders/${selectedOrder.id}/apply-discount`,
         {
           discount_type: discountDetails.discount_type,
           discount_value: Number(discountDetails.discount_value),

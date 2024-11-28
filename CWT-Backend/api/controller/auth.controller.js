@@ -239,8 +239,8 @@ export const forgotPassword = async (req, res) => {
 export const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
 
-  console.log("email on server is:", email);
-  console.log("otp on server is:", otp);
+  // console.log("email on server is:", email);
+  // console.log("otp on server is:", otp);
 
   if (!email || !otp) {
     return res.status(400).json({ message: "Email and OTP are required!" });

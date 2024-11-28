@@ -1,8 +1,9 @@
 import Stripe from "stripe";
 import { addOrder } from "../controller/order.controller.js";
+import prisma from "../lib/prisma.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const YOUR_DOMAIN = "http://localhost:3000";
+const YOUR_DOMAIN = "https://calgary-wholesale-tires.onrender.com";
 
 export const createCheckoutSession = async (req, res) => {
   try {
@@ -11,6 +12,49 @@ export const createCheckoutSession = async (req, res) => {
 
     // Validate input data (log them)
     console.log("Received data:", req.body);
+    if (!items || items.length === 0) {
+      return res.status(400).json({ error: "No items provided for checkout." });
+    }
+
+    const hasInvalidItems = items.some(
+      (item) =>
+        !item.productId ||
+        !item.price ||
+        item.price <= 0 ||
+        !item.quantity ||
+        item.quantity <= 0
+    );
+
+    if (hasInvalidItems) {
+      return res.status(400).json({
+        error: "Invalid items in the request.",
+        details: items,
+      });
+    }
+
+    // Validate total amount
+    const calculatedTotal = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    if (total_amount !== calculatedTotal) {
+      return res.status(400).json({ error: "Total amount mismatch." });
+    }
+
+    // Fetch product names from the database to use in line items
+    const productDetails = await prisma.product.findMany({
+      where: {
+        id: {
+          in: items.map((item) => item.productId),
+        },
+      },
+    });
+
+    // Create a map of product IDs to names
+    const productNameMap = productDetails.reduce((acc, product) => {
+      acc[product.id] = product.name;
+      return acc;
+    }, {});
 
     // Create a checkout session with Stripe
     const session = await stripe.checkout.sessions.create({
@@ -19,9 +63,9 @@ export const createCheckoutSession = async (req, res) => {
         price_data: {
           currency: "cad",
           product_data: {
-            name: item.name,
+            name: productNameMap[item.productId] || "Product", // Fallback name if not found
           },
-          unit_amount: item.price * 100, // Convert to cents
+          unit_amount: Math.round(item.price * 100), // Convert to cents
         },
         quantity: item.quantity,
       })),
@@ -34,13 +78,15 @@ export const createCheckoutSession = async (req, res) => {
         items: JSON.stringify(items), // Serialize items for order creation
       },
     });
-    console.log("Stripe session created:", session);
 
     // Send the session ID back to the frontend
     res.json({ id: session.id });
   } catch (error) {
     console.error("Error creating Stripe checkout session:", error);
-    res.status(500).json({ error: "Failed to create checkout session" });
+    res.status(500).json({
+      error: "Failed to create checkout session",
+      details: error.message,
+    });
   }
 };
 
@@ -71,9 +117,9 @@ export const handleStripeWebhook = async (req, res) => {
         total_amount,
         shipping_address: session.shipping ? session.shipping.address : "N/A",
         billing_address: session.customer_details.address,
-        status: 'pending',
-        payment_status: 'completed',
-        stripePaymentId: session.payment_intent, 
+        status: "pending",
+        payment_status: "completed",
+        stripePaymentId: session.payment_intent,
         items: items.map((item) => ({
           product_id: item.productId,
           quantity: item.quantity,

@@ -17,7 +17,7 @@ const Featured = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get("http://localhost:8800/api/orders/all");
+        const response = await axios.get("https://calgary-wholesale-tires.onrender.com/api/orders/all");
         const data = response.data;
 
         // Combine all orders into a single array

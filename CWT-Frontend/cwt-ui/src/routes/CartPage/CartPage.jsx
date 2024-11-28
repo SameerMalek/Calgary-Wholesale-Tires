@@ -59,27 +59,31 @@ const CartPage = () => {
     const shippingAddress = address;
     const billingAddress = address;
 
-    console.log("Shipping Address:", shippingAddress); // Debugging: Log shipping address
-    console.log("Billing Address:", billingAddress); // Debugging: Log billing address
+    // Sanitize cart items
+    const sanitizedItems = cartItems.map((item) => ({
+      productId: item.product.id,
+      quantity: item.quantity,
+      price: item.product.price,
+      total_price: item.product.price * item.quantity,
+    }));
+    
+    console.log("Sanitized Items:", sanitizedItems);
+    console.log("Shipping Address:", shippingAddress);
+    console.log("Billing Address:", billingAddress);
 
     if (paymentMethod === "stripe") {
       const stripe = await stripePromise;
       try {
         console.log("Sending data to backend for Stripe Checkout...");
         const response = await fetch(
-          "http://localhost:8800/api/stripe/create-checkout-session",
+          "https://calgary-wholesale-tires.onrender.com/api/stripe/create-checkout-session",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              items: cartItems.map((item) => ({
-                productId: item.product.id,
-                name: item.product.name,
-                price: item.product.price,
-                quantity: item.quantity,
-              })),
+              items: sanitizedItems,
               user_id: userId,
               shipping_address: shippingAddress,
               billing_address: billingAddress,
@@ -113,23 +117,24 @@ const CartPage = () => {
     } else if (paymentMethod === "cod") {
       // Create the order on backend even for COD
       try {
-        const response = await fetch("http://localhost:8800/api/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            items: cartItems.map((item) => ({
-              productId: item.product.id,
-              quantity: item.product.quantity,
-              price: item.product.price,
-            })),
-            total_amount: totalAmount,
-            user_id: userId,
-            shipping_address: shippingAddress,
-            billing_address: billingAddress,
-          }),
-        });
+        const response = await fetch(
+          "https://calgary-wholesale-tires.onrender.com/api/orders",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user_id: userId,
+              total_amount: totalAmount,
+              shipping_address: shippingAddress,
+              billing_address: billingAddress,
+              status: 'pending',
+              payment_status: 'pending', 
+              items: sanitizedItems,
+            }),
+          }
+        );
 
         const order = await response.json();
         console.log("Order created:", order); // Debugging: Log the created order response
@@ -143,23 +148,25 @@ const CartPage = () => {
   const handleRemoveFromCart = async (id) => {
     console.log("Removing item with cartId:", id);
     try {
-      const response = await fetch(`http://localhost:8800/api/cart/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
+      const response = await fetch(
+        `https://calgary-wholesale-tires.onrender.com/api/cart/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
       if (response.ok) {
         // Check if the item was removed from the backend
         console.log("Item removed from backend successfully");
-
+  
         // Directly update the cartItems state to remove the item
         setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-
-        // Update CartContext by calling removeFromCart (if necessary)
+  
+        // Update CartContext by calling removeFromCart
         removeFromCart(id);
-        window.location.reload();
       } else {
         console.error("Failed to remove item from cart in the database");
       }
@@ -201,7 +208,7 @@ const CartPage = () => {
                             updateQuantity(
                               item.product.id,
                               item.product.selectedVariant?.id,
-                              item.quantity - 1
+                              Math.max(item.quantity - 1, 1)
                             )
                           }
                         >
@@ -233,64 +240,61 @@ const CartPage = () => {
               ))
           )}
         </div>
+        <div className="cart-summary">
+          <p className="cart-total">
+            CART TOTAL:{" "}
+            <span className="total-amount">${totalAmount.toFixed(2)}</span>
+          </p>
 
-        {cartItems.length > 0 && ( // Render this section only if there are items in the cart
-          <div className="cart-summary">
-            <p className="cart-total">
-              CART TOTAL:{" "}
-              <span className="total-amount">${totalAmount.toFixed(2)}</span>
-            </p>
-
-            {/* Payment Method Selection */}
-            <div className="payment-method">
-              <label className={paymentMethod === "stripe" ? "selected" : ""}>
-                <input
-                  type="radio"
-                  name="payment-method"
-                  value="stripe"
-                  checked={paymentMethod === "stripe"}
-                  onChange={() => setPaymentMethod("stripe")}
-                />
-                Pay with Credit Card
-              </label>
-              <label className={paymentMethod === "cod" ? "selected" : ""}>
-                <input
-                  type="radio"
-                  name="payment-method"
-                  value="cod"
-                  checked={paymentMethod === "cod"}
-                  onChange={() => setPaymentMethod("cod")}
-                />
-                Cash on Delivery (COD)
-              </label>
-            </div>
-
-            {/* Terms and Conditions Checkbox */}
-            <div className="terms">
+          {/* Payment Method Selection */}
+          <div className="payment-method">
+            <label className={paymentMethod === "stripe" ? "selected" : ""}>
               <input
-                type="checkbox"
-                id="terms"
-                checked={isTermsAccepted}
-                onChange={() => setIsTermsAccepted(!isTermsAccepted)}
+                type="radio"
+                name="payment-method"
+                value="stripe"
+                checked={paymentMethod === "stripe"}
+                onChange={() => setPaymentMethod("stripe")}
               />
-              <label htmlFor="terms">
-                <b>*TERMS AND CONDITIONS</b>
-              </label>
-              <span className="terms-link" onClick={() => setIsModalOpen(true)}>
-                (Read Terms and Conditions)
-              </span>
-            </div>
-
-            <div className="cart-options">
-              <button className="back-button" onClick={() => navigate(-1)}>
-                BACK
-              </button>
-              <button className="checkout-button" onClick={handleCheckout}>
-                PROCEED TO CHECKOUT
-              </button>
-            </div>
+              Pay with Credit Card
+            </label>
+            <label className={paymentMethod === "cod" ? "selected" : ""}>
+              <input
+                type="radio"
+                name="payment-method"
+                value="cod"
+                checked={paymentMethod === "cod"}
+                onChange={() => setPaymentMethod("cod")}
+              />
+              Cash on Delivery (COD)
+            </label>
           </div>
-        )}
+
+          {/* Terms and Conditions Checkbox */}
+          <div className="terms">
+            <input
+              type="checkbox"
+              id="terms"
+              checked={isTermsAccepted}
+              onChange={() => setIsTermsAccepted(!isTermsAccepted)}
+            />
+            <label htmlFor="terms">
+              <b>*TERMS AND CONDITIONS</b>
+            </label>
+            <span className="terms-link" onClick={() => setIsModalOpen(true)}>
+              (Read Terms and Conditions)
+            </span>
+          </div>
+
+          <div className="cart-options">
+            <button className="back-button" onClick={() => navigate(-1)}>
+              BACK
+            </button>
+            <button className="checkout-button" onClick={handleCheckout}>
+              PROCEED TO CHECKOUT
+            </button>
+          </div>
+        </div>
       </div>
       <TermsAndConditionsModal
         isOpen={isModalOpen}

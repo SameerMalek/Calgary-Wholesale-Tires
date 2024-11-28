@@ -24,7 +24,7 @@ const OrderHistory = () => {
       try {
         const userId = currentUser.id;
         const response = await axios.get(
-          `http://localhost:8800/api/orders/user/${userId}/orders`
+          `https://calgary-wholesale-tires.onrender.com/api/orders/user/${userId}/orders`
         );
         setOrders(response.data.orders || []);
       } catch (error) {
@@ -43,7 +43,7 @@ const OrderHistory = () => {
     for (const item of order.orderItems) {
       try {
         const response = await axios.get(
-          `http://localhost:8800/api/product/${item.product_id}`
+          `https://calgary-wholesale-tires.onrender.com/api/product/${item.product_id}`
         );
         fetchedProductDetails[item.product_id] = response.data.product;
       } catch (error) {

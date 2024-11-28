@@ -17,4 +17,9 @@ export default router;
 Command for api> integrated terminal: 
 stripe listen --forward-to localhost:8800/api/stripe/webhook
 
+
+cmd>>
+>"C:\Users\Owner\Downloads\stripe_1.22.0_windows_x86_64\stripe.exe" listen --forward-to localhost:8800/api
+/stripe/webhook
+
 */

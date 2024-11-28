@@ -84,7 +84,7 @@ const uploadProductsBulk = async (req, res) => {
               continue;
             }
 
-            console.log(`Found category and subcategory for product "${product.name}". Category: ${product.categoryName}, SubCategory: ${product.subCategoryName}`);
+            // console.log(`Found category and subcategory for product "${product.name}". Category: ${product.categoryName}, SubCategory: ${product.subCategoryName}`);
 
             // Insert product into the database
             await prisma.product.create({
@@ -128,7 +128,7 @@ const uploadProductsBulk = async (req, res) => {
                 },
               },
             });
-            console.log(`Product "${product.name}" added successfully.`);
+            // console.log(`Product "${product.name}" added successfully.`);
           }
 
           fs.unlinkSync(filePath); // Clean up uploaded file after processing

@@ -23,7 +23,7 @@ const BulkProductUpload = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8800/api/product/bulk",
+        "https://calgary-wholesale-tires.onrender.com/api/product/bulk",
         formData,
         {
           headers: {
