@@ -35,25 +35,8 @@ import path from "path";
 // Initialize the app
 const app = express();
 const PORT = process.env.PORT || 8800;
-const _dirname = path.resolve();
+const _dirname = path.resolve();  
 
-<<<<<<< HEAD
-
-// Use CORS to allow requests from http://localhost:3000
-app.use(cors({
- // origin: 'http://localhost:3000',  // Your frontend's URL
-  origin: ["http://localhost:3000", "http://localhost:3001"],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
-
-
-//Check if the server is running
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-=======
 // Use CORS to allow requests
 app.use(
   cors({
@@ -63,7 +46,6 @@ app.use(
     credentials: true,
   })
 );
->>>>>>> fe6af9823ec5c4714a5ad41c5ef2c09b5bab1740
 
 // Check if the server is online
 app.get("/health", (req, res) => {
