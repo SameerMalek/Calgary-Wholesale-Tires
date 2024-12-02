@@ -314,33 +314,53 @@ export const deleteOrder = async (req, res) => {
 
     console.log("Fetched Order Details:", order);
 
-    // Handle refund if payment was completed
-    if (order.payment_status === "completed" && !order.stripePaymentId) {
-      if (!order.stripePaymentId) {
-        return res.status(400).json({
-          message: "Cannot process refund. Stripe Payment ID is missing.",
-        });
+      // Handle refund for completed payment orders
+      let refundDetails = null;
+      if (order.payment_status === "completed") {
+        if (!order.stripePaymentId) {
+          console.warn(`Order ${orderId} has completed payment but no Stripe Payment ID`);
+          return res.status(400).json({
+            message: "Cannot process refund. Stripe Payment ID is missing.",
+          });
+        }
+  
+        try {
+          // Create a full refund for the order
+          const refund = await stripe.refunds.create({
+            payment_intent: order.stripePaymentId,
+            reason: 'requested_by_customer' // Optional: specify reason for refund
+          });
+  
+          console.log("Refund Response:", refund);
+          
+          // Store refund details
+          refundDetails = {
+            id: refund.id,
+            amount: refund.amount / 100, // Convert cents to dollars
+            status: refund.status,
+            created: new Date(refund.created * 1000).toISOString()
+          };
+  
+          console.log(`Refund successful for Order ID: ${orderId}`);
+        } catch (refundError) {
+          console.error("Detailed Refund Error:", {
+            message: refundError.message,
+            code: refundError.code,
+            type: refundError.type,
+            raw: refundError,
+          });
+  
+          // Handle specific Stripe refund errors
+          if (refundError.code === 'resource_already_refunded') {
+            console.log(`Order ${orderId} was already refunded`);
+          } else {
+            return res.status(500).json({
+              message: "Failed to process payment refund.",
+              error: refundError.message,
+            });
+          }
+        }
       }
-
-      try {
-        // Refund the payment using Stripe
-        const refund = await stripe.refunds.create({
-          payment_intent: order.stripePaymentId,
-        });
-        console.log("Refund Response:", refund);
-        console.log(`Refund successful for Order ID: ${orderId}`);
-      } catch (refundError) {
-        console.error("Refund Error:", {
-          message: refundError.message,
-          stack: refundError.stack,
-          raw: refundError,
-        });
-        return res.status(500).json({
-          message: "Failed to process payment refund.",
-          error: refundError.message,
-        });
-      }
-    }
 
     // Delete associated order items
     await prisma.orderItem.deleteMany({
@@ -355,9 +375,14 @@ export const deleteOrder = async (req, res) => {
     res.status(200).json({
       message: "Order deleted successfully",
       order: deletedOrder,
+      refund: refundDetails
     });
   } catch (err) {
-    console.error("Error deleting order:", err.message || err);
+    console.error("Error deleting order:", {
+      message: err.message,
+      stack: err.stack,
+      name: err.name,
+    });
     res.status(500).json({
       message: "Error deleting order",
       error: err.message || "Internal Server Error",

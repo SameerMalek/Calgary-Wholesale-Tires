@@ -45,7 +45,7 @@ const OrderHistory = () => {
         const response = await axios.get(
           `https://calgary-wholesale-tires.onrender.com/api/product/${item.product_id}`
         );
-        fetchedProductDetails[item.product_id] = response.data.product;
+        fetchedProductDetails[item.product_id] = response.data.products;
       } catch (error) {
         console.error("Error fetching product details:", error.message);
       }
@@ -120,7 +120,7 @@ const OrderHistory = () => {
             </div>
 
             <div className="modal-field">
-              <span className="modal-field-label">Payment Status:</span>
+              <span className="modal-field-label">Order Status:</span>
               <span
                 className={`status-${selectedOrder.status.toLowerCase()} modal-field-content`}
               >

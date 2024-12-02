@@ -55,10 +55,26 @@
                 padding: 0.25rem 0.75rem;
                 border-radius: 5px;
                 font-size: 0.9rem;
+                text-transform: capitalize;
+                display: inline-block;
 
-                &.status-pending {
-                    background-color: #ffe5b4;
-                    color: #b45309;
+                &.status-Pending {
+                    background-color: #fff3cd;
+                    color: #856404;
+                    border: 1px solid #ffeeba;
+                }
+
+                &.status-Preparing {
+                    background-color: #d1ecf1;
+                    color: #0c5460;
+                    border: 1px solid #bee5eb;
+                }
+
+                &.status-Ready-For-Delivery,
+                &.status-ReadyForDelivery {
+                    background-color: #d4edda;
+                    color: #155724;
+                    border: 1px solid #c3e6cb;
                 }
 
                 &.status-completed {
@@ -66,7 +82,7 @@
                     color: #2f855a;
                 }
 
-                &.status-delivered {
+                &.status-Delivered {
                     background-color: #bee3f8;
                     color: #3182ce;
                 }
