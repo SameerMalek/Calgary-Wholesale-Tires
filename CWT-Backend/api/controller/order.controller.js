@@ -304,64 +304,111 @@ export const deleteOrder = async (req, res) => {
 
     // Fetch the order details
     const order = await prisma.order.findUnique({
-      where: { id: orderId }, // Corrected field name
-      include: { orderItems: true }, // Include related items
+      where: { id: orderId },
+      include: { 
+        orderItems: true,
+        user: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true
+          }
+        }
+      }
     });
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    console.log("Fetched Order Details:", order);
+    console.log("Fetched Order Details:", JSON.stringify(order, null, 2));
 
-      // Handle refund for completed payment orders
-      let refundDetails = null;
-      if (order.payment_status === "completed") {
-        if (!order.stripePaymentId) {
-          console.warn(`Order ${orderId} has completed payment but no Stripe Payment ID`);
-          return res.status(400).json({
-            message: "Cannot process refund. Stripe Payment ID is missing.",
-          });
+     // Handle refund for completed payment orders
+    let refundDetails = null;
+    if (order.payment_status === "completed") {
+      // Check if we can find the original Stripe session or payment intent
+      try {
+        // First, try to find the Stripe session through a webhook or direct creation
+        const sessions = await stripe.checkout.sessions.list({
+          limit: 1,
+          metadata: { 
+            user_id: order.user_id,
+            order_id: order.id 
+          }
+        });
+
+        let paymentIntentId = null;
+        if (sessions.data.length > 0) {
+          paymentIntentId = sessions.data[0].payment_intent;
         }
-  
-        try {
-          // Create a full refund for the order
-          const refund = await stripe.refunds.create({
-            payment_intent: order.stripePaymentId,
-            reason: 'requested_by_customer' // Optional: specify reason for refund
+
+        // If no session found, try a more comprehensive search
+        if (!paymentIntentId) {
+          const paymentIntents = await stripe.paymentIntents.search({
+            query: `metadata['order_id']:'${order.id}'`
           });
-  
-          console.log("Refund Response:", refund);
-          
-          // Store refund details
+
+          if (paymentIntents.data.length > 0) {
+            paymentIntentId = paymentIntents.data[0].id;
+          }
+        }
+
+        // If we found a payment intent, process the refund
+        if (paymentIntentId) {
+          const refund = await stripe.refunds.create({
+            payment_intent: paymentIntentId,
+            reason: 'requested_by_customer'
+          });
+
           refundDetails = {
             id: refund.id,
-            amount: refund.amount / 100, // Convert cents to dollars
+            amount: refund.amount / 100,
             status: refund.status,
             created: new Date(refund.created * 1000).toISOString()
           };
-  
+
           console.log(`Refund successful for Order ID: ${orderId}`);
-        } catch (refundError) {
-          console.error("Detailed Refund Error:", {
-            message: refundError.message,
-            code: refundError.code,
-            type: refundError.type,
-            raw: refundError,
+        } else {
+          // Log that no payment intent was found
+          console.warn(`No Stripe payment found for Order ID: ${orderId}`);
+          
+          // Optionally, you might want to add a manual refund process or notification
+          return res.status(400).json({
+            message: "Cannot process refund. No payment information found.",
+            details: {
+              orderId,
+              userEmail: order.user?.email,
+              userName: `${order.user?.firstName} ${order.user?.lastName}`,
+              amount: order.total_amount
+            }
           });
-  
-          // Handle specific Stripe refund errors
-          if (refundError.code === 'resource_already_refunded') {
-            console.log(`Order ${orderId} was already refunded`);
-          } else {
-            return res.status(500).json({
-              message: "Failed to process payment refund.",
-              error: refundError.message,
-            });
-          }
+        }
+      } catch (refundError) {
+        console.error("Detailed Refund Error:", {
+          message: refundError.message,
+          code: refundError.code,
+          type: refundError.type,
+          raw: refundError,
+        });
+
+        // Handle specific Stripe refund errors
+        if (refundError.code === 'resource_already_refunded') {
+          console.log(`Order ${orderId} was already refunded`);
+        } else {
+          return res.status(500).json({
+            message: "Failed to process payment refund.",
+            error: refundError.message,
+            details: {
+              orderId,
+              userEmail: order.user?.email,
+              userName: `${order.user?.firstName} ${order.user?.lastName}`,
+              amount: order.total_amount
+            }
+          });
         }
       }
-
+    }
+    
     // Delete associated order items
     await prisma.orderItem.deleteMany({
       where: { order_id: orderId }, // Ensure this matches the foreign key in your schema
