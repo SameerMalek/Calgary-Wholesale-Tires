@@ -125,12 +125,11 @@ const Navbar = () => {
         </div>
         <div className={open ? "menu active" : "menu"}>
           <a href="/">Home</a>
-          <a href="/">About</a>
-          <a href="/">Contact</a>
-          <a href="/">Products</a>
-          <a href="/">Sign In</a>
-          <a href="/">Cart</a>
-          <a href="/">My Account</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/login">Sign In</a>
+          <a href="/cart">Cart</a>
+          <a href="/profilePage">My Account</a>
         </div>
       </div>
 

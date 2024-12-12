@@ -27,49 +27,49 @@ const SliderComponent = () => {
             <div className="slide-content">
               <h2>Must Haves for Every Car</h2>
               <p>Custom wheels of any size and shapes</p>
-              <button>Discover Now!</button>
+              <button>
+                <a href="https://prince.tires/">Discover Now!</a>
+              </button>
             </div>
             <img src="/assets/car.png" alt="Car" />
           </div>
           <div className="slide">
             <div className="slide-content">
-              <h2>Must Haves for Every Car</h2>
+              <h2>Engineered for Adventure - CWT Tires Take You There</h2>
               <p>Custom wheels of any size and shapes</p>
-              <button>Discover Now!</button>
             </div>
-            <img src="/assets/car.png" alt="Car" />
+            <img src="/assets/forest-tire.jpeg" alt="tire" />
           </div>
           <div className="slide">
             <div className="slide-content">
-              <h2>Must Haves for Every Car</h2>
+              <h2>Performance and Precision - CWT Tires Elevate Your Ride</h2>
               <p>Custom wheels of any size and shapes</p>
-              <button>Discover Now!</button>
             </div>
-            <img src="/assets/car.png" alt="Car" />
+            <img src="/assets/rocky-tire.jpeg" alt="tire" />
           </div>
           <div className="slide">
             <div className="slide-content">
-              <h2>Must Haves for Every Car</h2>
+              <h2>Tough Meets Sleek - CWT Tires Blend Style and Strength</h2>
               <p>Custom wheels of any size and shapes</p>
-              <button>Discover Now!</button>
             </div>
-            <img src="/assets/car.png" alt="Car" />
+            <img src="/assets/black_tire.jpeg" alt="tire" />
           </div>
           <div className="slide">
             <div className="slide-content">
-              <h2>Must Haves for Every Car</h2>
+              <h2>Explore More with CWT - Your Adventure-Ready Tires</h2>
               <p>Custom wheels of any size and shapes</p>
-              <button>Discover Now!</button>
             </div>
-            <img src="/assets/car.png" alt="Car" />
+            <img src="/assets/tire-tool.jpeg" alt="Tire and Tools" />
           </div>
           <div className="slide">
             <div className="slide-content">
-              <h2>Must Haves for Every Car</h2>
-              <p>Custom wheels of any size and shapes</p>
-              <button>Discover Now!</button>
+              <h2>Rugged Style Meets Exceptional Performance - CWT Wheels</h2>
+              <p>
+                Crafted for the adventurous, our premium wheels elevate your
+                ride.
+              </p>
             </div>
-            <img src="/assets/car.png" alt="Car" />
+            <img src="/assets/rim-cwt.jpeg" alt="Rim" />
           </div>
         </Slider>
       </div>

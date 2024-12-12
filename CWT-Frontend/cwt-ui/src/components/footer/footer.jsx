@@ -16,10 +16,9 @@ const Footer = () => {
         </div>
         <div className="footer-contacts">
           <h3>CONTACTS</h3>
-          <p>2099 Walnut, Hill Ln undefined Lafayette, California 55262</p>
-          <p>+1 (256) 10 87 000</p>
-          <p>Mon - Sat: 10am - 6pm</p>
-          <p>Sunday: 10am - 4pm</p>
+          <p>111 42 Ave SW, Calgary, AB T2G 0A4</p>
+          <p>+1 (403) 452 4283</p>
+          <p>Mon - Sun: 09am - 07pm</p>
         </div>
         <div className="footer-services">
           <h3>SERVICES</h3>
