@@ -15,6 +15,7 @@ const SliderComponent = () => {
     autoplay: true, // Enable automatic sliding
     autoplaySpeed: 2000, // Time in milliseconds between each slide transition
     pauseOnHover: true, // Pause the slider on hover
+    arrows: false,
   };
 
   return (
