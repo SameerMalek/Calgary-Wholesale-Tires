@@ -22,51 +22,75 @@ const SliderComponent = () => {
       {/* Main container for the slider */}
       <div className="slider-container">
         <Slider {...settings}>
-          {/* Each 'div' within the 'Slider' represents an individual slide */}
-          <div className="slide">
+          {/* First Slide - Unique with Button */}
+          <div className="slide slide1">
             <div className="slide-content">
-              <h2>Must Haves for Every Car</h2>
-              <p>Custom wheels of any size and shapes</p>
+              <h2 className="highlight-text">Must Haves for Every Car</h2>
+              <p>Custom wheels that combine performance and elegance</p>
               <button>
-                <a href="https://prince.tires/">Discover Now!</a>
+                <a
+                  href="https://prince.tires/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Discover Now!
+                </a>
               </button>
             </div>
             <img src="/assets/car.png" alt="Car" />
           </div>
+
+          {/* Remaining Slides - Styled as Ads */}
           <div className="slide">
             <div className="slide-content">
-              <h2>Engineered for Adventure - CWT Tires Take You There</h2>
-              <p>Custom wheels of any size and shapes</p>
+              <h2 className="highlight-text">Engineered for Adventure</h2>
+              <p>
+                <span className="highlight">CWT Tires</span> take you off the
+                beaten path with all-terrain durability and style.
+              </p>
             </div>
-            <img src="/assets/forest-tire.jpeg" alt="tire" />
+            <img src="/assets/forest-tire.jpeg" alt="Adventure Tire" />
           </div>
+
           <div className="slide">
             <div className="slide-content">
-              <h2>Performance and Precision - CWT Tires Elevate Your Ride</h2>
-              <p>Custom wheels of any size and shapes</p>
+              <h2 className="highlight-text">Performance and Precision</h2>
+              <p>
+                Elevate your ride with{" "}
+                <span className="highlight">CWT Tires</span>, crafted for
+                unmatched control.
+              </p>
             </div>
-            <img src="/assets/rocky-tire.jpeg" alt="tire" />
+            <img src="/assets/rocky-tire.jpeg" alt="Performance Tire" />
           </div>
+
           <div className="slide">
             <div className="slide-content">
-              <h2>Tough Meets Sleek - CWT Tires Blend Style and Strength</h2>
-              <p>Custom wheels of any size and shapes</p>
+              <h2 className="highlight-text">Tough Meets Sleek</h2>
+              <p>
+                <span className="highlight">CWT Tires</span> blend rugged
+                strength with a sleek design for a superior look.
+              </p>
             </div>
-            <img src="/assets/black_tire.jpeg" alt="tire" />
+            <img src="/assets/black_tire.jpeg" alt="Sleek Tire" />
           </div>
+
           <div className="slide">
             <div className="slide-content">
-              <h2>Explore More with CWT - Your Adventure-Ready Tires</h2>
-              <p>Custom wheels of any size and shapes</p>
+              <h2 className="highlight-text">Explore More with CWT</h2>
+              <p>
+                Adventure-ready tires built to handle any challenge, anytime.
+              </p>
             </div>
             <img src="/assets/tire-tool.jpeg" alt="Tire and Tools" />
           </div>
+
           <div className="slide">
             <div className="slide-content">
-              <h2>Rugged Style Meets Exceptional Performance - CWT Wheels</h2>
+              <h2 className="highlight-text">Rugged Style Meets Performance</h2>
               <p>
-                Crafted for the adventurous, our premium wheels elevate your
-                ride.
+                Unleash your vehicle's potential with our premium{" "}
+                <span className="highlight">CWT Wheels</span>.
               </p>
             </div>
             <img src="/assets/rim-cwt.jpeg" alt="Rim" />
